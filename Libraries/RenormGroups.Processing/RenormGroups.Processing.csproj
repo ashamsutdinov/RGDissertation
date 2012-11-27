@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A379BD75-641E-45B2-9C10-86BA5388313C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RenormGroups.Processing</RootNamespace>
+    <AssemblyName>RenormGroups.Processing</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\IterationResolution.cs" />
+    <Compile Include="Actions\IterationResult.cs" />
+    <Compile Include="Actions\SceneDirectionDirectIterationAction.cs" />
+    <Compile Include="Actions\SceneDirectionReverseIterationAction.cs" />
+    <Compile Include="Actions\SceneDirectIterationAction.cs" />
+    <Compile Include="Actions\SceneFillIterationAction.cs" />
+    <Compile Include="Actions\ProcessingAction.cs" />
+    <Compile Include="Actions\SceneIterationAction.cs" />
+    <Compile Include="Actions\SceneReverseIterationAction.cs" />
+    <Compile Include="Actions\SceneTrackPointAction.cs" />
+    <Compile Include="Actions\SceneTrackPointDirectAction.cs" />
+    <Compile Include="Actions\SceneTrackPointReverseAction.cs" />
+    <Compile Include="ProcessingStack\C0C1ProjectionProcessingStack.cs" />
+    <Compile Include="ProcessingStack\C0C2ProjectionProcessingStack.cs" />
+    <Compile Include="ProcessingStack\C1C2ProjectionProcessingStack.cs" />
+    <Compile Include="Drawing\ClientGeometry.cs" />
+    <Compile Include="Enumerations\CSphereProjection.cs" />
+    <Compile Include="Drawing\MouseMovingState.cs" />
+    <Compile Include="ProcessingScene\ProcessingFrame.cs" />
+    <Compile Include="ProcessingScene\ProcessingScene.cs" />
+    <Compile Include="ProcessingStack\ProcessingStack.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RenormGroups.Configuration\RenormGroups.Configuration.csproj">
+      <Project>{F1E0EEA3-1801-4F38-B7B9-E3ECDBF3978F}</Project>
+      <Name>RenormGroups.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RenormGroups\RenormGroups.csproj">
+      <Project>{43AE0962-0460-4BA1-B044-15959D1EE165}</Project>
+      <Name>RenormGroups</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
