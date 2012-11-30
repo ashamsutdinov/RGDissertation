@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using RGUI.Resources;
@@ -25,8 +26,6 @@ namespace RGUI
     {
       InitializeComponent();
       InitializeResources();
-      var trackW = new TrackPointSlide(100);
-      trackW.Show();
     }
 
     private void InitializeResources()
@@ -182,22 +181,25 @@ namespace RGUI
         {
           stack = _stacks[sender];
           var pt = stack.GetCPoint(currentPoint);
-          //_scene.TrackPointDirect(pt, _trackPointDirect.Iterations, _trackPointDirect.N, _trackPointDirect.Alpha, Config.TrackColor, Config.PointColor);
-          //pbC1C2.Image = _scene.StackC1C2.CurrentFrame.ActualImage;
           pbC1C2.Cursor = Cursors.Default;
-          //pbC0C1.Image = _scene.StackC0C1.CurrentFrame.ActualImage;
           pbC0C1.Cursor = Cursors.Default;
-          //pbC0C2.Image = _scene.StackC0C2.CurrentFrame.ActualImage;
           pbC0C2.Cursor = Cursors.Default;
-          var act = new SceneTrackPointDirectAction
+
+          var trackPointSlide = new TrackPointSlide(_trackPointDirect.Iterations, pt, _trackPointDirect.N, _trackPointDirect.Alpha);
+          trackPointSlide.Show(this);
+          trackPointSlide.TrackPointChanged += ts =>
           {
-            Alpha = _trackPointDirect.Alpha,
-            N = _trackPointDirect.N,
-            InitialPoint = pt,
-            IterationsCount = _trackPointDirect.Iterations
+            var act = new SceneTrackPointDirectAction
+            {
+              Alpha = ts.Alpha,
+              N = ts.N,
+              InitialPoint = pt,
+              IterationsCount = ts.PointsCount,
+              DrawFullPath = ts.ShowFullPath
+            };
+            ActionBodySimple(act, true);
+            flowLayoutPanel.Update();
           };
-          ActionBodySimple(act);
-          flowLayoutPanel.Update();
         }
         _trackPointDirect = null;
         return;
@@ -213,22 +215,25 @@ namespace RGUI
         {
           stack = _stacks[sender];
           var pt = stack.GetCPoint(currentPoint);
-          //_scene.TrackPointReverse(pt, _trackPointReverse.Iterations, _trackPointReverse.N, _trackPointReverse.Alpha, Config.TrackColor.Interted(), Config.PointColor.Interted());
-          //pbC1C2.Image = _scene.StackC1C2.CurrentFrame.ActualImage;
           pbC1C2.Cursor = Cursors.Default;
-          //pbC0C1.Image = _scene.StackC0C1.CurrentFrame.ActualImage;
           pbC0C1.Cursor = Cursors.Default;
-          //pbC0C2.Image = _scene.StackC0C2.CurrentFrame.ActualImage;
           pbC0C2.Cursor = Cursors.Default;
-          var act = new SceneTrackPointReverseAction()
+
+          var trackPointSlide = new TrackPointSlide(_trackPointReverse.Iterations, pt, _trackPointReverse.N, _trackPointReverse.Alpha);
+          trackPointSlide.Show(this);
+          trackPointSlide.TrackPointChanged += ts =>
           {
-            Alpha = _trackPointReverse.Alpha,
-            N = _trackPointReverse.N,
-            InitialPoint = pt,
-            IterationsCount = _trackPointReverse.Iterations
+            var act = new SceneTrackPointReverseAction
+            {
+              Alpha = ts.Alpha,
+              N = ts.N,
+              InitialPoint = pt,
+              IterationsCount = ts.PointsCount,
+              DrawFullPath = ts.ShowFullPath
+            };
+            ActionBodySimple(act, true);
+            flowLayoutPanel.Update();
           };
-          ActionBodySimple(act);
-          flowLayoutPanel.Update();
         }
         _trackPointReverse = null;
         return;
@@ -310,31 +315,12 @@ namespace RGUI
     {
       _trackPointDirect = new TrackPoint();
       var res = _trackPointDirect.ShowDialog();
-      if (res != DialogResult.OK) 
+      if (res != DialogResult.OK)
         return;
 
-      if (!_trackPointDirect.SelectManually)
-      {
-        var act = new SceneTrackPointDirectAction
-          {
-            Alpha = _trackPointDirect.Alpha,
-            N = _trackPointDirect.N,
-            InitialPoint = _trackPointDirect.CPoint,
-            IterationsCount = _trackPointDirect.Iterations
-          };
-        ActionBody(act);
-        //_scene.TrackPointDirect(_trackPointDirect.CPoint, _trackPointDirect.Iterations, _trackPointDirect.N, _trackPointDirect.Alpha, Config.TrackColor, Config.PointColor);
-        //pbC1C2.Image = _scene.StackC1C2.CurrentFrame.ActualImage;
-        //pbC0C1.Image = _scene.StackC0C1.CurrentFrame.ActualImage;
-        //pbC0C2.Image = _scene.StackC0C2.CurrentFrame.ActualImage;
-        _trackPointDirect = null;
-      }
-      else
-      {
-        pbC0C1.Cursor = Cursors.Cross;
-        pbC0C2.Cursor = Cursors.Cross;
-        pbC1C2.Cursor = Cursors.Cross;
-      }
+      pbC0C1.Cursor = Cursors.Cross;
+      pbC0C2.Cursor = Cursors.Cross;
+      pbC1C2.Cursor = Cursors.Cross;
     }
 
     private void OnTrackPointReverse(object sender, EventArgs eargs)
@@ -344,20 +330,9 @@ namespace RGUI
       if (res != DialogResult.OK)
         return;
 
-      if (!_trackPointReverse.SelectManually)
-      {
-        _scene.TrackPointReverse(_trackPointReverse.CPoint, _trackPointReverse.Iterations, _trackPointReverse.N, _trackPointReverse.Alpha, Config.TrackColor.Interted(), Config.PointColor.Interted());
-        pbC1C2.Image = _scene.StackC1C2.CurrentFrame.ActualImage;
-        pbC0C1.Image = _scene.StackC0C1.CurrentFrame.ActualImage;
-        pbC0C2.Image = _scene.StackC0C2.CurrentFrame.ActualImage;
-        _trackPointReverse = null;
-      }
-      else
-      {
-        pbC0C1.Cursor = Cursors.Cross;
-        pbC0C2.Cursor = Cursors.Cross;
-        pbC1C2.Cursor = Cursors.Cross;
-      }
+      pbC0C1.Cursor = Cursors.Cross;
+      pbC0C2.Cursor = Cursors.Cross;
+      pbC1C2.Cursor = Cursors.Cross;
     }
 
     #endregion
@@ -368,7 +343,7 @@ namespace RGUI
     {
       var dlg = new EnterParameters();
       var res = dlg.ShowDialog();
-      if (res != DialogResult.OK) 
+      if (res != DialogResult.OK)
         return;
 
       var act = new SceneDirectIterationAction { N = dlg.N, Alpha = dlg.Alpha, Split = dlg.Split };
@@ -379,7 +354,7 @@ namespace RGUI
     {
       var dlg = new EnterParameters();
       var res = dlg.ShowDialog();
-      if (res != DialogResult.OK) 
+      if (res != DialogResult.OK)
         return;
 
       var act = new SceneReverseIterationAction { N = dlg.N, Alpha = dlg.Alpha, Split = dlg.Split };
@@ -390,7 +365,7 @@ namespace RGUI
     {
       var dlg = new EnterParameters();
       var res = dlg.ShowDialog();
-      if (res != DialogResult.OK) 
+      if (res != DialogResult.OK)
         return;
 
       var act = new SceneDirectionDirectIterationAction { N = dlg.N, Alpha = dlg.Alpha, Split = dlg.Split };
@@ -401,19 +376,27 @@ namespace RGUI
     {
       var dlg = new EnterParameters();
       var res = dlg.ShowDialog();
-      if (res != DialogResult.OK) 
+      if (res != DialogResult.OK)
         return;
 
       var act = new SceneDirectionReverseIterationAction { N = dlg.N, Alpha = dlg.Alpha, Split = dlg.Split };
       ActionBody(act);
     }
 
-    private void ActionBodySimple(ProcessingAction act)
+    private void ActionBodySimple(ProcessingAction act, bool cleanTrackActions = false)
     {
       new Thread(() =>
       {
         var s = _scene.StackC1C2;
         var f = s.CurrentFrame;
+        if (cleanTrackActions)
+        {
+          var tracks = s.ProcessedActions.OfType<SceneTrackPointAction>().ToList();
+          foreach (var sceneTrackPointAction in tracks)
+          {
+            s.ProcessedActions.Remove(sceneTrackPointAction);
+          }
+        }
         s.ProcessedActions.Add(act);
         s.DoAllSimpleActions();
         pbC1C2.Image = f.ActualImage;
@@ -423,6 +406,14 @@ namespace RGUI
       {
         var s = _scene.StackC0C1;
         var f = s.CurrentFrame;
+        if (cleanTrackActions)
+        {
+          var tracks = s.ProcessedActions.OfType<SceneTrackPointAction>().ToList();
+          foreach (var sceneTrackPointAction in tracks)
+          {
+            s.ProcessedActions.Remove(sceneTrackPointAction);
+          }
+        }
         s.ProcessedActions.Add(act);
         s.DoAllSimpleActions();
         pbC0C1.Image = f.ActualImage;
@@ -432,6 +423,14 @@ namespace RGUI
       {
         var s = _scene.StackC0C2;
         var f = s.CurrentFrame;
+        if (cleanTrackActions)
+        {
+          var tracks = s.ProcessedActions.OfType<SceneTrackPointAction>().ToList();
+          foreach (var sceneTrackPointAction in tracks)
+          {
+            s.ProcessedActions.Remove(sceneTrackPointAction);
+          }
+        }
         s.ProcessedActions.Add(act);
         s.DoAllSimpleActions();
         pbC0C2.Image = f.ActualImage;
@@ -475,7 +474,6 @@ namespace RGUI
     }
 
     #endregion
-
 
   }
 }

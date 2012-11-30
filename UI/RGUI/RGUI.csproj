@@ -80,6 +80,7 @@
       <DependentUpon>TrackPointSlide.cs</DependentUpon>
     </Compile>
     <Compile Include="TrackPointSlideChangedEventDelegate.cs" />
+    <Compile Include="TrackPointSlideDestroyedEventDelegate.cs" />
     <EmbeddedResource Include="EnterParameters.resx">
       <DependentUpon>EnterParameters.cs</DependentUpon>
     </EmbeddedResource>

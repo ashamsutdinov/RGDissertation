@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using RenormGroups;
 
 namespace RGUI
 {
@@ -10,7 +12,7 @@ namespace RGUI
 
     public event TrackPointSlideDestroyedEventDelegate TrackPointDestroyed;
 
-    protected virtual void OnTrackPointDestroyed(object sender, EventArgs eargs)
+    protected void OnTrackPointDestroyed(object sender, EventArgs eargs)
     {
       TrackPointChanged = null;
       var handler = TrackPointDestroyed;
@@ -20,7 +22,7 @@ namespace RGUI
       }
     }
 
-    protected virtual void OnTrackPointChanged(object sender, EventArgs eargs)
+    protected void OnTrackPointChanged(object sender, EventArgs eargs)
     {
       if (sender == slideCurrent)
       {
@@ -43,16 +45,20 @@ namespace RGUI
       }
     }
 
-    public TrackPointSlide(int maxTrack)
+    public TrackPointSlide(int maxTrack, CPoint initialPoint, double n, double alpha)
     {
       InitializeComponent();
-      slideCurrent.Minimum = 1;
+      InitialPoint = initialPoint;
+      N = n;
+      Alpha = alpha;
+      slideCurrent.Minimum = 0;
       slideCurrent.Maximum = maxTrack;
-      slideCurrent.Value = 1;
+      slideCurrent.Value = 0;
       slideCurrent.ValueChanged += OnTrackPointChanged;
       txtTo.Validated += OnTrackPointChanged;
       txtTo.Text = slideCurrent.Value.ToString(CultureInfo.InvariantCulture);
       Closing += OnTrackPointDestroyed;
+      OnTrackPointChanged(slideCurrent, new EventArgs());
     }
 
     public bool ShowFullPath
@@ -64,5 +70,11 @@ namespace RGUI
     {
       get { return int.Parse(txtTo.Text); }
     }
+
+    public CPoint InitialPoint { get; set; }
+
+    public double N { get; set; }
+
+    public double Alpha { get; set; }
   }
 }
