@@ -25,6 +25,8 @@ namespace RGUI
     {
       InitializeComponent();
       InitializeResources();
+      var trackW = new TrackPointSlide(100);
+      trackW.Show();
     }
 
     private void InitializeResources()
