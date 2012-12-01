@@ -58,7 +58,7 @@ namespace RGUI
       txtTo.Validated += OnTrackPointChanged;
       txtTo.Text = slideCurrent.Value.ToString(CultureInfo.InvariantCulture);
       Closing += OnTrackPointDestroyed;
-      OnTrackPointChanged(slideCurrent, new EventArgs());
+      VisibleChanged += (sender, args) => OnTrackPointChanged(slideCurrent, args);
     }
 
     public bool ShowFullPath

@@ -397,6 +397,7 @@ namespace RGUI
             s.ProcessedActions.Remove(sceneTrackPointAction);
           }
         }
+        f.ProcessedImage = new Bitmap(s.ProcessedActions.Count > 0 ? f.DrawedImage ?? f.ActualImage : f.Image);
         s.ProcessedActions.Add(act);
         s.DoAllSimpleActions();
         pbC1C2.Image = f.ActualImage;
@@ -414,6 +415,7 @@ namespace RGUI
             s.ProcessedActions.Remove(sceneTrackPointAction);
           }
         }
+        f.ProcessedImage = new Bitmap(s.ProcessedActions.Count > 0 ? f.DrawedImage ?? f.ActualImage : f.Image);
         s.ProcessedActions.Add(act);
         s.DoAllSimpleActions();
         pbC0C1.Image = f.ActualImage;
@@ -431,6 +433,7 @@ namespace RGUI
             s.ProcessedActions.Remove(sceneTrackPointAction);
           }
         }
+        f.ProcessedImage = new Bitmap(s.ProcessedActions.Count > 0 ? f.DrawedImage ?? f.ActualImage : f.Image);
         s.ProcessedActions.Add(act);
         s.DoAllSimpleActions();
         pbC0C2.Image = f.ActualImage;

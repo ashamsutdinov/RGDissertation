@@ -93,6 +93,8 @@ namespace RenormGroups.Processing
         }
         i++;
       }
+
+      frame.DrawedImage = image.Clone() as Bitmap;
     }
   }
 }

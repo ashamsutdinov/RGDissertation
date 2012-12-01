@@ -12,6 +12,8 @@ namespace RenormGroups.Processing
 
     public Bitmap ProcessedImage { get; set; }
 
+    public Bitmap DrawedImage { get; set; }
+
     public Bitmap ActualImage
     {
       get { return ProcessedImage ?? Image; }
