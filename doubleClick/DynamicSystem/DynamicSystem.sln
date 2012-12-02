@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicSystem", "DynamicSystem\DynamicSystem.csproj", "{2A811637-E4F3-4B69-9D43-193E0F67B004}"
 EndProject
 Global
