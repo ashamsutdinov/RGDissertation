@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace DynamicSystem
 {
     public partial class Form1 : Form
     {
-        double xmin = -1, xmax = 1, ymin = -1, ymax = 1;
+        double _xmin = -1, _xmax = 1, _ymin = -1, _ymax = 1;
         int _width, _height;
         int countOfPoints = 1;
         int level = 2;
@@ -35,6 +31,7 @@ namespace DynamicSystem
         {
             return (double)(Math.Pow(n, alfa - 1) * ((((rr + 1) * (rr + 1) - gg) / ((rr + 1) * (rr + 1) - gg / n)) * (rr + 1) - 1));
         }
+
         private double C0F(double c0, double c1, double c2)
         {
             return (c1 - c0) * (c1 - c0) + (c0 * c2 - c1 * c1) / n;
@@ -47,8 +44,6 @@ namespace DynamicSystem
         {
             return ((c2 - c1) * (c2 - c1) + (c0 * c2 - c1 * c1) / n) * Math.Pow(n, alfa - 1) * Math.Pow(n, alfa - 1);
         }
-
-
 
         private double C0FF(double c0, double c1, double c2)
         {
@@ -70,14 +65,14 @@ namespace DynamicSystem
         }
         private void Pereschet()
         {
-            if ((pictureBox1.Width - panel2.Width) / (xmax - xmin) < (pictureBox1.Height) / (ymax - ymin))
+            if ((pictureBox1.Width - panel2.Width) / (_xmax - _xmin) < (pictureBox1.Height) / (_ymax - _ymin))
             {
                 _width = pictureBox1.Width - panel2.Width;
-                _height = (int)((pictureBox1.Width - panel2.Width) * (ymax - ymin) / (xmax - xmin));
+                _height = (int)((pictureBox1.Width - panel2.Width) * (_ymax - _ymin) / (_xmax - _xmin));
             }
             else
             {
-                _width = (int)((pictureBox1.Height) * (xmax - xmin) / (ymax - ymin));
+                _width = (int)((pictureBox1.Height) * (_xmax - _xmin) / (_ymax - _ymin));
                 _height = pictureBox1.Height;
             }
         }
@@ -92,8 +87,8 @@ namespace DynamicSystem
             for (int i = 0; i < _width; i++)
                 for (int j = _height - 1; j >= 0; j--)
                 {
-                    double rr = xmin + i * (xmax - xmin) / _width;
-                    double gg = ymin + (_height - j) * (ymax - ymin) / _height;
+                    double rr = _xmin + i * (_xmax - _xmin) / _width;
+                    double gg = _ymin + (_height - j) * (_ymax - _ymin) / _height;
                     double ctemp = Math.Pow(1 - (rr * rr + gg * gg), 0.5);
                     if (rr * rr + gg * gg > 1)
                     {
@@ -176,8 +171,8 @@ namespace DynamicSystem
                 for (int i = 0; i < _width; i++)
                     for (int j = _height - 1; j >= 0; j--)
                     {
-                        double rr = xmin + i * (xmax - xmin) / _width;
-                        double gg = ymin + (_height - j) * (ymax - ymin) / _height;
+                        double rr = _xmin + i * (_xmax - _xmin) / _width;
+                        double gg = _ymin + (_height - j) * (_ymax - _ymin) / _height;
                         double ctemp = Math.Pow(1 - (rr * rr + gg * gg), 0.5);
                         if (rr * rr + gg * gg <= 1)
                         {
@@ -233,9 +228,9 @@ namespace DynamicSystem
             double temp = Math.Pow(c02 * c02 + c12 * c12 + c22 * c22, 0.5);
             c12 = c12 / temp;
             c22 = c22 / temp;
-            if (c12 > xmin && c12 < xmax && c22 > ymin && c22 < ymax)
+            if (c12 > _xmin && c12 < _xmax && c22 > _ymin && c22 < _ymax)
             {
-                Point pt = new Point((int)(_width * (c12 - xmin) / (xmax - xmin)), _height - (int)(_height * (c22 - ymin) / (ymax - ymin)));
+                Point pt = new Point((int)(_width * (c12 - _xmin) / (_xmax - _xmin)), _height - (int)(_height * (c22 - _ymin) / (_ymax - _ymin)));
                 gr = Graphics.FromImage(_bitmap);
                 gr.DrawEllipse(Pens.White, pt.X - 3, pt.Y - 3, 8, 8);
                 gr.DrawLine(Pens.White, pt.X - 3, pt.Y + 1, pt.X + 4, pt.Y + 1);
@@ -251,9 +246,9 @@ namespace DynamicSystem
             temp = Math.Pow(c02 * c02 + c12 * c12 + c22 * c22, 0.5);
             c12 = c12 / temp;
             c22 = c22 / temp;
-            if (c12 > xmin && c12 < xmax && c22 > ymin && c22 < ymax)
+            if (c12 > _xmin && c12 < _xmax && c22 > _ymin && c22 < _ymax)
             {
-                Point pt = new Point((int)(_width * (c12 - xmin) / (xmax - xmin)), _height - (int)(_height * (c22 - ymin) / (ymax - ymin)));
+                Point pt = new Point((int)(_width * (c12 - _xmin) / (_xmax - _xmin)), _height - (int)(_height * (c22 - _ymin) / (_ymax - _ymin)));
                 gr = Graphics.FromImage(_bitmap);
                 gr.DrawEllipse(Pens.White, pt.X - 3, pt.Y - 3, 8, 8);
                 gr.DrawLine(Pens.White, pt.X - 3, pt.Y + 1, pt.X + 4, pt.Y + 1);
@@ -267,9 +262,9 @@ namespace DynamicSystem
             c02 = c02 / temp;
             for (int h = 0; h < countOfPoints; h++)
             {
-                if (c12 > xmin && c12 < xmax && c22 > ymin && c22 < ymax)
+                if (c12 > _xmin && c12 < _xmax && c22 > _ymin && c22 < _ymax)
                 {
-                    Point pt = new Point((int)(_width * (c12 - xmin) / (xmax - xmin)), _height - (int)(_height * (c22 - ymin) / (ymax - ymin)));
+                    Point pt = new Point((int)(_width * (c12 - _xmin) / (_xmax - _xmin)), _height - (int)(_height * (c22 - _ymin) / (_ymax - _ymin)));
                     gr = Graphics.FromImage(_bitmap);
                     gr.FillEllipse(Brushes.White, pt.X - 2, pt.Y - 2, 5, 5);
                 }
@@ -316,9 +311,9 @@ namespace DynamicSystem
             c12 = c12 / temp;
             c22 = c22 / temp;
             c02 = c02 / temp;
-            if (c12 > xmin && c12 < xmax && c22 > ymin && c22 < ymax)
+            if (c12 > _xmin && c12 < _xmax && c22 > _ymin && c22 < _ymax)
             {
-                Point pt = new Point((int)(_width * (c12 - xmin) / (xmax - xmin)), _height - (int)(_height * (c22 - ymin) / (ymax - ymin)));
+                Point pt = new Point((int)(_width * (c12 - _xmin) / (_xmax - _xmin)), _height - (int)(_height * (c22 - _ymin) / (_ymax - _ymin)));
                 gr = Graphics.FromImage(_bitmap);
                 gr.DrawEllipse(new Pen(Color.FromArgb(255, 255, 0), 2), pt.X - 2, pt.Y - 2, 5, 5);
             }
@@ -349,9 +344,9 @@ namespace DynamicSystem
             c12 = c12 / temp;
             c22 = c22 / temp;
             c02 = c02 / temp;
-            if (c12 > xmin && c12 < xmax && c22 > ymin && c22 < ymax)
+            if (c12 > _xmin && c12 < _xmax && c22 > _ymin && c22 < _ymax)
             {
-                Point pt = new Point((int)(_width * (c12 - xmin) / (xmax - xmin)), _height - (int)(_height * (c22 - ymin) / (ymax - ymin)));
+                Point pt = new Point((int)(_width * (c12 - _xmin) / (_xmax - _xmin)), _height - (int)(_height * (c22 - _ymin) / (_ymax - _ymin)));
                 gr = Graphics.FromImage(_bitmap);
                 gr.DrawEllipse(new Pen(Color.FromArgb(255, 255, 0), 2), pt.X - 2, pt.Y - 2, 5, 5);
             }
@@ -375,9 +370,9 @@ namespace DynamicSystem
             c12 = c12 / temp;
             c22 = c22 / temp;
             c02 = c02 / temp;
-            if (c12 > xmin && c12 < xmax && c22 > ymin && c22 < ymax)
+            if (c12 > _xmin && c12 < _xmax && c22 > _ymin && c22 < _ymax)
             {
-                Point pt = new Point((int)(_width * (c12 - xmin) / (xmax - xmin)), _height - (int)(_height * (c22 - ymin) / (ymax - ymin)));
+                Point pt = new Point((int)(_width * (c12 - _xmin) / (_xmax - _xmin)), _height - (int)(_height * (c22 - _ymin) / (_ymax - _ymin)));
                 gr = Graphics.FromImage(_bitmap);
                 gr.DrawEllipse(new Pen(Color.Honeydew, 2), pt.X - 2, pt.Y - 2, 5, 5);
             }
@@ -400,9 +395,9 @@ namespace DynamicSystem
             c12 = c12 / temp;
             c22 = c22 / temp;
             c02 = c02 / temp;
-            if (c12 > xmin && c12 < xmax && c22 > ymin && c22 < ymax)
+            if (c12 > _xmin && c12 < _xmax && c22 > _ymin && c22 < _ymax)
             {
-                Point pt = new Point((int)(_width * (c12 - xmin) / (xmax - xmin)), _height - (int)(_height * (c22 - ymin) / (ymax - ymin)));
+                Point pt = new Point((int)(_width * (c12 - _xmin) / (_xmax - _xmin)), _height - (int)(_height * (c22 - _ymin) / (_ymax - _ymin)));
                 gr = Graphics.FromImage(_bitmap);
                 gr.DrawEllipse(new Pen(Color.Honeydew, 2), pt.X - 2, pt.Y - 2, 5, 5);
             }
@@ -425,9 +420,9 @@ namespace DynamicSystem
             c12 = c12 / temp;
             c22 = c22 / temp;
             c02 = c02 / temp;
-            if (c12 > xmin && c12 < xmax && c22 > ymin && c22 < ymax)
+            if (c12 > _xmin && c12 < _xmax && c22 > _ymin && c22 < _ymax)
             {
-                Point pt = new Point((int)(_width * (c12 - xmin) / (xmax - xmin)), _height - (int)(_height * (c22 - ymin) / (ymax - ymin)));
+                Point pt = new Point((int)(_width * (c12 - _xmin) / (_xmax - _xmin)), _height - (int)(_height * (c22 - _ymin) / (_ymax - _ymin)));
                 gr = Graphics.FromImage(_bitmap);
                 gr.DrawEllipse(new Pen(Color.Honeydew, 2), pt.X - 2, pt.Y - 2, 5, 5);
             }
@@ -439,14 +434,14 @@ namespace DynamicSystem
         }
         private void Status()
         {
-            toolStripStatusLabel1.Text = "Xmin  " + xmin.ToString();
-            toolStripStatusLabel2.Text = "Ytop  " + ymax.ToString();
-            toolStripStatusLabel3.Text = "Xmax  " + xmax.ToString();
-            toolStripStatusLabel4.Text = "Ybottom  " + ymin.ToString();
-            textBox1.Text = xmin.ToString();
-            textBox2.Text = ymax.ToString();
-            textBox3.Text = xmax.ToString();
-            textBox4.Text = ymin.ToString();
+            toolStripStatusLabel1.Text = "Xmin  " + _xmin.ToString();
+            toolStripStatusLabel2.Text = "Ytop  " + _ymax.ToString();
+            toolStripStatusLabel3.Text = "Xmax  " + _xmax.ToString();
+            toolStripStatusLabel4.Text = "Ybottom  " + _ymin.ToString();
+            textBox1.Text = _xmin.ToString();
+            textBox2.Text = _ymax.ToString();
+            textBox3.Text = _xmax.ToString();
+            textBox4.Text = _ymin.ToString();
             textBox5.Text = rFixed.ToString();
             textBox6.Text = gFixed.ToString();
             textBox7.Text = n.ToString();
@@ -479,8 +474,8 @@ namespace DynamicSystem
             {
                 int x = e.Location.X;
                 int y = e.Location.Y;
-                rFixed = xmin + x * (xmax - xmin) / _width;
-                gFixed = ymin + (_height - y) * (ymax - ymin) / _height;
+                rFixed = _xmin + x * (_xmax - _xmin) / _width;
+                gFixed = _ymin + (_height - y) * (_ymax - _ymin) / _height;
                 RePaint();
             }
             else
@@ -498,10 +493,10 @@ namespace DynamicSystem
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            xmin = -1;
-            xmax = 1;
-            ymin = -1;
-            ymax = 1;
+            _xmin = -1;
+            _xmax = 1;
+            _ymin = -1;
+            _ymax = 1;
             Status();
             DrawGraphics();
             RePaint();
@@ -530,10 +525,10 @@ namespace DynamicSystem
                 gr.DrawImage(_curBitmap, 0, 0, _bitmap.Width, _bitmap.Height);
                 if (dinamic)
                 {
-                    if (rFixed >= xmin && rFixed <= xmax && gFixed >= ymin && gFixed <= ymax)
+                    if (rFixed >= _xmin && rFixed <= _xmax && gFixed >= _ymin && gFixed <= _ymax)
                     {
-                        int xx = (int)(_width * (rFixed - xmin) / (xmax - xmin));
-                        int yy = _height - (int)(_height * (gFixed - ymin) / (ymax - ymin));
+                        int xx = (int)(_width * (rFixed - _xmin) / (_xmax - _xmin));
+                        int yy = _height - (int)(_height * (gFixed - _ymin) / (_ymax - _ymin));
                         gr.FillRectangle(Brushes.Black, xx - 1, yy - 1, 3, 3);
 
                     }
@@ -548,10 +543,10 @@ namespace DynamicSystem
                 gr.DrawImage(_curBitmap, 0, 0, _bitmap.Width, _bitmap.Height);
                 if (dinamic)
                 {
-                    if (rFixed >= xmin && rFixed <= xmax && gFixed >= ymin && gFixed <= ymax)
+                    if (rFixed >= _xmin && rFixed <= _xmax && gFixed >= _ymin && gFixed <= _ymax)
                     {
-                        int xx = (int)(_width * (rFixed - xmin) / (xmax - xmin));
-                        int yy = _height - (int)(_height * (gFixed - ymin) / (ymax - ymin));
+                        int xx = (int)(_width * (rFixed - _xmin) / (_xmax - _xmin));
+                        int yy = _height - (int)(_height * (gFixed - _ymin) / (_ymax - _ymin));
                         gr.FillRectangle(Brushes.Black, xx - 1, yy - 1, 3, 3);
 
                     }
@@ -580,10 +575,10 @@ namespace DynamicSystem
             gr.DrawImage(_curBitmap, 0, 0, _bitmap.Width, _bitmap.Height);
             if (dinamic)
             {
-                if (rFixed >= xmin && rFixed <= xmax && gFixed >= ymin && gFixed <= ymax)
+                if (rFixed >= _xmin && rFixed <= _xmax && gFixed >= _ymin && gFixed <= _ymax)
                 {
-                    int xx = (int)(_width * (rFixed - xmin) / (xmax - xmin));
-                    int yy = _height - (int)(_height * (gFixed - ymin) / (ymax - ymin));
+                    int xx = (int)(_width * (rFixed - _xmin) / (_xmax - _xmin));
+                    int yy = _height - (int)(_height * (gFixed - _ymin) / (_ymax - _ymin));
                     gr.FillRectangle(Brushes.Black, xx - 1, yy - 1, 3, 3);
 
                 }
@@ -616,11 +611,11 @@ namespace DynamicSystem
 
         private void уменьшитьМасштабToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            double temp = (xmax - xmin) / 2;
-            xmin -= temp;
-            xmax += temp;
-            ymin = 0;
-            ymax += (ymax - ymin);
+            double temp = (_xmax - _xmin) / 2;
+            _xmin -= temp;
+            _xmax += temp;
+            _ymin = 0;
+            _ymax += (_ymax - _ymin);
             Status();
             DrawGraphics();
             RePaint();
@@ -630,10 +625,10 @@ namespace DynamicSystem
         {
             rFixed = double.Parse(textBox5.Text);
             gFixed = double.Parse(textBox6.Text);
-            xmin = double.Parse(textBox1.Text);
-            ymax = double.Parse(textBox2.Text);
-            xmax = double.Parse(textBox3.Text);
-            ymin = double.Parse(textBox4.Text);
+            _xmin = double.Parse(textBox1.Text);
+            _ymax = double.Parse(textBox2.Text);
+            _xmax = double.Parse(textBox3.Text);
+            _ymin = double.Parse(textBox4.Text);
             n = int.Parse(textBox7.Text);
             alfa = double.Parse(textBox8.Text);
             countOfPoints = int.Parse(textBox9.Text);
@@ -668,16 +663,16 @@ namespace DynamicSystem
             {
                 int x = e.Location.X;
                 int y = e.Location.Y;
-                double xx = xmin + x * (xmax - xmin) / _width;
-                double yy = ymin + (_height - y) * (ymax - ymin) / _height;
-                double xminx = Math.Max(xmin, xx - (xmax - xmin) / (2 * level));
-                double xmaxx = Math.Min(xmax, xx + (xmax - xmin) / (2 * level));
-                double yminy = Math.Max(ymin, yy - (ymax - ymin) / (2 * level));
-                double ymaxy = Math.Min(ymax, yy + (ymax - ymin) / (2 * level));
-                xmin = xminx;
-                xmax = xmaxx;
-                ymin = yminy;
-                ymax = ymaxy;
+                double xx = _xmin + x * (_xmax - _xmin) / _width;
+                double yy = _ymin + (_height - y) * (_ymax - _ymin) / _height;
+                double xminx = Math.Max(_xmin, xx - (_xmax - _xmin) / (2 * level));
+                double xmaxx = Math.Min(_xmax, xx + (_xmax - _xmin) / (2 * level));
+                double yminy = Math.Max(_ymin, yy - (_ymax - _ymin) / (2 * level));
+                double ymaxy = Math.Min(_ymax, yy + (_ymax - _ymin) / (2 * level));
+                _xmin = xminx;
+                _xmax = xmaxx;
+                _ymin = yminy;
+                _ymax = ymaxy;
                 Status();
                 DrawGraphics();
                 pictureBox1.Refresh();
@@ -686,16 +681,16 @@ namespace DynamicSystem
             {
                 int x = e.Location.X;
                 int y = e.Location.Y;
-                double xx = xmin + x * (xmax - xmin) / _width;
-                double yy = ymin + (_height - y) * (ymax - ymin) / _height;
-                double xminx = Math.Max(xmin, xx - (xmax - xmin) * (10.0 / _width));
-                double xmaxx = Math.Min(xmax, xx + (xmax - xmin) * (10.0 / _width));
-                double yminy = Math.Max(ymin, yy - (ymax - ymin) * (10.0 / _height));
-                double ymaxy = Math.Min(ymax, yy + (ymax - ymin) * (10.0 / _height));
-                xmin = xminx;
-                xmax = xmaxx;
-                ymin = yminy;
-                ymax = ymaxy;
+                double xx = _xmin + x * (_xmax - _xmin) / _width;
+                double yy = _ymin + (_height - y) * (_ymax - _ymin) / _height;
+                double xminx = Math.Max(_xmin, xx - (_xmax - _xmin) * (10.0 / _width));
+                double xmaxx = Math.Min(_xmax, xx + (_xmax - _xmin) * (10.0 / _width));
+                double yminy = Math.Max(_ymin, yy - (_ymax - _ymin) * (10.0 / _height));
+                double ymaxy = Math.Min(_ymax, yy + (_ymax - _ymin) * (10.0 / _height));
+                _xmin = xminx;
+                _xmax = xmaxx;
+                _ymin = yminy;
+                _ymax = ymaxy;
                 Status();
                 DrawGraphics();
                 pictureBox1.Refresh();
