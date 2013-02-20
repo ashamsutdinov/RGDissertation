@@ -15,9 +15,9 @@ namespace ReverseTransform
 
     private ProcessingStack Stack { get; set; }
 
-    private decimal Alpha { get; set; }
+    private double Alpha { get; set; }
 
-    private decimal N { get; set; }
+    private double N { get; set; }
 
     private CPoint P1 { get; set; }
 
@@ -66,10 +66,10 @@ namespace ReverseTransform
       Stack = new ProcessingStack();
       P1 = new CPoint(1, 0, 0);
       P2 = new CPoint(0, 0, 1);
-      var frame = new ProcessingFrame { Rectangle = new DRect { X = (decimal)(-1.1), Y = (decimal)(-1.1), Width = (decimal)2.2, Height = (decimal)2.2 } };
+      var frame = new ProcessingFrame { Rectangle = new DRect { X = (double)(-1.1), Y = (double)(-1.1), Width = (double)2.2, Height = (double)2.2 } };
       var conf = ConfigurationManager.AppSettings;
-      Alpha = decimal.Parse(conf["Alpha"]);
-      N = decimal.Parse(conf["N"]);
+      Alpha = double.Parse(conf["Alpha"]);
+      N = double.Parse(conf["N"]);
       Stack.Push(frame);
     }
 
@@ -105,7 +105,7 @@ namespace ReverseTransform
           var c2 = 1 - rd;
           if (rd <= 1)
           {
-            c2 = c2.SqrtB();
+            c2 = Math.Sqrt(c2);//.SqrtB());
           }
           var cpt = new CPoint(c0, c1, c2);
           SetPixel(i, j, GetColor(cpt));

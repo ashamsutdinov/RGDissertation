@@ -2,8 +2,8 @@
 {
   public class RGPoint
   {
-    public decimal R { get; set; }
+    public double R { get; set; }
 
-    public decimal G { get; set; }
+    public double G { get; set; }
   }
 }

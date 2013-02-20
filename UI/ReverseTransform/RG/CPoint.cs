@@ -5,24 +5,24 @@ namespace ReverseTransform
 {
   public class CPoint
   {
-    public decimal C0 { get; set; }
+    public double C0 { get; set; }
 
-    public decimal C1 { get; set; }
+    public double C1 { get; set; }
 
-    public decimal C2 { get; set; }
+    public double C2 { get; set; }
 
-    public CPoint(decimal c0, decimal c1, decimal c2)
+    public CPoint(double c0, double c1, double c2)
     {
       C0 = c0;
       C1 = c1;
       C2 = c2;
     }
 
-    public decimal Norm
+    public double Norm
     {
       get
       {
-        var n = (C0 * C0 + C1 * C1 + C2 * C2).SqrtB();
+        var n = Math.Sqrt(C0 * C0 + C1 * C1 + C2 * C2);//.SqrtB();
         return n;
       }
     }
@@ -33,13 +33,13 @@ namespace ReverseTransform
       {
         try
         {
-          var r = C0 > 0 || C0 < 0 ? -C1/C0 : decimal.MaxValue;
-          var g = C0 > 0 || C0 < 0 ? (C1*C1 - C0*C2)/(C0*C0) : decimal.MaxValue;
+          var r = C0 > 0 || C0 < 0 ? -C1/C0 : double.MaxValue;
+          var g = C0 > 0 || C0 < 0 ? (C1*C1 - C0*C2)/(C0*C0) : double.MaxValue;
           return new RGPoint {R = r, G = g};
         }
         catch (Exception ex)
         {
-          return new RGPoint {R = decimal.MaxValue, G = decimal.MaxValue};
+          return new RGPoint {R = double.MaxValue, G = double.MaxValue};
         }
       }
     }
@@ -63,13 +63,13 @@ namespace ReverseTransform
       }
     }
 
-    public decimal DistanceTo(CPoint pt)
+    public double DistanceTo(CPoint pt)
     {
       var c0S = C0 - pt.C0;
       var c1S = C1 - pt.C1;
       var c2S = C2 - pt.C2;
       var d = c0S * c0S + c1S * c1S + c2S * c2S;
-      var dist = d.SqrtB();
+      var dist = Math.Sqrt(d);//.SqrtB());
       return dist;
     }
 
@@ -83,13 +83,13 @@ namespace ReverseTransform
       get { return Norm <= 1; }
     }
 
-    private static decimal? _lambda;
+    private static double? _lambda;
 
-    public CPoint DirectIterated(decimal alpha, decimal n)
+    public CPoint DirectIterated(double alpha, double n)
     {
       if (_lambda == null)
       {
-        var l = (decimal)Math.Pow((double) n, (double) alpha - 1);
+        var l = (double)Math.Pow((double) n, (double) alpha - 1);
         _lambda = l;
       }
       var lambda = _lambda.Value;
@@ -108,11 +108,11 @@ namespace ReverseTransform
       return nres;
     }
 
-    public CPoint ReverseIterated(decimal alpha, decimal n)
+    public CPoint ReverseIterated(double alpha, double n)
     {
       if (_lambda == null)
       {
-        var l = (decimal)Math.Pow((double)n, (double)alpha - 1);
+        var l = (double)Math.Pow((double)n, (double)alpha - 1);
         _lambda = l;
       }
       var lambda = _lambda.Value;
@@ -132,10 +132,10 @@ namespace ReverseTransform
       return nres;
     }
 
-    public IEnumerable<CPoint> DirectTrack(CPoint crit, decimal alpha, decimal n, decimal acc = (decimal)0.0000001, int N = 100)
+    public IEnumerable<CPoint> DirectTrack(CPoint crit, double alpha, double n, double acc = (double)0.0000001, int N = 100)
     {
       var pt = this;
-      var d = decimal.MaxValue;
+      var d = double.MaxValue;
       var i = 0;
       while (d > acc && i < N)
       {
@@ -146,10 +146,10 @@ namespace ReverseTransform
       }
     }
 
-    public IEnumerable<CPoint> ReverseTrack(CPoint crit, decimal alpha, decimal n, decimal acc = (decimal)0.0000001, int N = 100)
+    public IEnumerable<CPoint> ReverseTrack(CPoint crit, double alpha, double n, double acc = (double)0.0000001, int N = 100)
     {
       var pt = this;
-      var d = decimal.MaxValue;
+      var d = double.MaxValue;
       var i = 0;
       while (d > acc && i < N)
       {
