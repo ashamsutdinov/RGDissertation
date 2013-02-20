@@ -21,7 +21,6 @@ namespace ReverseTransform
 
     public static decimal SqrtB(this decimal x, decimal? guess = null)
     {
-      return SqrtD(x);
       if (x == 0)
       {
         return 0;

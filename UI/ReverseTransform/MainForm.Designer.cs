@@ -47,7 +47,7 @@
             this.helpToolStripMenuItem});
       this.menuStrip1.Location = new System.Drawing.Point(0, 0);
       this.menuStrip1.Name = "menuStrip1";
-      this.menuStrip1.Size = new System.Drawing.Size(784, 24);
+      this.menuStrip1.Size = new System.Drawing.Size(883, 24);
       this.menuStrip1.TabIndex = 0;
       this.menuStrip1.Text = "mainMenu";
       // 
@@ -70,7 +70,7 @@
       this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
       this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
       this.exitToolStripMenuItem.Text = "Exit";
-      this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+      this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
       // 
       // helpToolStripMenuItem
       // 
@@ -88,9 +88,9 @@
       // 
       // statusStrip1
       // 
-      this.statusStrip1.Location = new System.Drawing.Point(0, 740);
+      this.statusStrip1.Location = new System.Drawing.Point(0, 806);
       this.statusStrip1.Name = "statusStrip1";
-      this.statusStrip1.Size = new System.Drawing.Size(784, 22);
+      this.statusStrip1.Size = new System.Drawing.Size(883, 22);
       this.statusStrip1.TabIndex = 1;
       this.statusStrip1.Text = "statusBar";
       // 
@@ -98,15 +98,17 @@
       // 
       this.pictureBox.Location = new System.Drawing.Point(12, 27);
       this.pictureBox.Name = "pictureBox";
-      this.pictureBox.Size = new System.Drawing.Size(760, 710);
+      this.pictureBox.Size = new System.Drawing.Size(859, 776);
       this.pictureBox.TabIndex = 2;
       this.pictureBox.TabStop = false;
+      this.pictureBox.Click += new System.EventHandler(this.PictureBoxClick);
+      this.pictureBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PictureBoxMouseDoubleClick);
       // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(784, 762);
+      this.ClientSize = new System.Drawing.Size(883, 828);
       this.Controls.Add(this.pictureBox);
       this.Controls.Add(this.statusStrip1);
       this.Controls.Add(this.menuStrip1);

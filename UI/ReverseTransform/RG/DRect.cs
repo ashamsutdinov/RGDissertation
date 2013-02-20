@@ -1,6 +1,11 @@
 ﻿namespace ReverseTransform
 {
-  public class DRect : Rect<double>
+  public class DRect :
+#if DECIMAL
+ Rect<decimal>
+#else
+ Rect<double>
+#endif
   {
   }
 }
