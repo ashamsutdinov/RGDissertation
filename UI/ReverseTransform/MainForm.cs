@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ReverseTransform
@@ -15,6 +16,8 @@ namespace ReverseTransform
 
     private double N { get; set; }
 
+    private ParallelOptions POpts { get; set; }
+
     protected override void OnShown(EventArgs e)
     {
       base.OnShown(e);
@@ -24,31 +27,31 @@ namespace ReverseTransform
 
     private void InitializeConfig()
     {
-      
+      POpts = new ParallelOptions();
+      POpts.MaxDegreeOfParallelism = Environment.ProcessorCount;
     }
 
     private void InitializeArea()
     {
       var r = new Random();
       pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
-      for (var i = 0; i < pictureBox.Width; i++)
+      Parallel.For(0, pictureBox.Width, POpts, i =>
       {
         for (var j = 0; j < pictureBox.Height; j++)
         {
           SetPixel(i, j, Color.FromArgb(r.Next()));
         }
-      }
+      });
     }
 
     private void SetPixel(int x, int y, Color color)
     {
       var bmp = pictureBox.Image as Bitmap;
-      if (bmp != null)
+      if (bmp == null)
+        return;
+      lock (bmp)
       {
-        lock (bmp)
-        {
-          bmp.SetPixel(x, y, color);
-        }
+        bmp.SetPixel(x, y, color);
       }
     }
 

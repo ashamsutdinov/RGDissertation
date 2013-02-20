@@ -1,9 +1,0 @@
-D:\Projects\RGDissertation\UI\ReverseTransform\bin\Debug\ReverseTransform.exe.config
-D:\Projects\RGDissertation\UI\ReverseTransform\bin\Debug\ReverseTransform.exe
-D:\Projects\RGDissertation\UI\ReverseTransform\bin\Debug\ReverseTransform.pdb
-D:\Projects\RGDissertation\UI\ReverseTransform\obj\Debug\ReverseTransform.csprojResolveAssemblyReference.cache
-D:\Projects\RGDissertation\UI\ReverseTransform\obj\Debug\ReverseTransform.MainForm.resources
-D:\Projects\RGDissertation\UI\ReverseTransform\obj\Debug\ReverseTransform.Properties.Resources.resources
-D:\Projects\RGDissertation\UI\ReverseTransform\obj\Debug\ReverseTransform.csproj.GenerateResource.Cache
-D:\Projects\RGDissertation\UI\ReverseTransform\obj\Debug\ReverseTransform.exe
-D:\Projects\RGDissertation\UI\ReverseTransform\obj\Debug\ReverseTransform.pdb
