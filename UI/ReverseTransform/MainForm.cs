@@ -1,58 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ReverseTransform
 {
   public partial class MainForm : Form
   {
-    internal class Pixel
-    {
-      public int X { get; set; }
-
-      public int Y { get; set; }
-
-      public Color Color { get; set; }
-    }
-
     public MainForm()
     {
       InitializeComponent();
     }
 
-    private Queue<Pixel> Pixels { get; set; }
+    private double Alpha { get; set; }
 
-    private Task GrTask { get; set; }
+    private double N { get; set; }
 
     protected override void OnShown(EventArgs e)
     {
       base.OnShown(e);
-      Pixels = new Queue<Pixel>();
+      InitializeConfig();
       InitializeArea();
-      InitializePainter();
     }
 
-    private void InitializePainter()
+    private void InitializeConfig()
     {
-      GrTask = new Task(() =>
-      {
-        while (Visible)
-        {
-          var bmp = pictureBox.Image as Bitmap;
-          if (bmp == null || !Pixels.Any())
-            continue;
-          lock (bmp)
-          {
-            var p = Pixels.Dequeue();
-            bmp.SetPixel(p.X, p.Y, p.Color);
-          }
-        }
-      });
-      GrTask.Start();
+      
     }
 
     private void InitializeArea()
@@ -70,7 +42,14 @@ namespace ReverseTransform
 
     private void SetPixel(int x, int y, Color color)
     {
-      Pixels.Enqueue(new Pixel { X = x, Y = y, Color = color });
+      var bmp = pictureBox.Image as Bitmap;
+      if (bmp != null)
+      {
+        lock (bmp)
+        {
+          bmp.SetPixel(x, y, color);
+        }
+      }
     }
 
     private void exitToolStripMenuItem_Click(object sender, EventArgs e)
