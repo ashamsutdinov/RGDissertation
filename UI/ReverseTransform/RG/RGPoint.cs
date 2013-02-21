@@ -1,15 +1,18 @@
 ﻿namespace ReverseTransform
 {
-  public class RGPoint
+  public class RGPoint<T>
   {
+    public T R { get; set; }
+
+    public T G { get; set; }
+  }
+
+  public class RGPoint :
 #if DECIMAL
-    public decimal R { get; set; }
-
-    public decimal G { get; set; }
+    RGPoint<decimal>
 #else
-    public double R { get; set; }
-
-    public double G { get; set; }
+ RGPoint<double>
 #endif
+  {
   }
 }

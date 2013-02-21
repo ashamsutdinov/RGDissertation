@@ -3,22 +3,22 @@ using System.Collections.Generic;
 
 namespace ReverseTransform
 {
-  public class CPoint
+  public class CPoint<T>
   {
+    public T C0 { get; set; }
+
+    public T C1 { get; set; }
+
+    public T C2 { get; set; }
+  }
+
+  public class CPoint :
 #if DECIMAL
-    public decimal C0 { get; set; }
-
-    public decimal C1 { get; set; }
-
-    public decimal C2 { get; set; }
+    CPoint<decimal>
 #else
-    public double C0 { get; set; }
-
-    public double C1 { get; set; }
-
-    public double C2 { get; set; }
+    CPoint<double>
 #endif
-
+  {
     public CPoint(
 #if DECIMAL
 decimal c0, decimal c1, decimal c2

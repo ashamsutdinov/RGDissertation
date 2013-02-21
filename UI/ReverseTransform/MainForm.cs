@@ -13,7 +13,7 @@ namespace ReverseTransform
       InitializeComponent();
     }
 
-    private ProcessingStack Stack { get; set; }
+    private readonly ProcessingStack Stack = new ProcessingStack();
 
 #if DECIMAL
     private decimal Alpha { get; set; }
@@ -25,11 +25,29 @@ namespace ReverseTransform
     private double N { get; set; }
 #endif
 
-    private CPoint P1 { get; set; }
+    private readonly CPoint P1 = new CPoint(1, 0, 0);
 
-    // ReSharper disable UnusedAutoPropertyAccessor.Local
-    private CPoint P2 { get; set; }
-    // ReSharper restore UnusedAutoPropertyAccessor.Local
+    private readonly CPoint P2 = new CPoint(0, 0, 1);
+
+    private readonly Brush BlackBrush = new SolidBrush(Color.Black);
+
+    private readonly Pen BlackPen = new Pen(Color.Black);
+
+    private readonly Pen RedPen = new Pen(Color.Red);
+
+    private readonly Pen WhitePen = new Pen(Color.White);
+
+    private readonly Color Red = Color.Red;
+
+    private readonly Color Blue = Color.Blue;
+
+    private readonly Color Black = Color.Black;
+
+    private readonly Color Green = Color.Green;
+
+    private readonly Color Yellow = Color.Yellow;
+
+    private readonly Color White = Color.White;
 
     protected override void OnShown(EventArgs e)
     {
@@ -60,28 +78,24 @@ namespace ReverseTransform
     {
       if (!pt.IsNormal)
       {
-        return Color.White;
+        return White;
       }
 
       var rp = pt.RG;
-      var baseClr = rp.G <= 0 ? Color.Green : Color.Yellow;
+      var baseClr = rp.G <= 0 ? Green : Yellow;
       var track = pt.ReverseTrack(P1, Alpha, N).ToList();
       if (track.Count == 100)
       {
         return baseClr;
       }
       var last = track.Last();
-      var clr = last.C1 < P1.C1 ?
-        Color.Red : Color.Blue;
+      var clr = last.C1 < P1.C1 ? Red : Blue;
       var resClr = Blend(baseClr, clr);
       return resClr;
     }
 
     private void InitializeConfig()
     {
-      Stack = new ProcessingStack();
-      P1 = new CPoint(1, 0, 0);
-      P2 = new CPoint(0, 0, 1);
       var frame = new ProcessingFrame
       {
         Rectangle = new DRect
@@ -110,18 +124,20 @@ namespace ReverseTransform
       Stack.Push(frame);
     }
 
-    private void Recreate()
+    private Bitmap Recreate()
     {
       if (pictureBox.Image != null)
       {
         pictureBox.Image.Dispose();
       }
-      pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
+      var bmp = new Bitmap(pictureBox.Width, pictureBox.Height);
+      pictureBox.Image = bmp;
+      return bmp;
     }
 
     private void Redraw()
     {
-      Recreate();
+      var bmp = Recreate();
       var fr = Stack.Peek();
       var r = fr.Rectangle;
       var w = pictureBox.Width;
@@ -149,7 +165,7 @@ namespace ReverseTransform
 #endif
           }
           var cpt = new CPoint(c0, c1, c2);
-          SetPixel(i, j, GetColor(cpt));
+          SetPixel(bmp, i, j, GetColor(cpt));
         }
       }
 
@@ -159,21 +175,22 @@ namespace ReverseTransform
       {
         var ix = (float)(Math.Abs(r.X) / onepxw);
         var jy = (float)(Math.Abs(r.Y) / onepxh);
-        gr.DrawEllipse(new Pen(Color.White), ix - 3, jy - 3, 6, 6);
+        gr.DrawEllipse(WhitePen, ix - 3, jy - 3, 6, 6);
       }
       if (r.X + r.Width > 1 && r.Y < 0 && r.Y + r.Height > 0)
       {
         var ix = (float)((Math.Abs(r.X) + 1) / onepxw);
         var jy = (float)(Math.Abs(r.Y) / onepxh);
-        gr.DrawEllipse(new Pen(Color.Red), ix - 3, jy - 3, 6, 6);
+        gr.DrawEllipse(RedPen, ix - 3, jy - 3, 6, 6);
       }
 
       gr.Save();
+
+      fr.Bitmap = new Bitmap(bmp);
     }
 
-    private void SetPixel(int x, int y, Color color)
+    private static void SetPixel(Bitmap bmp, int x, int y, Color color)
     {
-      var bmp = pictureBox.Image as Bitmap;
       if (bmp == null)
         return;
       lock (bmp)
@@ -200,12 +217,33 @@ namespace ReverseTransform
       var pixHt = r.Height / pictureBox.Height;
       var newX = r.X + e.X * pixWd;
       var newY = r.Y + e.Y * pixHt;
-      var newW = 30 * pixWd;
-      var newH = 30 * pixHt;
+      var newW = 20 * pixWd;
+      var newH = 20 * pixHt;
       var newRect = new DRect { X = newX, Y = newY, Width = newW, Height = newH };
       var newFr = new ProcessingFrame { Rectangle = newRect };
       Stack.Push(newFr);
       Redraw();
+    }
+
+    private void PictureBoxMouseMove(object sender, MouseEventArgs e)
+    {
+      var fr = Stack.Peek();
+      var bmp = fr.Bitmap;
+      if (bmp == null)
+        return;
+      lock (bmp)
+      {
+        var oldImg = pictureBox.Image;
+        pictureBox.Image = new Bitmap(bmp);
+
+        var gr = Graphics.FromImage(pictureBox.Image);
+        gr.DrawRectangle(BlackPen, e.X, e.Y, 20, 20);
+        gr.Save();
+        
+        pictureBox.Refresh();
+        if (oldImg != null)
+          oldImg.Dispose();
+      }
     }
   }
 }

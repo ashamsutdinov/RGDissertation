@@ -103,6 +103,7 @@
       this.pictureBox.TabStop = false;
       this.pictureBox.Click += new System.EventHandler(this.PictureBoxClick);
       this.pictureBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PictureBoxMouseDoubleClick);
+      this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBoxMouseMove);
       // 
       // MainForm
       // 
