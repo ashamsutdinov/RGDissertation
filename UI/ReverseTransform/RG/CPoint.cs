@@ -62,8 +62,8 @@ double c0, double c1, double c2
 #endif
         try
         {
-          var r = C0 > 0 || C0 < 0 ? -C1 / C0 : max;
-          var g = C0 > 0 || C0 < 0 ? (C1 * C1 - C0 * C2) / (C0 * C0) : max;
+          var r = C2 > 0 || C2 < 0 ? -C1 / C2 : max;
+          var g = C2 > 0 || C2 < 0 ? (C1 * C1 - C0 * C2) / (C2 * C2) : max;
           return new RGPoint { R = r, G = g };
         }
         catch (Exception)

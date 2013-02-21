@@ -25,29 +25,29 @@ namespace ReverseTransform
     private double N { get; set; }
 #endif
 
-    private readonly CPoint P1 = new CPoint(1, 0, 0);
+    private readonly CPoint _p1 = new CPoint(1, 0, 0);
 
-    private readonly CPoint P2 = new CPoint(0, 0, 1);
+    private readonly CPoint _p2 = new CPoint(0, 0, 1);
 
-    private readonly Brush BlackBrush = new SolidBrush(Color.Black);
+    private readonly Brush _blackBrush = new SolidBrush(Color.Black);
 
-    private readonly Pen BlackPen = new Pen(Color.Black);
+    private readonly Pen _blackPen = new Pen(Color.Black);
 
-    private readonly Pen RedPen = new Pen(Color.Red);
+    private readonly Pen _redPen = new Pen(Color.Red);
 
-    private readonly Pen WhitePen = new Pen(Color.White);
+    private readonly Pen _whitePen = new Pen(Color.White);
 
-    private readonly Color Red = Color.Red;
+    private readonly Color _red = Color.Red;
 
-    private readonly Color Blue = Color.Blue;
+    private readonly Color _blue = Color.Blue;
 
-    private readonly Color Black = Color.Black;
+    private readonly Color _black = Color.Black;
 
-    private readonly Color Green = Color.Green;
+    private readonly Color _green = Color.Green;
 
-    private readonly Color Yellow = Color.Yellow;
+    private readonly Color _yellow = Color.Yellow;
 
-    private readonly Color White = Color.White;
+    private readonly Color _white = Color.White;
 
     protected override void OnShown(EventArgs e)
     {
@@ -78,18 +78,19 @@ namespace ReverseTransform
     {
       if (!pt.IsNormal)
       {
-        return White;
+        return _white;
       }
 
       var rp = pt.RG;
-      var baseClr = rp.G <= 0 ? Green : Yellow;
-      var track = pt.ReverseTrack(P1, Alpha, N).ToList();
+      var baseClr = rp.G <= 0 ? _green : _yellow;
+     
+      var track = pt.ReverseTrack(_p1, Alpha, N).ToList();
       if (track.Count == 100)
       {
         return baseClr;
       }
       var last = track.Last();
-      var clr = last.C1 < P1.C1 ? Red : Blue;
+      var clr = last.C1 < _p1.C1 ? _red : _blue;
       var resClr = Blend(baseClr, clr);
       return resClr;
     }
@@ -135,6 +136,32 @@ namespace ReverseTransform
       return bmp;
     }
 
+    private void DrawParabola(Color clr, double a, double b, Graphics gr, DRect r, double onepxw, double onepxh, int w, int h)
+    {
+      var rgParabola = RGPoint.Parabola(Alpha, N, a, b);
+      var cParabola = rgParabola.Select(rg => rg.C).ToList();
+      var pen = new Pen(clr);
+
+      for (var i = 0; i < cParabola.Count - 1; i++)
+      {
+        var cp1 = cParabola[i];
+        var cp2 = cParabola[i + 1];
+
+        var i1 = (cp1.C0 - r.X) / onepxw;
+        var i2 = (cp2.C0 - r.X) / onepxw;
+        var j1 = (cp1.C1 - r.Y) / onepxh;
+        var j2 = (cp2.C1 - r.Y) / onepxh;
+
+        if (Math.Abs(i1 - i2) <= 20)
+        {
+          if (i1 >= 0 && i1 <= w && i2 >= 0 && i2 <= w && j1 >= 0 && j1 <= h && j2 >= 0 && j2 <= h)
+          {
+            gr.DrawLine(pen, (float) i1, (float) j1, (float) i2, (float) j2);
+          }
+        }
+      }
+    }
+
     private void Redraw()
     {
       var bmp = Recreate();
@@ -175,13 +202,20 @@ namespace ReverseTransform
       {
         var ix = (float)(Math.Abs(r.X) / onepxw);
         var jy = (float)(Math.Abs(r.Y) / onepxh);
-        gr.DrawEllipse(WhitePen, ix - 3, jy - 3, 6, 6);
+        gr.DrawEllipse(_whitePen, ix - 3, jy - 3, 6, 6);
       }
       if (r.X + r.Width > 1 && r.Y < 0 && r.Y + r.Height > 0)
       {
         var ix = (float)((Math.Abs(r.X) + 1) / onepxw);
         var jy = (float)(Math.Abs(r.Y) / onepxh);
-        gr.DrawEllipse(RedPen, ix - 3, jy - 3, 6, 6);
+        gr.DrawEllipse(_redPen, ix - 3, jy - 3, 6, 6);
+      }
+
+      for (var a = -5; a <= 5; a+=1)
+      {
+        var cl = (a + 5) * 25;
+        var clr = Color.FromArgb(255, cl, cl, cl);
+        DrawParabola(clr, a, 1, gr, r, onepxw, onepxh, w, h);
       }
 
       gr.Save();
@@ -237,9 +271,9 @@ namespace ReverseTransform
         pictureBox.Image = new Bitmap(bmp);
 
         var gr = Graphics.FromImage(pictureBox.Image);
-        gr.DrawRectangle(BlackPen, e.X, e.Y, 20, 20);
+        gr.DrawRectangle(_blackPen, e.X, e.Y, 20, 20);
         gr.Save();
-        
+
         pictureBox.Refresh();
         if (oldImg != null)
           oldImg.Dispose();
