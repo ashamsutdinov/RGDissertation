@@ -33,7 +33,7 @@ namespace rg
       var lambda = _lambda.Value;
       var l1 = Math.Pow(lambda, -1);
 
-      for (var r = -100.0; r <= 100.0; r += 0.01)
+      for (var r = -1000.0; r <= 1000.0; r += 0.01)
       {
         var g = r;
         if (g - b == 0)

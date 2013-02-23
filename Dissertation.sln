@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReverseTransform", "UI\Reve
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicSystem", "UI\doubleClick\DynamicSystem\DynamicSystem\DynamicSystem.csproj", "{2A811637-E4F3-4B69-9D43-193E0F67B004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rg", "rg\rg.csproj", "{278039E8-96C0-465F-8595-69F414D750B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rg", "UI\rg\rg.csproj", "{278039E8-96C0-465F-8595-69F414D750B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
