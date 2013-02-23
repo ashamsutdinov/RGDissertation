@@ -1,0 +1,16 @@
+bin\Debug\DynamicSystem.exe
+bin\Debug\DynamicSystem.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\DynamicSystem.Form1.resources
+obj\Debug\DynamicSystem.Properties.Resources.resources
+obj\Debug\DynamicSystem.csproj.GenerateResource.Cache
+obj\Debug\DynamicSystem.exe
+obj\Debug\DynamicSystem.pdb
+bin\Release\DynamicSystem.exe
+bin\Release\DynamicSystem.pdb
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\DynamicSystem.Form1.resources
+obj\Release\DynamicSystem.Properties.Resources.resources
+obj\Release\DynamicSystem.csproj.GenerateResource.Cache
+obj\Release\DynamicSystem.exe
+obj\Release\DynamicSystem.pdb

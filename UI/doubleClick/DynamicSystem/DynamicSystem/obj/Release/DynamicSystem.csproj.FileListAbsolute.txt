@@ -1,0 +1,8 @@
+D:\Projects\RGDissertation\doubleClick\DynamicSystem\DynamicSystem\obj\Release\DynamicSystem.exe
+D:\Projects\RGDissertation\doubleClick\DynamicSystem\DynamicSystem\obj\Release\DynamicSystem.pdb
+D:\Projects\RGDissertation\doubleClick\DynamicSystem\DynamicSystem\bin\Release\DynamicSystem.exe
+D:\Projects\RGDissertation\doubleClick\DynamicSystem\DynamicSystem\bin\Release\DynamicSystem.pdb
+D:\Projects\RGDissertation\doubleClick\DynamicSystem\DynamicSystem\obj\Release\DynamicSystem.csprojResolveAssemblyReference.cache
+D:\Projects\RGDissertation\doubleClick\DynamicSystem\DynamicSystem\obj\Release\DynamicSystem.Form1.resources
+D:\Projects\RGDissertation\doubleClick\DynamicSystem\DynamicSystem\obj\Release\DynamicSystem.Properties.Resources.resources
+D:\Projects\RGDissertation\doubleClick\DynamicSystem\DynamicSystem\obj\Release\DynamicSystem.csproj.GenerateResource.Cache
