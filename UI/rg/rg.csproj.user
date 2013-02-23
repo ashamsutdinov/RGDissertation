@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>curves a=2 n=2 sz=1000 amin=-10 amax=10 astep=0,1</StartArguments>
+    <StartArguments>a=2 n=2 sz=10000 amin=-10 amax=10 astep=1 dynamics x=0,9 y=-0,9 w=0,12 h=0,12</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartArguments>curves a=1,7 n=2 sz=10000 amin=-10 amax=10 astep=1</StartArguments>

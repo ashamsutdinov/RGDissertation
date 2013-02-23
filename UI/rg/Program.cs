@@ -13,6 +13,8 @@ namespace rg
 
     public static double N { get; set; }
 
+    public static double Lambda { get; set; }
+
     public static bool Curves { get; set; }
 
     public static bool Dynamics { get; set; }
@@ -109,6 +111,51 @@ namespace rg
       return resClr;
     }
 
+    private static double Correct(double value, double max)
+    {
+      if (value < 0)
+        return 0;
+      if (value >= max)
+        return max - 1;
+      return value;
+    }
+
+    private static void DrawLine(Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
+    {
+      var i1 = Correct((cp1.C0 - X) / OnePixelX, Sz);
+      var i2 = Correct((cp2.C0 - X) / OnePixelX, Sz);
+      var j1 = Correct((cp1.C1 - Y) / OnePixelY, Sz);
+      var j2 = Correct((cp2.C1 - Y) / OnePixelY, Sz);
+
+      var di = Math.Abs(i2 - i1);
+      var dj = Math.Abs(j2 - j1);
+      var d = Math.Sqrt(di * di + dj * dj);
+
+      var check = Sz / 2;
+      if (d >= check && verify)
+      {
+        return;
+      }
+
+      lock (gr)
+      {
+        gr.DrawLine(pen, (float)i1, (float)j1, (float)i2, (float)j2);
+      }
+    }
+
+    private static void FillPoint(Color clr, CPoint cp1, Graphics gr)
+    {
+      var i1 = Correct((cp1.C0 - X) / OnePixelX, Sz);
+      var j1 = Correct((cp1.C1 - Y) / OnePixelY, Sz);
+
+      var brush = new SolidBrush(clr);
+
+      lock (gr)
+      {
+        gr.FillEllipse(brush, (float)(i1 - 3), (float)(j1 - 3), 6, 6);
+      }
+    }
+
     private static void DrawParabola(Color clr, double a, double b, Graphics gr)
     {
       var rgParabola = RGPoint.Parabola(Alpha, N, a, b);
@@ -119,27 +166,15 @@ namespace rg
       {
         var cp1 = cParabola[i];
         var cp2 = cParabola[i + 1];
-
-        var i1 = (cp1.C0 - X) / OnePixelX;
-        var i2 = (cp2.C0 - X) / OnePixelX;
-        var j1 = (cp1.C1 - Y) / OnePixelY;
-        var j2 = (cp2.C1 - Y) / OnePixelY;
-
-        var check = Sz / 2;
-
-        if (!(Math.Abs(i1 - i2) <= check))
-          continue;
-
-        /*
-         * if (!(i1 >= 0) || !(i1 < Sz) || !(i2 >= 0) || !(i2 <= Sz) || !(j1 >= 0) || !(j1 <= Sz) || !(j2 >= 0) ||
-            !(j2 <= Sz)) continue;
-         * */
-
-        lock (gr)
-        {
-          gr.DrawLine(pen, (float)i1, (float)j1, (float)i2, (float)j2);
-        }
+        DrawLine(pen, cp1, cp2, gr);
       }
+      var dim = a - b - 2 * Math.Pow(Lambda, -1);
+      var div = (Math.Sqrt(1 + dim * dim));
+      var c0 = -1 / div;
+      var c1 = dim / div;
+      var cpt1 = new CPoint(c0, c1, 1);
+      var cpt2 = cpt1.Diametral;
+      FillPoint(clr, cpt1, gr);
     }
 
     private static void ReadConfig(IEnumerable<string> args)
@@ -191,10 +226,23 @@ namespace rg
           case "nodynamics":
             Dynamics = false;
             break;
+          case "x":
+            X = double.Parse(val);
+            break;
+          case "y":
+            Y = double.Parse(val);
+            break;
+          case "w":
+            W = double.Parse(val);
+            break;
+          case "h":
+            H = double.Parse(val);
+            break;
         }
       }
       OnePixelX = W / Sz;
       OnePixelY = H / Sz;
+      Lambda = Math.Pow(N, Alpha - 1);
     }
 
     private static void CreateBitmap()
@@ -264,8 +312,8 @@ namespace rg
     private static void SaveBitmap()
     {
       Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
-      var fname = string.Format("a{0}-n{1}.bmp", Alpha, N);
-      Image.Save(fname);
+      var fname = string.Format("a{0}-n{1}-({0}-{1})({2}-{3}).png", Alpha, N, X, Y, X + W, Y + W);
+      Image.Save(fname, ImageFormat.Png);
       Image.Dispose();
     }
 
