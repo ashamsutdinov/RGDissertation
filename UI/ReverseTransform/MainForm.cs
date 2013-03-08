@@ -129,12 +129,31 @@ namespace ReverseTransform
 
     private void FillPoint(CPoint p1, Color clr)
     {
-
+      var np = NPt(p1);
+      var gr = Graphics.FromImage(pictureBox.Image);
+      gr.FillEllipse(new SolidBrush(clr), np.X - 2, np.Y - 2, 4, 4);
     }
 
     private void DrawLine(CPoint p1, CPoint p2, Color clr)
     {
+      FillPoint(p1, clr);
+      FillPoint(p2, clr);
 
+      var np1 = NPt(p1);
+      var np2 = NPt(p2);
+
+      var gr = Graphics.FromImage(pictureBox.Image);
+      gr.DrawLine(new Pen(clr), np1, np2);
+    }
+
+    private Point NPt(CPoint p)
+    {
+      var fr = _stack.Peek();
+      var xA = fr.Rectangle.Width / pictureBox.Width;
+      var yA = fr.Rectangle.Height / pictureBox.Height;
+      var i = (int)((p.C0 - fr.Rectangle.X) / xA);
+      var j = (int)((p.C1 - fr.Rectangle.Y) / yA);
+      return new Point(i, j);
     }
 
     private void Redraw()
@@ -234,12 +253,31 @@ namespace ReverseTransform
       var pixHt = r.Height / pictureBox.Height;
       var newX = r.X + e.X * pixWd;
       var newY = r.Y + e.Y * pixHt;
-      var newW = 20 * pixWd;
-      var newH = 20 * pixHt;
-      var newRect = new DRect { X = newX, Y = newY, Width = newW, Height = newH };
-      var newFr = new ProcessingFrame { Rectangle = newRect };
-      _stack.Push(newFr);
-      Redraw();
+
+      if (_pointSelecting)
+      {
+        var c0 = newX;
+        var c1 = newY;
+        var rd = c0 * c0 + c1 * c1;
+        var c2 = 1 - rd;
+        if (rd <= 1)
+        {
+          c2 = Math.Sqrt(c2);
+          var cpt = new CPoint(c0, c1, c2);
+          _pointSelected = cpt;
+          DrawPoint();
+        }
+        _pointSelecting = false;
+      }
+      else
+      {
+        var newW = 20 * pixWd;
+        var newH = 20 * pixHt;
+        var newRect = new DRect { X = newX, Y = newY, Width = newW, Height = newH };
+        var newFr = new ProcessingFrame { Rectangle = newRect };
+        _stack.Push(newFr);
+        Redraw();
+      }
     }
 
     private void PictureBoxMouseMove(object sender, MouseEventArgs e)
@@ -276,12 +314,14 @@ namespace ReverseTransform
 
     private void SetPointToolStripMenuItemClick(object sender, EventArgs e)
     {
-
+      _pointSelecting = true;
     }
 
     private void CleanPointToolStripMenuItemClick(object sender, EventArgs e)
     {
-
+      _pointSelected = null;
+      pictureBox.Image = new Bitmap(_stack.Peek().Bitmap);
     }
   }
 }
+
