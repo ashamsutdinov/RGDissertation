@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace ReverseTransform
@@ -13,23 +12,13 @@ namespace ReverseTransform
       InitializeComponent();
     }
 
-    private readonly ProcessingStack Stack = new ProcessingStack();
+    private readonly ProcessingStack _stack = new ProcessingStack();
 
-#if DECIMAL
-    private decimal Alpha { get; set; }
+    public double Alpha;
 
-    private decimal N { get; set; }
-#else
-    private double Alpha { get; set; }
-
-    private double N { get; set; }
-#endif
+    public double N;
 
     private readonly CPoint _p1 = new CPoint(1, 0, 0);
-
-    private readonly CPoint _p2 = new CPoint(0, 0, 1);
-
-    private readonly Brush _blackBrush = new SolidBrush(Color.Black);
 
     private readonly Pen _blackPen = new Pen(Color.Black);
 
@@ -41,13 +30,17 @@ namespace ReverseTransform
 
     private readonly Color _blue = Color.Blue;
 
-    private readonly Color _black = Color.Black;
-
     private readonly Color _green = Color.Green;
 
     private readonly Color _yellow = Color.Yellow;
 
     private readonly Color _white = Color.White;
+
+    private readonly Color _black = Color.Black;
+
+    private bool _pointSelecting;
+
+    private CPoint _pointSelected;
 
     protected override void OnShown(EventArgs e)
     {
@@ -76,22 +69,28 @@ namespace ReverseTransform
 
     private Color GetColor(CPoint pt)
     {
-      if (!pt.IsNormal)
-      {
-        return _white;
-      }
-
       var rp = pt.RG;
+      /*      
       var baseClr = rp.G <= 0 ? _green : _yellow;
-     
-      var track = pt.ReverseTrack(_p1, Alpha, N).ToList();
+      var track = pt.ReverseTrack(_p1, Alpha, N);
       if (track.Count == 100)
       {
-        return baseClr;
+        return _black;
       }
       var last = track.Last();
       var clr = last.C1 < _p1.C1 ? _red : _blue;
       var resClr = Blend(baseClr, clr);
+      return resClr;
+       * */
+      var cnt = 0;
+      var end = pt.ReverseTrackEndPoint(_p1, Alpha, N, out cnt);
+      if (cnt >= 100)
+      {
+        return _black;
+      }
+      var last = end;
+      var clr = rp.G < 0 ? (last.C1 < _p1.C1 ? _yellow : _green) : (last.C1 < _p1.C1 ? _red : _blue);
+      var resClr = clr;
       return resClr;
     }
 
@@ -101,28 +100,20 @@ namespace ReverseTransform
       {
         Rectangle = new DRect
           {
-#if DECIMAL
-            X = -1.1M,
-            Y = -1.1M,
-            Width = 2.2M,
-            Height = 2.2M
-#else
             X = -1.1,
             Y = -1.1,
             Width = 2.2,
             Height = 2.2
-#endif
           }
       };
       var conf = ConfigurationManager.AppSettings;
-#if DECIMAL
-      Alpha = decimal.Parse(conf["Alpha"]);
-      N = decimal.Parse(conf["N"]);
-#else
       Alpha = double.Parse(conf["Alpha"]);
       N = double.Parse(conf["N"]);
-#endif
-      Stack.Push(frame);
+      CPoint.Lambda = Math.Pow(N, Alpha - 1);
+      CPoint.LambdaMinus1 = 1 / CPoint.Lambda;
+      CPoint.LambdaMinus2 = CPoint.LambdaMinus1 / CPoint.Lambda;
+      CPoint.NLambdaMinus2 = N * CPoint.LambdaMinus2;
+      _stack.Push(frame);
     }
 
     private Bitmap Recreate()
@@ -136,36 +127,20 @@ namespace ReverseTransform
       return bmp;
     }
 
-    private void DrawParabola(Color clr, double a, double b, Graphics gr, DRect r, double onepxw, double onepxh, int w, int h)
+    private void FillPoint(CPoint p1, Color clr)
     {
-      var rgParabola = RGPoint.Parabola(Alpha, N, a, b);
-      var cParabola = rgParabola.Select(rg => rg.C).ToList();
-      var pen = new Pen(clr);
 
-      for (var i = 0; i < cParabola.Count - 1; i++)
-      {
-        var cp1 = cParabola[i];
-        var cp2 = cParabola[i + 1];
+    }
 
-        var i1 = (cp1.C0 - r.X) / onepxw;
-        var i2 = (cp2.C0 - r.X) / onepxw;
-        var j1 = (cp1.C1 - r.Y) / onepxh;
-        var j2 = (cp2.C1 - r.Y) / onepxh;
+    private void DrawLine(CPoint p1, CPoint p2, Color clr)
+    {
 
-        if (Math.Abs(i1 - i2) <= 20)
-        {
-          if (i1 >= 0 && i1 <= w && i2 >= 0 && i2 <= w && j1 >= 0 && j1 <= h && j2 >= 0 && j2 <= h)
-          {
-            gr.DrawLine(pen, (float) i1, (float) j1, (float) i2, (float) j2);
-          }
-        }
-      }
     }
 
     private void Redraw()
     {
       var bmp = Recreate();
-      var fr = Stack.Peek();
+      var fr = _stack.Peek();
       var r = fr.Rectangle;
       var w = pictureBox.Width;
       var h = pictureBox.Height;
@@ -185,14 +160,14 @@ namespace ReverseTransform
           var c2 = 1 - rd;
           if (rd <= 1)
           {
-#if DECIMAL
-            c2 = c2.SqrtB();
-#else
             c2 = Math.Sqrt(c2);
-#endif
+            var cpt = new CPoint(c0, c1, c2);
+            SetPixel(bmp, i, j, GetColor(cpt));
           }
-          var cpt = new CPoint(c0, c1, c2);
-          SetPixel(bmp, i, j, GetColor(cpt));
+          else
+          {
+            SetPixel(bmp, i, j, _white);
+          }
         }
       }
 
@@ -211,16 +186,24 @@ namespace ReverseTransform
         gr.DrawEllipse(_redPen, ix - 3, jy - 3, 6, 6);
       }
 
-      for (var a = -5; a <= 5; a+=1)
-      {
-        var cl = (a + 5) * 25;
-        var clr = Color.FromArgb(255, cl, cl, cl);
-        DrawParabola(clr, a, 1, gr, r, onepxw, onepxh, w, h);
-      }
-
       gr.Save();
 
       fr.Bitmap = new Bitmap(bmp);
+      DrawPoint();
+    }
+
+    private void DrawPoint()
+    {
+      if (_pointSelected == null)
+        return;
+
+      var dyn = _pointSelected.ReverseTrack(_p1, Alpha, N);
+      for (var i = 0; i < dyn.Count - 1; i++)
+      {
+        var p1 = dyn[i];
+        var p2 = dyn[i + 1];
+        DrawLine(p1, p2, _black);
+      }
     }
 
     private static void SetPixel(Bitmap bmp, int x, int y, Color color)
@@ -245,7 +228,7 @@ namespace ReverseTransform
 
     private void PictureBoxMouseDoubleClick(object sender, MouseEventArgs e)
     {
-      var fr = Stack.Peek();
+      var fr = _stack.Peek();
       var r = fr.Rectangle;
       var pixWd = r.Width / pictureBox.Width;
       var pixHt = r.Height / pictureBox.Height;
@@ -255,13 +238,13 @@ namespace ReverseTransform
       var newH = 20 * pixHt;
       var newRect = new DRect { X = newX, Y = newY, Width = newW, Height = newH };
       var newFr = new ProcessingFrame { Rectangle = newRect };
-      Stack.Push(newFr);
+      _stack.Push(newFr);
       Redraw();
     }
 
     private void PictureBoxMouseMove(object sender, MouseEventArgs e)
     {
-      var fr = Stack.Peek();
+      var fr = _stack.Peek();
       var bmp = fr.Bitmap;
       if (bmp == null)
         return;
@@ -278,6 +261,27 @@ namespace ReverseTransform
         if (oldImg != null)
           oldImg.Dispose();
       }
+    }
+
+    private void BackToolStripMenuItemClick(object sender, EventArgs e)
+    {
+      if (_stack.Count < 2)
+        return;
+
+      var peek = _stack.Pop();
+      pictureBox.Image = new Bitmap(peek.Bitmap);
+      DrawPoint();
+      pictureBox.Refresh();
+    }
+
+    private void SetPointToolStripMenuItemClick(object sender, EventArgs e)
+    {
+
+    }
+
+    private void CleanPointToolStripMenuItemClick(object sender, EventArgs e)
+    {
+
     }
   }
 }

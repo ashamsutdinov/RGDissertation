@@ -3,49 +3,27 @@ using System.Collections.Generic;
 
 namespace ReverseTransform
 {
-  public class RGPoint<T>
+  public class RGPoint
   {
-    public T R { get; set; }
+    public double R;
 
-    public T G { get; set; }
-  }
+    public double G;
 
-  public class RGPoint :
-#if DECIMAL
-    RGPoint<decimal>
-#else
- RGPoint<double>
-#endif
-  {
     public CPoint C
     {
       get
       {
-        return new CPoint(R * R - G, -R, 1).Normalized;
+        return new CPoint(R * R - G, -R, 1);
       }
     }
 
-#if DECIMAL
-    private static decimal? _lambda;
-#else
     private static double? _lambda;
-#endif
 
-    public static IEnumerable<RGPoint> Parabola(
-#if DECINAL
-      decimal alpha, decimal n, decimal a, decimal b
-#else
-      double alpha, double n, double a, double b
-#endif
-      )
+    public static IEnumerable<RGPoint> Parabola(double alpha, double n, double a, double b)
     {
       if (_lambda == null)
       {
-        var l =
-#if DECIMAL
- (decimal)
-#endif
- Math.Pow((double)n, (double)alpha - 1);
+        var l = Math.Pow(n, alpha - 1);
         _lambda = l;
       }
       var lambda = _lambda.Value;
@@ -60,9 +38,9 @@ namespace ReverseTransform
         }
         else
         {
-          g = ((r - a)/(r - b))*Math.Pow(r + l1, 2);
+          g = ((r - a) / (r - b)) * Math.Pow(r + l1, 2);
         }
-        yield return new RGPoint {R = r, G = g};
+        yield return new RGPoint { R = r, G = g };
       }
     }
   }

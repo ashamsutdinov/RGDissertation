@@ -15,7 +15,7 @@ namespace rg
 
     public static double Lambda { get; set; }
 
-    public static bool Curves { get; set; }
+    public static string Curves { get; set; }
 
     public static bool Dynamics { get; set; }
 
@@ -69,7 +69,7 @@ namespace rg
 
     private static readonly Color White = Color.White;
 
-    private static readonly Color BgColor = Color.Indigo;
+    private static readonly Color BgColor = Color.IndianRed;
 
     private static ParallelOptions POpts { get; set; }
 
@@ -99,6 +99,12 @@ namespace rg
       }
 
       var rp = pt.RG;
+
+      if (!Dynamics)
+      {
+        return rp.G < 0 ? Green : Blue;
+      }
+
       var baseClr = rp.G <= 0 ? White : Black;
 
       var track = pt.ReverseTrack(P1, Alpha, N).ToList();
@@ -131,7 +137,7 @@ namespace rg
       var dj = Math.Abs(j2 - j1);
       var d = Math.Sqrt(di * di + dj * dj);
 
-      var check = Sz / 2;
+      var check = Sz / 10;
       if (d >= check && verify)
       {
         return;
@@ -143,7 +149,7 @@ namespace rg
       }
     }
 
-    private static void FillPoint(Color clr, CPoint cp1, Graphics gr)
+    private static void FillPoint(Color clr, CPoint cp1, Graphics gr, int radius = 3)
     {
       var i1 = Correct((cp1.C0 - X) / OnePixelX, Sz);
       var j1 = Correct((cp1.C1 - Y) / OnePixelY, Sz);
@@ -152,13 +158,13 @@ namespace rg
 
       lock (gr)
       {
-        gr.FillEllipse(brush, (float)(i1 - 3), (float)(j1 - 3), 6, 6);
+        gr.FillEllipse(brush, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
       }
     }
 
     private static void DrawParabola(Color clr, double a, double b, Graphics gr)
     {
-      var rgParabola = RGPoint.Parabola(Alpha, N, a, b);
+      var rgParabola = RGPoint.Parabola(Alpha, N, a, b, Curves);
       var cParabola = rgParabola.Select(rg => rg.C).ToList();
       var pen = new Pen(clr);
 
@@ -168,6 +174,21 @@ namespace rg
         var cp2 = cParabola[i + 1];
         DrawLine(pen, cp1, cp2, gr);
       }
+
+      /*
+     const int maxRadius = 15;
+     const int minRadius = 1;
+     const int diff = maxRadius - minRadius;
+     for (var i = 0; i < cParabola.Count; i++)
+     {
+       var percent = i * 1.0 / cParabola.Count;
+       var radius = minRadius + diff * percent;
+       FillPoint(clr, cParabola[i], gr, (int)radius);
+     }
+      */
+
+      /*
+
       var dim = a - b - 2 * Math.Pow(Lambda, -1);
       var div = (Math.Sqrt(1 + dim * dim));
       var c0 = -1 / div;
@@ -175,13 +196,34 @@ namespace rg
       var cpt1 = new CPoint(c0, c1, 1);
       var cpt2 = cpt1.Diametral;
       FillPoint(clr, cpt1, gr);
+      FillPoint(clr, cpt2, gr);
+
+
+      var nearToB = rgParabola.Where(rg => Math.Abs(rg.R - b) < 0.002).Select(rg => rg.C).ToArray();
+      for (var i = 0; i < nearToB.Length; i++)
+      {
+        var r = i;
+        if (i > nearToB.Length / 2)
+          r = nearToB.Length - i;
+        FillPoint(clr, nearToB[i], gr, r);
+      }
+      */
+
+      if (cParabola.Any())
+      {
+        var first = cParabola.First();
+        var last = cParabola.Last();
+
+        FillPoint(clr, first, gr);
+        FillPoint(clr, last, gr);
+      }
     }
 
     private static void ReadConfig(IEnumerable<string> args)
     {
       Alpha = 1.7;
       N = 2;
-      Curves = false;
+      Curves = null;
       AMin = -10;
       AMax = 10;
       AStep = 1;
@@ -200,7 +242,7 @@ namespace rg
         switch (cfg)
         {
           case "curves":
-            Curves = true;
+            Curves = val;
             break;
           case "a":
             Alpha = double.Parse(val);
@@ -255,18 +297,15 @@ namespace rg
 
     private static void ProcessBitmap()
     {
-      if (Dynamics)
-      {
-        DrawDynamics();
-      }
-      if (Curves)
-      {
-        DrawParabolas();
-      }
+      DrawDynamics();
+      DrawParabolas();
     }
 
     private static void DrawParabolas()
     {
+      if (Curves == null)
+        return;
+
       var clrMax = (int)Math.Abs(AMax - AMin);
       var cnt = (int)(clrMax / AStep + 1);
       var step = 255.0 / cnt;
@@ -312,7 +351,7 @@ namespace rg
     private static void SaveBitmap()
     {
       Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
-      var fname = string.Format("a{0}-n{1}-({0}-{1})({2}-{3}).png", Alpha, N, X, Y, X + W, Y + W);
+      var fname = string.Format("a{0}n{1}({2};{3})({4};{5})_({6}).png", Alpha, N, X, Y, X + W, Y + W, Curves);
       Image.Save(fname, ImageFormat.Png);
       Image.Dispose();
     }

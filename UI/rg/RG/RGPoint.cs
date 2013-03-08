@@ -23,7 +23,21 @@ namespace rg
 
     private static double? _lambda;
 
-    public static IEnumerable<RGPoint> Parabola(double alpha, double n, double a, double b)
+    private static RGPoint ParabolaPt(double r, double a, double b, double l1)
+    {
+      var g = r;
+      if (g - b == 0)
+      {
+        g = double.MaxValue;
+      }
+      else
+      {
+        g = ((r - a) / (r - b)) * Math.Pow(r + l1, 2);
+      }
+      return new RGPoint { R = r, G = g };
+    }
+
+    public static IEnumerable<RGPoint> Parabola(double alpha, double n, double a, double b, string mode = "all")
     {
       if (_lambda == null)
       {
@@ -33,18 +47,26 @@ namespace rg
       var lambda = _lambda.Value;
       var l1 = Math.Pow(lambda, -1);
 
-      for (var r = -1000.0; r <= 1000.0; r += 0.01)
+      switch (mode)
       {
-        var g = r;
-        if (g - b == 0)
-        {
-          g = double.MaxValue;
-        }
-        else
-        {
-          g = ((r - a) / (r - b)) * Math.Pow(r + l1, 2);
-        }
-        yield return new RGPoint { R = r, G = g };
+        case "left":
+          for (var r = -1000.0; r <= b; r += 0.001)
+          {
+            yield return ParabolaPt(r, a, b, l1);
+          }
+          break;
+        case "right":
+          for (var r = b; r <= 1000.0; r += 0.001)
+          {
+            yield return ParabolaPt(r, a, b, l1);
+          }
+          break;
+        default:
+          for (var r = -1000.0; r <= 1000.0; r += 0.001)
+          {
+            yield return ParabolaPt(r, a, b, l1);
+          }
+          break;
       }
     }
   }

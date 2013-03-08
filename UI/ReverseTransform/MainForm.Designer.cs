@@ -32,10 +32,12 @@
       this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
       this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
       this.pictureBox = new System.Windows.Forms.PictureBox();
+      this.imageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.backToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.setPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.cleanPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
       this.SuspendLayout();
@@ -44,10 +46,10 @@
       // 
       this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.imageToolStripMenuItem});
       this.menuStrip1.Location = new System.Drawing.Point(0, 0);
       this.menuStrip1.Name = "menuStrip1";
-      this.menuStrip1.Size = new System.Drawing.Size(1318, 24);
+      this.menuStrip1.Size = new System.Drawing.Size(1284, 24);
       this.menuStrip1.TabIndex = 0;
       this.menuStrip1.Text = "mainMenu";
       // 
@@ -63,34 +65,20 @@
       // toolStripSeparator1
       // 
       this.toolStripSeparator1.Name = "toolStripSeparator1";
-      this.toolStripSeparator1.Size = new System.Drawing.Size(89, 6);
+      this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
       // 
       // exitToolStripMenuItem
       // 
       this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-      this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+      this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
       this.exitToolStripMenuItem.Text = "Exit";
       this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
-      // 
-      // helpToolStripMenuItem
-      // 
-      this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
-      this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-      this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-      this.helpToolStripMenuItem.Text = "Help";
-      // 
-      // aboutToolStripMenuItem
-      // 
-      this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-      this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-      this.aboutToolStripMenuItem.Text = "About";
       // 
       // statusStrip1
       // 
       this.statusStrip1.Location = new System.Drawing.Point(0, 780);
       this.statusStrip1.Name = "statusStrip1";
-      this.statusStrip1.Size = new System.Drawing.Size(1318, 22);
+      this.statusStrip1.Size = new System.Drawing.Size(1284, 22);
       this.statusStrip1.TabIndex = 1;
       this.statusStrip1.Text = "statusBar";
       // 
@@ -105,11 +93,42 @@
       this.pictureBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PictureBoxMouseDoubleClick);
       this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBoxMouseMove);
       // 
+      // imageToolStripMenuItem
+      // 
+      this.imageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.backToolStripMenuItem,
+            this.setPointToolStripMenuItem,
+            this.cleanPointToolStripMenuItem});
+      this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
+      this.imageToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+      this.imageToolStripMenuItem.Text = "Image";
+      // 
+      // backToolStripMenuItem
+      // 
+      this.backToolStripMenuItem.Name = "backToolStripMenuItem";
+      this.backToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.backToolStripMenuItem.Text = "Back";
+      this.backToolStripMenuItem.Click += new System.EventHandler(this.BackToolStripMenuItemClick);
+      // 
+      // setPointToolStripMenuItem
+      // 
+      this.setPointToolStripMenuItem.Name = "setPointToolStripMenuItem";
+      this.setPointToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.setPointToolStripMenuItem.Text = "Set point";
+      this.setPointToolStripMenuItem.Click += new System.EventHandler(this.SetPointToolStripMenuItemClick);
+      // 
+      // cleanPointToolStripMenuItem
+      // 
+      this.cleanPointToolStripMenuItem.Name = "cleanPointToolStripMenuItem";
+      this.cleanPointToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.cleanPointToolStripMenuItem.Text = "Clean point";
+      this.cleanPointToolStripMenuItem.Click += new System.EventHandler(this.CleanPointToolStripMenuItemClick);
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1318, 802);
+      this.ClientSize = new System.Drawing.Size(1284, 802);
       this.Controls.Add(this.pictureBox);
       this.Controls.Add(this.statusStrip1);
       this.Controls.Add(this.menuStrip1);
@@ -130,10 +149,12 @@
     private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     private System.Windows.Forms.StatusStrip statusStrip1;
     private System.Windows.Forms.PictureBox pictureBox;
+    private System.Windows.Forms.ToolStripMenuItem imageToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem backToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem setPointToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem cleanPointToolStripMenuItem;
   }
 }
 
