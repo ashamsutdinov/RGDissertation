@@ -282,6 +282,9 @@ namespace ReverseTransform
 
     private void PictureBoxMouseMove(object sender, MouseEventArgs e)
     {
+      if (_pointSelecting)
+        return;
+
       var fr = _stack.Peek();
       var bmp = fr.Bitmap;
       if (bmp == null)
@@ -294,7 +297,7 @@ namespace ReverseTransform
         var gr = Graphics.FromImage(pictureBox.Image);
         gr.DrawRectangle(_blackPen, e.X, e.Y, 20, 20);
         gr.Save();
-
+        DrawPoint();
         pictureBox.Refresh();
         if (oldImg != null)
           oldImg.Dispose();
