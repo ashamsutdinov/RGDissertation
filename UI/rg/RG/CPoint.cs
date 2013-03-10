@@ -3,18 +3,14 @@ using System.Collections.Generic;
 
 namespace rg
 {
-  public class CPoint<T>
+  public class CPoint
   {
-    public T C0 { get; set; }
+    public double C0;
 
-    public T C1 { get; set; }
+    public double C1;
 
-    public T C2 { get; set; }
-  }
+    public double C2;
 
-  public class CPoint :
-    CPoint<double>
-  {
     public CPoint(double c0, double c1, double c2)
     {
       C0 = c0;

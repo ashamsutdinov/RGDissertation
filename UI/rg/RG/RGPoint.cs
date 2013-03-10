@@ -3,16 +3,12 @@ using System.Collections.Generic;
 
 namespace rg
 {
-  public class RGPoint<T>
+  public class RGPoint
   {
-    public T R { get; set; }
+    public double R;
 
-    public T G { get; set; }
-  }
+    public double G;
 
-  public class RGPoint :
- RGPoint<double>
-  {
     public CPoint C
     {
       get
