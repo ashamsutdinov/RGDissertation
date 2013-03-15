@@ -19,6 +19,8 @@ namespace rg
 
     public static bool Dynamics { get; set; }
 
+    public static bool SingleCurve { get; set; }
+
     public static double AMin { get; set; }
 
     public static double AMax { get; set; }
@@ -167,56 +169,28 @@ namespace rg
       var rgParabola = RGPoint.Parabola(Alpha, N, a, b, Curves);
       var cParabola = rgParabola.Select(rg => rg.C).ToList();
       var pen = new Pen(clr);
-
       for (var i = 0; i < cParabola.Count - 1; i++)
       {
         var cp1 = cParabola[i];
         var cp2 = cParabola[i + 1];
-        DrawLine(pen, cp1, cp2, gr);
+        var realPen = pen;
+        if (SingleCurve)
+        {
+          var gray = i * 255.0 / cParabola.Count;
+          var ngray = (int)gray;
+          realPen = new Pen(Color.FromArgb(255, ngray, ngray, ngray));
+        }
+        DrawLine(realPen, cp1, cp2, gr);
       }
 
-      /*
-     const int maxRadius = 15;
-     const int minRadius = 1;
-     const int diff = maxRadius - minRadius;
-     for (var i = 0; i < cParabola.Count; i++)
-     {
-       var percent = i * 1.0 / cParabola.Count;
-       var radius = minRadius + diff * percent;
-       FillPoint(clr, cParabola[i], gr, (int)radius);
-     }
-      */
+      if (!cParabola.Any())
+        return;
 
-      /*
+      var first = cParabola.First();
+      var last = cParabola.Last();
 
-      var dim = a - b - 2 * Math.Pow(Lambda, -1);
-      var div = (Math.Sqrt(1 + dim * dim));
-      var c0 = -1 / div;
-      var c1 = dim / div;
-      var cpt1 = new CPoint(c0, c1, 1);
-      var cpt2 = cpt1.Diametral;
-      FillPoint(clr, cpt1, gr);
-      FillPoint(clr, cpt2, gr);
-
-
-      var nearToB = rgParabola.Where(rg => Math.Abs(rg.R - b) < 0.002).Select(rg => rg.C).ToArray();
-      for (var i = 0; i < nearToB.Length; i++)
-      {
-        var r = i;
-        if (i > nearToB.Length / 2)
-          r = nearToB.Length - i;
-        FillPoint(clr, nearToB[i], gr, r);
-      }
-      */
-
-      if (cParabola.Any())
-      {
-        var first = cParabola.First();
-        var last = cParabola.Last();
-
-        FillPoint(clr, first, gr);
-        FillPoint(clr, last, gr);
-      }
+      FillPoint(clr, first, gr);
+      FillPoint(clr, last, gr);
     }
 
     private static void ReadConfig(IEnumerable<string> args)
@@ -233,6 +207,7 @@ namespace rg
       W = 2;
       H = 2;
       Dynamics = true;
+      SingleCurve = false;
       POpts = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
       foreach (var s in args)
       {
@@ -243,6 +218,9 @@ namespace rg
         {
           case "curves":
             Curves = val;
+            break;
+          case "singlecurve":
+            SingleCurve = true;
             break;
           case "a":
             Alpha = double.Parse(val);
@@ -306,6 +284,8 @@ namespace rg
       if (Curves == null)
         return;
 
+      if (SingleCurve)
+        AMax = AMin;
       var clrMax = (int)Math.Abs(AMax - AMin);
       var cnt = (int)(clrMax / AStep + 1);
       var step = 255.0 / cnt;
@@ -351,7 +331,12 @@ namespace rg
     private static void SaveBitmap()
     {
       Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
-      var fname = string.Format("a{0}n{1}({2};{3})({4};{5})_({6}).png", Alpha, N, X, Y, X + W, Y + W, Curves);
+      var singlePart = "";
+      if (SingleCurve)
+      {
+        singlePart = string.Format("single_{0}", AMin);
+      }
+      var fname = string.Format("a{0}n{1}({2};{3})({4};{5})_({6}) ({7}).png", Alpha, N, X, Y, X + W, Y + W, Curves, singlePart);
       Image.Save(fname, ImageFormat.Png);
       Image.Dispose();
     }

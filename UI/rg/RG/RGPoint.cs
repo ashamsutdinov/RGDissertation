@@ -46,19 +46,19 @@ namespace rg
       switch (mode)
       {
         case "left":
-          for (var r = -1000.0; r <= b; r += 0.001)
+          for (var r = -100.0; r <= b; r += 0.01)
           {
             yield return ParabolaPt(r, a, b, l1);
           }
           break;
         case "right":
-          for (var r = b; r <= 1000.0; r += 0.001)
+          for (var r = b; r <= 100.0; r += 0.01)
           {
             yield return ParabolaPt(r, a, b, l1);
           }
           break;
         default:
-          for (var r = -1000.0; r <= 1000.0; r += 0.001)
+          for (var r = -100.0; r <= 100.0; r += 0.01)
           {
             yield return ParabolaPt(r, a, b, l1);
           }
