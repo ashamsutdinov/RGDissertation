@@ -24,6 +24,11 @@ namespace ReverseTransform
       C2 = C2 / norm;
     }
 
+    public CPoint(CPoint src)
+    {
+      Build(src.C0, src.C1, src.C2);
+    }
+
     public CPoint(double c0, double c1, double c2)
     {
       Build(c0, c1, c2);
@@ -128,7 +133,7 @@ namespace ReverseTransform
       Build(c0, c1, c2);
     }
 
-    public IEnumerable<CPoint> DirectTrack(CPoint crit, double alpha, double n, double acc = 0.0000001, int k = 100)
+    public IEnumerable<CPoint> DirectTrack(CPoint crit, double alpha, double n, double acc, int k)
     {
       var pt = this;
       const double max = double.MaxValue;
@@ -145,7 +150,7 @@ namespace ReverseTransform
       return res;
     }
 
-    public List<CPoint> ReverseTrack(CPoint crit, double alpha, double n, double acc = 0.0000001, int k = 100)
+    public List<CPoint> ReverseTrack(CPoint crit, double alpha, double n, double acc, int k)
     {
       var pt = this;
       const double max = double.MaxValue;
@@ -162,16 +167,14 @@ namespace ReverseTransform
       return res;
     }
 
-    public CPoint ReverseTrackEndPoint(CPoint crit, double alpha, double n, out int cnt, double acc = 0.0000001, int k = 100)
+    public CPoint ReverseTrackEndPoint(CPoint crit, double alpha, double n, out int cnt, double acc, int k)
     {
       var pt = this;
       const double max = double.MaxValue;
       var d = max;
       var i = 0;
-      var res = new List<CPoint>();
       while (d > acc && i < k)
       {
-        res.Add(pt);
         pt.IterateReverse(alpha, n);
         d = pt.DistanceTo(crit);
         i++;

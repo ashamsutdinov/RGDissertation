@@ -43,5 +43,10 @@ namespace ReverseTransform
         yield return new RGPoint { R = r, G = g };
       }
     }
+
+    public override string ToString()
+    {
+      return string.Format("({0};{1})", R, G);
+    }
   }
 }
