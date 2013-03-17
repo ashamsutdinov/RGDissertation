@@ -1,5 +1,0 @@
-D:\Projects\RGDissertation\rg\bin\Debug\rg.dll
-D:\Projects\RGDissertation\rg\bin\Debug\rg.pdb
-D:\Projects\RGDissertation\rg\obj\Debug\rg.csprojResolveAssemblyReference.cache
-D:\Projects\RGDissertation\rg\obj\Debug\rg.dll
-D:\Projects\RGDissertation\rg\obj\Debug\rg.pdb

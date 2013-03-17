@@ -45,29 +45,6 @@ namespace ReverseTransform
       return Color.FromArgb(255, r, g, b);
     }
 
-    public static Color Blend(Color color, Color backColor, double amount = 0.5)
-    {
-      var r = (byte)((color.R * amount) + backColor.R * (1 - amount));
-      var g = (byte)((color.G * amount) + backColor.G * (1 - amount));
-      var b = (byte)((color.B * amount) + backColor.B * (1 - amount));
-      return Color.FromArgb(r, g, b);
-    }
-
-    private Color GetColor(CPoint pt)
-    {
-      var rp = pt.RG;
-      var cnt = 0;
-      var end = pt.ReverseTrackEndPoint(Config.P1, Config.Alpha, Config.N, out cnt, Config.Acc, Config.Count);
-      if (cnt >= Config.Count)
-      {
-        return Config.Black;
-      }
-      var last = end;
-      var clr = rp.G < 0 ? (last.C1 < Config.P1.C1 ? Config.Yellow : Config.Green) : (last.C1 < Config.P1.C1 ? Config.Red : Config.Blue);
-      var resClr = clr;
-      return resClr;
-    }
-
     private void InitializeConfig()
     {
       var frame = new ProcessingFrame
@@ -99,8 +76,8 @@ namespace ReverseTransform
     {
       var np = NPt(p1);
       var gr = Graphics.FromImage(pictureBox.Image);
-      var bgClr = GetColor(new CPoint(p1));
-      var blend = Blend(clr, bgClr);
+      var bgClr = RG.GetColor(new CPoint(p1));
+      var blend = RG.Blend(clr, bgClr);
       gr.TryDraw(g => g.FillEllipse(new SolidBrush(clr), np.X - 2, np.Y - 2, 4, 4));
       gr.TryDraw(g => g.DrawRectangle(new Pen(blend), np.X - 10, np.Y - 10, 20, 20));
     }
@@ -136,7 +113,7 @@ namespace ReverseTransform
       {
         c2 = Math.Sqrt(c2);
         var cpt = new CPoint(c0, c1, c2);
-        SetPixel(bmp, pt.X, pt.Y, GetColor(cpt));
+        SetPixel(bmp, pt.X, pt.Y, RG.GetColor(cpt));
       }
       else
       {

@@ -22,7 +22,20 @@ namespace ReverseTransform
         return Config.Black;
       }
       var last = end;
-      var clr = rp.G < 0 ? (last.C1 < Config.P1.C1 ? Config.Yellow : Config.Green) : (last.C1 < Config.P1.C1 ? Config.Red : Config.Blue);
+      var p = Config.P1;
+      Color clr;
+      if (p.C0 > 0)
+      {
+        clr = rp.G < 0
+                    ? (last.C1 < p.C1 ? Config.Yellow : Config.Green)
+                    : (last.C1 < p.C1 ? Config.Red : Config.Blue);
+      }
+      else
+      {
+        clr = rp.G < 0
+                    ? (last.C1 > p.C1 ? Config.Yellow : Config.Green)
+                    : (last.C1 > p.C1 ? Config.Red : Config.Blue);
+      }
       var resClr = clr;
       return resClr;
     }
