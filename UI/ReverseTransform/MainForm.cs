@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -16,34 +15,6 @@ namespace ReverseTransform
 
     private readonly ProcessingStack _stack = new ProcessingStack();
 
-    public double Alpha;
-
-    public double N;
-
-    public double Acc;
-
-    public int Count;
-
-    private readonly CPoint _p1 = new CPoint(1, 0, 0);
-
-    private readonly Pen _blackPen = new Pen(Color.Black);
-
-    private readonly Pen _redPen = new Pen(Color.Red);
-
-    private readonly Pen _whitePen = new Pen(Color.White);
-
-    private readonly Color _red = Color.Red;
-
-    private readonly Color _blue = Color.Blue;
-
-    private readonly Color _green = Color.Green;
-
-    private readonly Color _yellow = Color.Yellow;
-
-    private readonly Color _white = Color.White;
-
-    private readonly Color _black = Color.Black;
-
     private bool _pointSelecting;
 
     private CPoint _pointSelected;
@@ -52,7 +23,7 @@ namespace ReverseTransform
 
     public List<CPoint> PointTrack
     {
-      get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(_p1, Alpha, N, Acc, Count)); }
+      get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.P1, Config.Alpha, Config.N, Config.Acc, Config.Count)); }
     }
 
     public int PointNumber { get; set; }
@@ -86,13 +57,13 @@ namespace ReverseTransform
     {
       var rp = pt.RG;
       var cnt = 0;
-      var end = pt.ReverseTrackEndPoint(_p1, Alpha, N, out cnt, Acc, Count);
-      if (cnt >= Count)
+      var end = pt.ReverseTrackEndPoint(Config.P1, Config.Alpha, Config.N, out cnt, Config.Acc, Config.Count);
+      if (cnt >= Config.Count)
       {
-        return _black;
+        return Config.Black;
       }
       var last = end;
-      var clr = rp.G < 0 ? (last.C1 < _p1.C1 ? _yellow : _green) : (last.C1 < _p1.C1 ? _red : _blue);
+      var clr = rp.G < 0 ? (last.C1 < Config.P1.C1 ? Config.Yellow : Config.Green) : (last.C1 < Config.P1.C1 ? Config.Red : Config.Blue);
       var resClr = clr;
       return resClr;
     }
@@ -109,15 +80,7 @@ namespace ReverseTransform
             Height = 2.0
           }
       };
-      var conf = ConfigurationManager.AppSettings;
-      Alpha = double.Parse(conf["Alpha"]);
-      N = double.Parse(conf["N"]);
-      Count = int.Parse(conf["Count"]);
-      Acc = double.Parse(conf["Acc"]);
-      CPoint.Lambda = Math.Pow(N, Alpha - 1);
-      CPoint.LambdaMinus1 = 1 / CPoint.Lambda;
-      CPoint.LambdaMinus2 = CPoint.LambdaMinus1 / CPoint.Lambda;
-      CPoint.NLambdaMinus2 = N * CPoint.LambdaMinus2;
+      
       _stack.Push(frame);
     }
 
@@ -177,7 +140,7 @@ namespace ReverseTransform
       }
       else
       {
-        SetPixel(bmp, pt.X, pt.Y, _white);
+        SetPixel(bmp, pt.X, pt.Y, Config.White);
       }
     }
 
@@ -232,10 +195,10 @@ namespace ReverseTransform
       var jy = (float)(Math.Abs(r.Y) / onepxh);
       var ix1 = ix;
       var jy1 = jy;
-      gr.TryDraw(g => g.DrawEllipse(_whitePen, ix1 - 3, jy1 - 3, 6, 6));
+      gr.TryDraw(g => g.DrawEllipse(Config.WhitePen, ix1 - 3, jy1 - 3, 6, 6));
       ix = (float)(Math.Abs(1 - r.X) / onepxw);
       jy = (float)(Math.Abs(r.Y) / onepxh);
-      gr.TryDraw(g => g.DrawEllipse(_redPen, ix - 3, jy - 3, 6, 6));
+      gr.TryDraw(g => g.DrawEllipse(Config.RedPen, ix - 3, jy - 3, 6, 6));
 
       gr.Save();
 
@@ -249,7 +212,7 @@ namespace ReverseTransform
         return;
 
       var pt = PointTrack[PointNumber];
-      FillPoint(pt, _black);
+      FillPoint(pt, Config.Black);
     }
 
     private static void SetPixel(Bitmap bmp, int x, int y, Color color)
@@ -311,7 +274,7 @@ namespace ReverseTransform
       if (_pointSelecting)
         return;
 
-      RedrawScene(gr => gr.TryDraw(g => g.DrawRectangle(_blackPen, e.X, e.Y, 20, 20)));
+      RedrawScene(gr => gr.TryDraw(g => g.DrawRectangle(Config.BlackPen, e.X, e.Y, 20, 20)));
     }
 
     public void RedrawScene(Action<Graphics> redrawAction = null)

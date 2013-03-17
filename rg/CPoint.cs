@@ -24,9 +24,18 @@ namespace ReverseTransform
       C2 = C2 / norm;
     }
 
-    public CPoint(CPoint src)
+    private void ToUpperSphere()
     {
-      Build(src.C0, src.C1, src.C2);
+      if (!(C2 < 0)) 
+        return;
+      C0 = -C0;
+      C1 = -C1;
+      C2 = -C2;
+    }
+
+    public CPoint(CPoint src)
+      : this(src.C0, src.C1, src.C2)
+    {
     }
 
     public CPoint(double c0, double c1, double c2)
@@ -73,8 +82,17 @@ namespace ReverseTransform
       var c0S = C0 - pt.C0;
       var c1S = C1 - pt.C1;
       var c2S = C2 - pt.C2;
-      var d = c0S * c0S + c1S * c1S + c2S * c2S;
-      var dist = Math.Sqrt(d);
+      var d1 = c0S * c0S + c1S * c1S + c2S * c2S;
+      var dist1 = Math.Sqrt(d1);
+
+      var ptd = pt.Diametral;
+      c0S = C0 - ptd.C0;
+      c1S = C1 - ptd.C1;
+      c2S = C2 - ptd.C2;
+      var d2 = c0S * c0S + c1S * c1S + c2S * c2S;
+      var dist2 = Math.Sqrt(d2);
+
+      var dist = Math.Min(dist1, dist2);
       return dist;
     }
 
@@ -159,6 +177,7 @@ namespace ReverseTransform
       var res = new List<CPoint>();
       while (d > acc && i < k)
       {
+        pt.ToUpperSphere();
         res.Add(pt);
         pt = pt.ReverseIterated(alpha, n);
         d = pt.DistanceTo(crit);
