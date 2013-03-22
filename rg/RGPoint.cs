@@ -19,7 +19,21 @@ namespace ReverseTransform
 
     private static double? _lambda;
 
-    public static IEnumerable<RGPoint> Parabola(double alpha, double n, double a, double b)
+    private static RGPoint ParabolaPt(double r, double a, double b, double l1)
+    {
+      var g = r;
+      if (g - b == 0)
+      {
+        g = double.MaxValue;
+      }
+      else
+      {
+        g = ((r - a) / (r - b)) * Math.Pow(r + l1, 2);
+      }
+      return new RGPoint { R = r, G = g };
+    }
+
+    public static IEnumerable<RGPoint> Parabola(double alpha, double n, double a, double b, bool beforeTrans = true)
     {
       if (_lambda == null)
       {
@@ -28,19 +42,14 @@ namespace ReverseTransform
       }
       var lambda = _lambda.Value;
       var l1 = Math.Pow(lambda, -1);
-
-      for (var r = -100.0; r <= 100.0; r += 0.01)
+      if (!beforeTrans)
       {
-        var g = r;
-        if (g - b == 0)
-        {
-          g = double.MaxValue;
-        }
-        else
-        {
-          g = ((r - a) / (r - b)) * Math.Pow(r + l1, 2);
-        }
-        yield return new RGPoint { R = r, G = g };
+        l1 = 1;
+      }
+
+      for (var r = -1000.0; r <= 1000.0; r += 0.01)
+      {
+        yield return ParabolaPt(r, a, b, l1);
       }
     }
 

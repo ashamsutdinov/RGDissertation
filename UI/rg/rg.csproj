@@ -45,12 +45,15 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RG\CPoint.cs" />
-    <Compile Include="RG\Rect.cs" />
-    <Compile Include="RG\RGPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\rg\RgLib.csproj">
+      <Project>{6286f950-cc88-493a-8139-84f3a3bf3a04}</Project>
+      <Name>RgLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

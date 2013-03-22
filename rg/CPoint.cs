@@ -53,6 +53,10 @@ namespace ReverseTransform
       }
     }
 
+    public bool IsNormal
+    {
+      get { return Norm <= 1; }
+    }
 
     public RGPoint RG
     {
@@ -168,7 +172,7 @@ namespace ReverseTransform
       return res;
     }
 
-    public List<CPoint> ReverseTrack(CPoint crit, double alpha, double n, double acc, int k)
+    public IEnumerable<CPoint> ReverseTrack(CPoint crit, double alpha, double n, double acc = 0.0000001, int k = 100)
     {
       var pt = this;
       const double max = double.MaxValue;

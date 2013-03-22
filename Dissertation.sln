@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicSystem", "UI\doubleC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rg", "UI\rg\rg.csproj", "{278039E8-96C0-465F-8595-69F414D750B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rg", "rg\rg.csproj", "{6286F950-CC88-493A-8139-84F3A3BF3A04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RgLib", "rg\RgLib.csproj", "{6286F950-CC88-493A-8139-84F3A3BF3A04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

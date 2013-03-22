@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
+using ReverseTransform;
 
 namespace rg
 {
@@ -14,8 +16,6 @@ namespace rg
     public static double N { get; set; }
 
     public static double Lambda { get; set; }
-
-    public static string Curves { get; set; }
 
     public static bool Dynamics { get; set; }
 
@@ -95,11 +95,6 @@ namespace rg
 
     private static Color GetColor(CPoint pt)
     {
-      if (!pt.IsNormal)
-      {
-        return White;
-      }
-
       var rp = pt.RG;
 
       if (!Dynamics)
@@ -164,40 +159,90 @@ namespace rg
       }
     }
 
-    private static void DrawParabola(Color clr, double a, double b, Graphics gr)
+    private static void DrawParabola(double a, double b, Graphics gr, DashStyle dash = DashStyle.Dot, bool beforeTrans = true)
     {
-      var rgParabola = RGPoint.Parabola(Alpha, N, a, b, Curves);
-      var cParabola = rgParabola.Select(rg => rg.C).ToList();
-      var pen = new Pen(clr);
-      for (var i = 0; i < cParabola.Count - 1; i++)
+      var rgParabola = RGPoint.Parabola(Alpha, N, a, b, beforeTrans);
+      var l = -Math.Pow(Lambda, -1);
+      var rgPoints = rgParabola as RGPoint[] ?? rgParabola.ToArray();
+      var beforeB = rgPoints.Where(rg => rg.R <= b).ToList();
+      var fromBtoL = rgPoints.Where(rg => rg.R >= b && rg.R <= l).ToList();
+      var fromLtoB = rgPoints.Where(rg => rg.R >= l && rg.R <= b).ToList();
+      var fromL = rgPoints.Where(rg => rg.R >= l).ToList();
+
+      var cParabola1 = beforeB.Select(rg => rg.C).ToList();
+      var cParabola2 = fromBtoL.Select(rg => rg.C).ToList();
+      var cParabola3 = fromLtoB.Select(rg => rg.C).ToList();
+      var cParabola4 = fromL.Select(rg => rg.C).ToList();
+
+      var pen1 = new Pen(Color.Red, 2) { DashStyle = dash };
+      for (var i = 0; i < cParabola1.Count - 1; i++)
       {
-        var cp1 = cParabola[i];
-        var cp2 = cParabola[i + 1];
-        var realPen = pen;
-        if (SingleCurve)
-        {
-          var gray = i * 255.0 / cParabola.Count;
-          var ngray = (int)gray;
-          realPen = new Pen(Color.FromArgb(255, ngray, ngray, ngray));
-        }
+        var cp1 = cParabola1[i];
+        var cp2 = cParabola1[i + 1];
+        var realPen = pen1;
         DrawLine(realPen, cp1, cp2, gr);
       }
+      if (cParabola1.Any())
+      {
+        var first = cParabola1.First();
+        var last = cParabola1.Last();
+        FillPoint(Color.Red, first, gr);
+        FillPoint(Color.Red, last, gr);
+      }
 
-      if (!cParabola.Any())
-        return;
+      var pen2 = new Pen(Color.LemonChiffon, 2) { DashStyle = dash };
+      for (var i = 0; i < cParabola2.Count - 1; i++)
+      {
+        var cp1 = cParabola2[i];
+        var cp2 = cParabola2[i + 1];
+        var realPen = pen2;
+        DrawLine(realPen, cp1, cp2, gr);
+      }
+      if (cParabola2.Any())
+      {
+        var first = cParabola2.First();
+        var last = cParabola2.Last();
+        FillPoint(Color.LemonChiffon, first, gr);
+        FillPoint(Color.LemonChiffon, last, gr);
+      }
 
-      var first = cParabola.First();
-      var last = cParabola.Last();
+      var pen3 = new Pen(Color.Yellow, 2) { DashStyle = dash };
+      for (var i = 0; i < cParabola3.Count - 1; i++)
+      {
+        var cp1 = cParabola3[i];
+        var cp2 = cParabola3[i + 1];
+        var realPen = pen3;
+        DrawLine(realPen, cp1, cp2, gr);
+      }
+      if (cParabola3.Any())
+      {
+        var first = cParabola3.First();
+        var last = cParabola3.Last();
+        FillPoint(Color.Yellow, first, gr);
+        FillPoint(Color.Yellow, last, gr);
+      }
 
-      FillPoint(clr, first, gr);
-      FillPoint(clr, last, gr);
+      var pen4 = new Pen(Color.DarkViolet, 2) { DashStyle = dash };
+      for (var i = 0; i < cParabola4.Count - 1; i++)
+      {
+        var cp1 = cParabola4[i];
+        var cp2 = cParabola4[i + 1];
+        var realPen = pen4;
+        DrawLine(realPen, cp1, cp2, gr);
+      }
+      if (cParabola4.Any())
+      {
+        var first = cParabola4.First();
+        var last = cParabola4.Last();
+        FillPoint(Color.DarkViolet, first, gr);
+        FillPoint(Color.DarkViolet, last, gr);
+      }
     }
 
     private static void ReadConfig(IEnumerable<string> args)
     {
       Alpha = 1.7;
       N = 2;
-      Curves = null;
       AMin = -10;
       AMax = 10;
       AStep = 1;
@@ -216,9 +261,6 @@ namespace rg
         var val = parts.Length == 2 ? parts[1] : string.Empty;
         switch (cfg)
         {
-          case "curves":
-            Curves = val;
-            break;
           case "singlecurve":
             SingleCurve = true;
             break;
@@ -281,23 +323,19 @@ namespace rg
 
     private static void DrawParabolas()
     {
-      if (Curves == null)
-        return;
-
       if (SingleCurve)
         AMax = AMin;
       var clrMax = (int)Math.Abs(AMax - AMin);
       var cnt = (int)(clrMax / AStep + 1);
-      var step = 255.0 / cnt;
       var l = Math.Pow(N, Alpha - 1);
       var b = -(N - 1) / (N - l);
       var gr = Graphics.FromImage(Image);
       Parallel.For(0, cnt, POpts, p =>
       {
         var a = AMin + p * AStep;
-        var iclr = (int)(p * step);
-        var clr = Color.FromArgb(255, iclr, iclr, iclr);
-        DrawParabola(clr, a, b, gr);
+        DrawParabola(a, b, gr);
+        var a1 = Lambda * a;
+        DrawParabola(a1, b, gr, DashStyle.Solid, false);
       });
       gr.Save();
     }
@@ -314,12 +352,17 @@ namespace rg
           var c1 = y;
           var rd = c0 * c0 + c1 * c1;
           var c2 = 1 - rd;
+          Color clr;
           if (rd <= 1)
           {
             c2 = Math.Sqrt(c2);
+            var cpt = new CPoint(c0, c1, c2);
+            clr = GetColor(cpt);
           }
-          var cpt = new CPoint(c0, c1, c2);
-          var clr = GetColor(cpt);
+          else
+          {
+            clr = White;
+          }
           lock (Image)
           {
             Image.SetPixel(i, j, clr);
@@ -336,7 +379,7 @@ namespace rg
       {
         singlePart = string.Format("single_{0}", AMin);
       }
-      var fname = string.Format("a{0}n{1}({2};{3})({4};{5})_({6}) ({7}).png", Alpha, N, X, Y, X + W, Y + W, Curves, singlePart);
+      var fname = string.Format("img/a{0}n{1}({2};{3})({4};{5}) ({6}).png", Alpha, N, X, Y, X + W, Y + W, singlePart);
       Image.Save(fname, ImageFormat.Png);
       Image.Dispose();
     }

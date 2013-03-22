@@ -92,9 +92,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\rg\rg.csproj">
+    <ProjectReference Include="..\..\rg\RgLib.csproj">
       <Project>{6286f950-cc88-493a-8139-84f3a3bf3a04}</Project>
-      <Name>rg %28Libraries\rg%29</Name>
+      <Name>RgLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
