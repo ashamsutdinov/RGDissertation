@@ -41,13 +41,23 @@ namespace ReverseTransform
         _lambda = l;
       }
       var lambda = _lambda.Value;
+      return Parabola(lambda, alpha,n,a,b,beforeTrans);
+    }
+
+    public static IEnumerable<RGPoint> Parabola(double lambda, double alpha, double n, double a, double b, bool beforeTrans = true)
+    {
+      return Parabola(lambda, alpha, n, a, b, -1000.0, 1000.0, 0.01, beforeTrans);
+    }
+
+    public static IEnumerable<RGPoint> Parabola(double lambda, double alpha, double n, double a, double b, double rmin, double rmax, double rstep, bool beforeTrans = true)
+    {
       var l1 = Math.Pow(lambda, -1);
       if (!beforeTrans)
       {
         l1 = 1;
       }
 
-      for (var r = -1000.0; r <= 1000.0; r += 0.01)
+      for (var r = rmin; r <= rmax; r += rstep)
       {
         yield return ParabolaPt(r, a, b, l1);
       }
