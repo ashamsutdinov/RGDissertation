@@ -20,6 +20,8 @@ namespace RGLines
 
     private Bitmap _bgWithLines;
 
+    private Bitmap _bgWithArea;
+
     private double _alpha;
 
     private double _n;
@@ -68,6 +70,22 @@ namespace RGLines
 
     private double _ypxsz;
 
+    private bool _linesShown;
+
+    private bool _areasShown;
+
+    private double _c1;
+
+    private int _areaStep;
+
+    private List<CPoint> _areaInitialSetCPositive;
+
+    private List<CPoint> _areaInitialSetCNegative;
+
+    private List<List<CPoint>> _iteratedAreasCPositive;
+
+    private List<List<CPoint>> _iteratedAreasCNegative;
+
     #endregion
 
     #region Constructors
@@ -80,6 +98,8 @@ namespace RGLines
       ApplyRGSettings();
       BtnDefBClick(this, new EventArgs());
       ApplyLineSettings();
+      trackLineGroup.Visible = false;
+      trackAreaGroup.Visible = false;
       Redraw();
     }
 
@@ -109,7 +129,16 @@ namespace RGLines
 
     private void BtnAppyLineSettingsClick(object sender, EventArgs e)
     {
+      trackLineGroup.Visible = true;
+      _linesShown = true;
       ApplyLineSettings();
+      Redraw();
+    }
+
+    private void BtnHideLineClick(object sender, EventArgs e)
+    {
+      trackLineGroup.Visible = false;
+      _linesShown = false;
       Redraw();
     }
 
@@ -125,6 +154,42 @@ namespace RGLines
       if (trackLine.Value != trackLine.Maximum)
         trackLine.Value = trackLine.Value + 1;
       trackLine.Update();
+    }
+
+    private void BtnApplyAreaClick(object sender, EventArgs e)
+    {
+      trackAreaGroup.Visible = true;
+      _areasShown = true;
+      ApplyAreaSettings();
+      Redraw();
+    }
+
+    private void BtnHideAreaClick(object sender, EventArgs e)
+    {
+      trackAreaGroup.Visible = false;
+      _areasShown = false;
+      Redraw();
+    }
+
+    private void TrackAreaValueChanged(object sender, EventArgs e)
+    {
+      _areaStep = trackArea.Value;
+      RedrawArea();
+      txtAreaIteration.Text = _areaStep.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private void BtnAreaPrevIterationClick(object sender, EventArgs e)
+    {
+      if (trackArea.Value != 0)
+        trackArea.Value = trackArea.Value - 1;
+      trackArea.Update();
+    }
+
+    private void BtnAreaNextIterationClick(object sender, EventArgs e)
+    {
+      if (trackArea.Value != trackArea.Maximum)
+        trackArea.Value = trackArea.Value + 1;
+      trackArea.Update();
     }
 
     #endregion
@@ -167,6 +232,10 @@ namespace RGLines
       _alpha = double.Parse(txtAlpha.Text);
       _n = double.Parse(txtN.Text);
       _lambda = Math.Pow(_n, _alpha - 1);
+      CPoint.Lambda = _lambda;
+      CPoint.LambdaMinus1 = Math.Pow(_lambda, -1);
+      CPoint.LambdaMinus2 = Math.Pow(_lambda, -2);
+      CPoint.NLambdaMinus2 = Math.Pow(_lambda, -2) * _n;
     }
 
     private void ApplyLineSettings()
@@ -187,6 +256,13 @@ namespace RGLines
       _currentStep = 0;
     }
 
+    private void ApplyAreaSettings()
+    {
+      trackArea.Value = 0;
+      _areaStep = 0;
+      _c1 = double.Parse(txtAreaC1.Text);
+    }
+
     private void ChangePictureBoxPicture(ICloneable newImageSource)
     {
       var newImg = newImageSource.Clone() as Bitmap;
@@ -197,7 +273,7 @@ namespace RGLines
       pictureBox.Image = newImg;
     }
 
-    private void Redraw()
+    private void RedrawWithLines()
     {
       if (_bgWithLines != null)
       {
@@ -218,9 +294,11 @@ namespace RGLines
       }
       _line2 = _rline2.Select(rg => rg.C).ToList();
 
+      var nearestToB = _rline1.OrderBy(rp => Math.Abs(rp.R - _b)).FirstOrDefault();
+      var nearestToL = _rline1.OrderBy(rp => Math.Abs(rp.R - (-Math.Pow(_lambda, -1)))).FirstOrDefault();
 
-      //_rline2 = RGPoint.Parabola(_lambda, _alpha, _n, _a, _b, _rmin, _rmax, _rstep, false).ToList();
-      //_line2 = _rline2.Select(rg => rg.C).ToList();
+      var cNearestToB = nearestToB != null ? nearestToB.C : null;
+      var cNearesToL = nearestToL != null ? nearestToL.C : null;
 
       if (_bgWithLines != null)
       {
@@ -241,10 +319,61 @@ namespace RGLines
           var c2 = _line2[i + 1];
           RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr);
         }
+
+        if (cNearestToB != null) RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, cNearestToB, gr);
+        if (cNearesToL != null) RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Yellow, cNearesToL, gr);
         gr.Save();
       }
       ChangePictureBoxPicture(_bgWithLines);
       pictureBox.Update();
+    }
+
+    private void RedrawWithArea()
+    {
+      if (_bgWithArea != null)
+      {
+        _bgWithArea.Dispose();
+      }
+      _bgWithArea = _bg.Clone() as Bitmap;
+
+      var initialLstPositive = RGPoint.GetPositiveNumbersGreaterThanC1ProjC0C1Positive(_c1, _xpxsz, _ypxsz).ToList();
+      var initialLstNegative = RGPoint.GetPositiveNumbersGreaterThanC1ProjC0C1Negative(_c1, _xpxsz, _ypxsz).ToList();
+      _areaInitialSetCPositive = initialLstPositive.Select(e => e.Key).ToList();
+      _areaInitialSetCNegative = initialLstNegative.Select(e => e.Key).ToList();
+
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.GhostWhite, _areaInitialSetCPositive, _bgWithArea);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, _areaInitialSetCNegative, _bgWithArea);
+
+      var iteratedPositive = RGPoint.ReverseIteratedMany(_areaInitialSetCPositive, _alpha, _n, trackArea.Maximum).ToList();
+      var iteratedNegative = RGPoint.ReverseIteratedMany(_areaInitialSetCNegative, _alpha, _n, trackArea.Maximum).ToList();
+      _iteratedAreasCPositive = iteratedPositive.Select(e => e.Key.ToList()).ToList();
+      _iteratedAreasCPositive.Insert(0, _areaInitialSetCPositive);
+      _iteratedAreasCNegative = iteratedNegative.Select(e => e.Key.ToList()).ToList();
+      _iteratedAreasCNegative.Insert(0, _areaInitialSetCNegative);
+
+      ChangePictureBoxPicture(_bgWithArea);
+      pictureBox.Update();
+    }
+
+    private void RedrawWithoutAnything()
+    {
+      ChangePictureBoxPicture(_bg);
+    }
+
+    private void Redraw()
+    {
+      if (_linesShown)
+      {
+        RedrawWithLines();
+      }
+      else if (_areasShown)
+      {
+        RedrawWithArea();
+      }
+      else
+      {
+        RedrawWithoutAnything();
+      }
     }
 
     private void RedrawPoint()
@@ -253,15 +382,19 @@ namespace RGLines
       var gr = Graphics.FromImage(pictureBox.Image);
       var p1 = _line1[_currentStep];
       RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Black, p1, gr);
-      /*
-      var rp1 = _rline1[_currentStep];
-      var r = rp1.R;
-      var r1 = _lambda * ((_a - _b + (_n - 1) * Math.Pow(_lambda, -1)) / (1 - _n)) * ((r - _a1) / (r - _b1));
-      var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + 1, 2);
-      var rp2 = new RGPoint { R = r1, G = g1 };
-       * */
       var p2 = _line2[_currentStep];
       RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.White, p2, gr);
+    }
+
+    private void RedrawArea()
+    {
+      ChangePictureBoxPicture(_bg);
+      var img = pictureBox.Image.Clone() as Bitmap;
+      var ptsPositive = _iteratedAreasCPositive[_areaStep];
+      var ptsNegative = _iteratedAreasCNegative[_areaStep];
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.GhostWhite, ptsPositive, img);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, ptsNegative, img);
+      ChangePictureBoxPicture(img);
     }
 
     #endregion

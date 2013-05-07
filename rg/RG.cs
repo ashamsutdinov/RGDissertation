@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace ReverseTransform
@@ -128,6 +129,25 @@ namespace ReverseTransform
       lock (gr)
       {
         gr.FillEllipse(brush, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
+      }
+    }
+
+    public static void SetPixel(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
+    {
+      var i1 = (int)Correct((cp1.C0 - x) / xsz, sz);
+      var j1 = (int)Correct((cp1.C1 - y) / ysz, sz);
+
+      lock (bmp)
+      {
+        bmp.SetPixel(i1, j1, clr);
+      }
+    }
+
+    public static void FillArea(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
+    {
+      foreach (var cPoint in cpts)
+      {
+        SetPixel(x, y, xsz, ysz, sz, clr, cPoint, bmp);
       }
     }
   }

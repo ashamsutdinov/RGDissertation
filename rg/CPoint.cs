@@ -139,6 +139,7 @@ namespace ReverseTransform
       var c2 = LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + NLambdaMinus2 * c0C2MinusC1;
 
       var res = new CPoint(c0, c1, c2);
+      res.ToUpperSphere();
       return res;
     }
 
