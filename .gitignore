@@ -30,3 +30,9 @@
 /rg/obj
 /UI/RGLines/bin
 /UI/RGLines/obj
+/Libraries/RgLib/obj
+/Libraries/RgLib/bin
+/UI/RGLinesDirect/obj
+/UI/RGLinesDirect/bin
+/UI/DClick/DynamicSystem/obj
+/UI/DClick/DynamicSystem/bin
