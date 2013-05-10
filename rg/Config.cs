@@ -1,20 +1,17 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Drawing;
 
 namespace ReverseTransform
 {
-  public static class Config
+  public class Config : RGSettings
   {
-    public static double Alpha;
+    public static readonly double Acc;
 
-    public static double N;
+    public static readonly int Count;
 
-    public static double Acc;
+    public static readonly CPoint ReserverInterestedPoint = new CPoint(1, 0, 0);
 
-    public static int Count;
-
-    public static readonly CPoint P1 = new CPoint(1, 0, 0);
+    public static readonly CPoint DirectInterestedPoint = new CPoint(0, 0, 1);
 
     public static readonly Pen BlackPen = new Pen(Color.Black);
 
@@ -34,17 +31,22 @@ namespace ReverseTransform
 
     public static readonly Color Black = Color.Black;
 
+    public static readonly Brush BlackBrush = new SolidBrush(Color.Black);
+
+    public static readonly Color BgColor = Color.IndianRed;
+
     static Config()
     {
       var conf = ConfigurationManager.AppSettings;
-      Alpha = double.Parse(conf["Alpha"]);
-      N = double.Parse(conf["N"]);
-      Count = int.Parse(conf["Count"]);
-      Acc = double.Parse(conf["Acc"]);
-      CPoint.Lambda = Math.Pow(N, Alpha - 1);
-      CPoint.LambdaMinus1 = 1 / CPoint.Lambda;
-      CPoint.LambdaMinus2 = CPoint.LambdaMinus1 / CPoint.Lambda;
-      CPoint.NLambdaMinus2 = N * CPoint.LambdaMinus2;
+      double.TryParse(conf["Alpha"], out Alpha);
+      double.TryParse(conf["N"], out N);
+      var parsedCount = int.TryParse(conf["Count"], out Count);
+      if (!parsedCount)
+        Count = 100;
+      var parsedAcc = double.TryParse(conf["Acc"], out Acc);
+      if (!parsedAcc)
+        Acc = 0.000001d;
+      Build(Alpha, N);
     }
   }
 }

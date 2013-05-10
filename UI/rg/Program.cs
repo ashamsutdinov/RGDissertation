@@ -9,14 +9,8 @@ using ReverseTransform;
 
 namespace rg
 {
-  class Program
+  static class Program
   {
-    private static double Alpha { get; set; }
-
-    public static double N { get; set; }
-
-    public static double Lambda { get; set; }
-
     public static bool Dynamics { get; set; }
 
     public static bool SingleCurve { get; set; }
@@ -47,70 +41,26 @@ namespace rg
       set;
     }
 
-    private static readonly CPoint P1 = new CPoint(1, 0, 0);
-
-    private static readonly CPoint P2 = new CPoint(0, 0, 1);
-
-    private static readonly Brush BlackBrush = new SolidBrush(Color.Black);
-
-    private static readonly Pen BlackPen = new Pen(Color.Black);
-
-    private static readonly Pen RedPen = new Pen(Color.Red);
-
-    private static readonly Pen WhitePen = new Pen(Color.White);
-
-    private static readonly Color Red = Color.Red;
-
-    private static readonly Color Blue = Color.Blue;
-
-    private static readonly Color Black = Color.Black;
-
-    private static readonly Color Green = Color.Green;
-
-    private static readonly Color Yellow = Color.Yellow;
-
-    private static readonly Color White = Color.White;
-
-    private static readonly Color BgColor = Color.IndianRed;
-
     private static ParallelOptions POpts { get; set; }
 
-    public static Color ColorMixer(Color c1, Color c2)
+    private static Color GetColorReversed(CPoint pt)
     {
-
-      var r = Math.Min((c1.R + c2.R), 255);
-      var g = Math.Min((c1.G + c2.G), 255);
-      var b = Math.Min((c1.B + c2.B), 255);
-
-      return Color.FromArgb(255, r, g, b);
-    }
-
-    public static Color Blend(Color color, Color backColor, double amount = 0.5)
-    {
-      var r = (byte)((color.R * amount) + backColor.R * (1 - amount));
-      var g = (byte)((color.G * amount) + backColor.G * (1 - amount));
-      var b = (byte)((color.B * amount) + backColor.B * (1 - amount));
-      return Color.FromArgb(r, g, b);
-    }
-
-    private static Color GetColor(CPoint pt)
-    {
-      var rp = pt.RG;
+      var rp = pt.RGReversed;
 
       if (!Dynamics)
       {
-        return rp.G < 0 ? Green : Blue;
+        return rp.G < 0 ? Config.Green : Config.Blue;
       }
 
-      var baseClr = rp.G <= 0 ? White : Black;
+      var baseClr = rp.G <= 0 ? Config.White : Config.Black;
 
-      var track = pt.ReverseTrack(P1, Alpha, N).ToList();
+      var track = pt.ReverseTrack(Config.ReserverInterestedPoint).ToList();
       if (track.Count == 100)
       {
         return baseClr;
       }
       var last = track.Last();
-      var resClr = rp.G < 0 ? last.C1 < P1.C1 ? Yellow : Green : last.C1 < P1.C1 ? Blue : Red;
+      var resClr = rp.G < 0 ? last.C1 < Config.ReserverInterestedPoint.C1 ? Config.Yellow : Config.Green : last.C1 < Config.ReserverInterestedPoint.C1 ? Config.Blue : Config.Red;
       return resClr;
     }
 
@@ -159,20 +109,19 @@ namespace rg
       }
     }
 
-    private static void DrawParabola(double a, double b, Graphics gr, DashStyle dash = DashStyle.Dot, bool beforeTrans = true)
+    private static void DrawParabolaReversed(double a, double b, Graphics gr, DashStyle dash = DashStyle.Dot, bool beforeTrans = true)
     {
-      var rgParabola = RGPoint.Parabola(Alpha, N, a, b, beforeTrans);
-      var l = -Math.Pow(Lambda, -1);
+      var rgParabola = RGPoint.ParabolaReversed(a, b, beforeTrans);
       var rgPoints = rgParabola as RGPoint[] ?? rgParabola.ToArray();
       var beforeB = rgPoints.Where(rg => rg.R <= b).ToList();
-      var fromBtoL = rgPoints.Where(rg => rg.R >= b && rg.R <= l).ToList();
-      var fromLtoB = rgPoints.Where(rg => rg.R >= l && rg.R <= b).ToList();
-      var fromL = rgPoints.Where(rg => rg.R >= l).ToList();
+      var fromBtoL = rgPoints.Where(rg => rg.R >= b && rg.R <= RGSettings.LambdaMinus1).ToList();
+      var fromLtoB = rgPoints.Where(rg => rg.R >= RGSettings.LambdaMinus1 && rg.R <= b).ToList();
+      var fromL = rgPoints.Where(rg => rg.R >= RGSettings.LambdaMinus1).ToList();
 
-      var cParabola1 = beforeB.Select(rg => rg.C).ToList();
-      var cParabola2 = fromBtoL.Select(rg => rg.C).ToList();
-      var cParabola3 = fromLtoB.Select(rg => rg.C).ToList();
-      var cParabola4 = fromL.Select(rg => rg.C).ToList();
+      var cParabola1 = beforeB.Select(rg => rg.CReversed).ToList();
+      var cParabola2 = fromBtoL.Select(rg => rg.CReversed).ToList();
+      var cParabola3 = fromLtoB.Select(rg => rg.CReversed).ToList();
+      var cParabola4 = fromL.Select(rg => rg.CReversed).ToList();
 
       var pen1 = new Pen(Color.Red, 2) { DashStyle = dash };
       for (var i = 0; i < cParabola1.Count - 1; i++)
@@ -241,8 +190,8 @@ namespace rg
 
     private static void ReadConfig(IEnumerable<string> args)
     {
-      Alpha = 1.7;
-      N = 2;
+      var alpha = 1.7;
+      var n = 2d;
       AMin = -10;
       AMax = 10;
       AStep = 1;
@@ -265,10 +214,10 @@ namespace rg
             SingleCurve = true;
             break;
           case "a":
-            Alpha = double.Parse(val);
+            alpha = double.Parse(val);
             break;
           case "n":
-            N = double.Parse(val);
+            n = double.Parse(val);
             break;
           case "amin":
             AMin = double.Parse(val);
@@ -304,43 +253,43 @@ namespace rg
       }
       OnePixelX = W / Sz;
       OnePixelY = H / Sz;
-      Lambda = Math.Pow(N, Alpha - 1);
+      RGSettings.Build(alpha, n);
     }
 
     private static void CreateBitmap()
     {
       Image = new Bitmap(Sz, Sz);
       var gr = Graphics.FromImage(Image);
-      gr.FillRectangle(new SolidBrush(BgColor), 0, 0, Sz, Sz);
+      gr.FillRectangle(new SolidBrush(Config.BgColor), 0, 0, Sz, Sz);
       gr.Save();
     }
 
     private static void ProcessBitmap()
     {
-      DrawDynamics();
-      DrawParabolas();
+      DrawDynamicsReversed();
+      DrawParabolasReversed();
     }
 
-    private static void DrawParabolas()
+    private static void DrawParabolasReversed()
     {
       if (SingleCurve)
         AMax = AMin;
       var clrMax = (int)Math.Abs(AMax - AMin);
       var cnt = (int)(clrMax / AStep + 1);
-      var l = Math.Pow(N, Alpha - 1);
-      var b = -(N - 1) / (N - l);
+      var l = RGSettings.Lambda;
+      var b = -(RGSettings.N - 1) / (RGSettings.N - l);
       var gr = Graphics.FromImage(Image);
       Parallel.For(0, cnt, POpts, p =>
       {
         var a = AMin + p * AStep;
-        DrawParabola(a, b, gr);
-        var a1 = Lambda * a;
-        DrawParabola(a1, b, gr, DashStyle.Solid, false);
+        DrawParabolaReversed(a, b, gr);
+        var a1 = l * a;
+        DrawParabolaReversed(a1, b, gr, DashStyle.Solid, false);
       });
       gr.Save();
     }
 
-    private static void DrawDynamics()
+    private static void DrawDynamicsReversed()
     {
       Parallel.For(0, Sz, POpts, i =>
       {
@@ -357,11 +306,11 @@ namespace rg
           {
             c2 = Math.Sqrt(c2);
             var cpt = new CPoint(c0, c1, c2);
-            clr = GetColor(cpt);
+            clr = GetColorReversed(cpt);
           }
           else
           {
-            clr = White;
+            clr = Config.White;
           }
           lock (Image)
           {
@@ -379,7 +328,7 @@ namespace rg
       {
         singlePart = string.Format("single_{0}", AMin);
       }
-      var fname = string.Format("img/a{0}n{1}({2};{3})({4};{5}) ({6}).png", Alpha, N, X, Y, X + W, Y + W, singlePart);
+      var fname = string.Format("img/a{0}n{1}({2};{3})({4};{5}) ({6}).png", RGSettings.Alpha, RGSettings.N, X, Y, X + W, Y + W, singlePart);
       Image.Save(fname, ImageFormat.Png);
       Image.Dispose();
     }

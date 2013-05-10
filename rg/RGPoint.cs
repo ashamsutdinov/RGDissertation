@@ -10,7 +10,7 @@ namespace ReverseTransform
 
     public double G;
 
-    public CPoint C
+    public CPoint CReversed
     {
       get
       {
@@ -18,9 +18,15 @@ namespace ReverseTransform
       }
     }
 
-    private static double? _lambda;
+    public CPoint CDirect
+    {
+      get
+      {
+        return new CPoint(1, -R, R * R - G);
+      }
+    }
 
-    private static RGPoint ParabolaPt(double r, double a, double b, double l1)
+    private static RGPoint ParabolaPtReversed(double r, double a, double b, double l1)
     {
       var g = r;
       if (g - b == 0)
@@ -34,25 +40,14 @@ namespace ReverseTransform
       return new RGPoint { R = r, G = g };
     }
 
-    public static IEnumerable<RGPoint> Parabola(double alpha, double n, double a, double b, bool beforeTrans = true)
+    public static IEnumerable<RGPoint> ParabolaReversed(double a, double b, bool beforeTrans = true)
     {
-      if (_lambda == null)
-      {
-        var l = Math.Pow(n, alpha - 1);
-        _lambda = l;
-      }
-      var lambda = _lambda.Value;
-      return Parabola(lambda, alpha, n, a, b, beforeTrans);
+      return ParabolaReversed(a, b, -1000.0, 1000.0, 0.01, beforeTrans);
     }
 
-    public static IEnumerable<RGPoint> Parabola(double lambda, double alpha, double n, double a, double b, bool beforeTrans = true)
+    public static IEnumerable<RGPoint> ParabolaReversed(double a, double b, double rmin, double rmax, double rstep, bool beforeTrans = true)
     {
-      return Parabola(lambda, alpha, n, a, b, -1000.0, 1000.0, 0.01, beforeTrans);
-    }
-
-    public static IEnumerable<RGPoint> Parabola(double lambda, double alpha, double n, double a, double b, double rmin, double rmax, double rstep, bool beforeTrans = true)
-    {
-      var l1 = Math.Pow(lambda, -1);
+      var l1 = RGSettings.LambdaMinus1;
       if (!beforeTrans)
       {
         l1 = 1;
@@ -60,7 +55,7 @@ namespace ReverseTransform
 
       for (var r = rmin; r <= rmax; r += rstep)
       {
-        yield return ParabolaPt(r, a, b, l1);
+        yield return ParabolaPtReversed(r, a, b, l1);
       }
     }
 
@@ -80,7 +75,7 @@ namespace ReverseTransform
           {
             c2 = Math.Sqrt(c2);
             var cpt = new CPoint(c0, c1, c2);
-            var rg = cpt.RG;
+            var rg = cpt.RGReversed;
             if (rg.G >= 0)
             {
               yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
@@ -106,7 +101,7 @@ namespace ReverseTransform
           {
             c2 = Math.Sqrt(c2);
             var cpt = new CPoint(c0, c1, c2);
-            var rg = cpt.RG;
+            var rg = cpt.RGReversed;
             if (rg.G >= 0)
             {
               yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
@@ -116,15 +111,15 @@ namespace ReverseTransform
       }
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> ReverseIterated(IEnumerable<CPoint> points, double alpha, double n)
+    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> ReverseIterated(IEnumerable<CPoint> points)
     {
-      return points.Select(cPoint => cPoint.ReverseIterated(alpha, n)).Select(cpt => new KeyValuePair<CPoint, RGPoint>(cpt, cpt.RG));
+      return points.Select(cPoint => cPoint.ReverseIterated()).Select(cpt => new KeyValuePair<CPoint, RGPoint>(cpt, cpt.RGReversed));
     }
 
-    public static IEnumerable<KeyValuePair<List<CPoint>, List<RGPoint>>> ReverseIteratedMany(IEnumerable<CPoint> points, double alpha, double n, int count)
+    public static IEnumerable<KeyValuePair<List<CPoint>, List<RGPoint>>> ReverseIteratedMany(IEnumerable<CPoint> points, int count)
     {
       var lst = new List<KeyValuePair<List<CPoint>, List<RGPoint>>>();
-      var curIterated = ReverseIterated(points, alpha, n).ToList();
+      var curIterated = ReverseIterated(points).ToList();
       lst.Add(
         new KeyValuePair<List<CPoint>, List<RGPoint>>(
           curIterated.Select(e => e.Key).ToList(),
@@ -133,7 +128,7 @@ namespace ReverseTransform
         );
       for (var i = 2; i <= count; i++)
       {
-        curIterated = ReverseIterated(curIterated.Select(c => c.Key), alpha, n).ToList();
+        curIterated = ReverseIterated(curIterated.Select(c => c.Key)).ToList();
         lst.Add(
         new KeyValuePair<List<CPoint>, List<RGPoint>>(
           curIterated.Select(e => e.Key).ToList(),

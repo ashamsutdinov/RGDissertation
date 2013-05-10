@@ -14,15 +14,25 @@ namespace ReverseTransform
       return Color.FromArgb(r, g, b);
     }
 
-    public static Color GetBgColor(CPoint pt)
+    public static Color GetBgColorReversed(CPoint pt)
     {
-      var rp = pt.RG;
+      var rp = pt.RGReversed;
       {
         return rp.G < 0 ? Color.Green : Color.Blue;
       }
     }
 
-    public static Image GetBg(int width, int height)
+    public static Color ColorMixer(Color c1, Color c2)
+    {
+
+      var r = Math.Min((c1.R + c2.R), 255);
+      var g = Math.Min((c1.G + c2.G), 255);
+      var b = Math.Min((c1.B + c2.B), 255);
+
+      return Color.FromArgb(255, r, g, b);
+    }
+
+    public static Image GetBgReversed(int width, int height)
     {
       var img = new Bitmap(width, height);
 
@@ -46,7 +56,7 @@ namespace ReverseTransform
           {
             c2 = Math.Sqrt(c2);
             var cpt = new CPoint(c0, c1, c2);
-            clr = GetBgColor(cpt);
+            clr = GetBgColorReversed(cpt);
           }
           else
           {
@@ -59,23 +69,24 @@ namespace ReverseTransform
       return img;
     }
 
-    public static Color GetColor(CPoint pt)
+    public static Color GetColorReversed(CPoint pt)
     {
-      var rp = pt.RG;
+      var rp = pt.RGReversed;
       var cnt = 0;
-      var end = pt.ReverseTrackEndPoint(Config.P1, Config.Alpha, Config.N, out cnt, Config.Acc, Config.Count);
+      var end = pt.ReverseTrackEndPoint(Config.ReserverInterestedPoint, out cnt);
       if (cnt >= Config.Count)
       {
         return Config.Black;
       }
       var last = end;
-      var p = Config.P1;
+      var p = Config.ReserverInterestedPoint;
       Color clr;
-      if (p.C0 > 0)
+      if (last.C0 > 0)
       {
         clr = rp.G < 0
                     ? (last.C1 < p.C1 ? Config.Yellow : Config.Green)
                     : (last.C1 < p.C1 ? Config.Red : Config.Blue);
+        clr = Blend(clr, Config.White);
       }
       else
       {

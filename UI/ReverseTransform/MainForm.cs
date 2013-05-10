@@ -21,28 +21,18 @@ namespace ReverseTransform
 
     private List<CPoint> _pointTrack;
 
-    public List<CPoint> PointTrack
+    private List<CPoint> PointTrack
     {
-      get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.P1, Config.Alpha, Config.N, Config.Acc, Config.Count)); }
+      get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.ReserverInterestedPoint).ToList()); }
     }
 
-    public int PointNumber { get; set; }
+    public int PointNumber { private get; set; }
 
     protected override void OnShown(EventArgs e)
     {
       base.OnShown(e);
       InitializeConfig();
       Redraw();
-    }
-
-    public Color ColorMixer(Color c1, Color c2)
-    {
-
-      var r = Math.Min((c1.R + c2.R), 255);
-      var g = Math.Min((c1.G + c2.G), 255);
-      var b = Math.Min((c1.B + c2.B), 255);
-
-      return Color.FromArgb(255, r, g, b);
     }
 
     private void InitializeConfig()
@@ -76,7 +66,7 @@ namespace ReverseTransform
     {
       var np = NPt(p1);
       var gr = Graphics.FromImage(pictureBox.Image);
-      var bgClr = RG.GetColor(new CPoint(p1));
+      var bgClr = RG.GetColorReversed(new CPoint(p1));
       var blend = RG.Blend(clr, bgClr);
       gr.TryDraw(g => g.FillEllipse(new SolidBrush(clr), np.X - 2, np.Y - 2, 4, 4));
       gr.TryDraw(g => g.DrawRectangle(new Pen(blend), np.X - 10, np.Y - 10, 20, 20));
@@ -113,7 +103,8 @@ namespace ReverseTransform
       {
         c2 = Math.Sqrt(c2);
         var cpt = new CPoint(c0, c1, c2);
-        SetPixel(bmp, pt.X, pt.Y, RG.GetColor(cpt));
+        var color = RG.GetColorReversed(cpt);
+        SetPixel(bmp, pt.X, pt.Y, color);
       }
       else
       {
@@ -155,7 +146,7 @@ namespace ReverseTransform
           {
             c2 = Math.Sqrt(c2);
             var cpt = new CPoint(c0, c1, c2);
-            SetPixel(bmp, i, j, GetColor(cpt));
+            SetPixel(bmp, i, j, GetColorReversed(cpt));
           }
           else
           {
@@ -183,7 +174,7 @@ namespace ReverseTransform
       DrawPoint();
     }
 
-    public void DrawPoint()
+    private void DrawPoint()
     {
       if (_pointSelected == null || PointTrack == null)
         return;
@@ -233,7 +224,7 @@ namespace ReverseTransform
         _pointSelecting = false;
         var tr = new TrackPoint(this, PointTrack.Count);
         tr.Show(this);
-        track.Lines = PointTrack.Select(p => string.Format("{0} {1}", p, p.RG)).ToArray();
+        track.Lines = PointTrack.Select(p => string.Format("{0} {1}", p, p.RGReversed)).ToArray();
       }
       else
       {

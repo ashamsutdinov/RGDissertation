@@ -24,13 +24,32 @@ namespace ReverseTransform
       C2 = C2 / norm;
     }
 
-    private void ToUpperSphere()
+    public void ToDiametral()
     {
-      if (!(C2 < 0)) 
-        return;
       C0 = -C0;
       C1 = -C1;
       C2 = -C2;
+    }
+
+    public void ToUpperSphereC1C2()
+    {
+      if (!(C0 < 0))
+        return;
+      ToDiametral();
+    }
+
+    public void ToUpperSphereC0C2()
+    {
+      if (!(C1 < 0))
+        return;
+      ToDiametral();
+    }
+
+    private void ToUpperSphereC0C1()
+    {
+      if (!(C2 < 0))
+        return;
+      ToDiametral();
     }
 
     public CPoint(CPoint src)
@@ -53,12 +72,7 @@ namespace ReverseTransform
       }
     }
 
-    public bool IsNormal
-    {
-      get { return Norm <= 1; }
-    }
-
-    public RGPoint RG
+    public RGPoint RGReversed
     {
       get
       {
@@ -67,6 +81,24 @@ namespace ReverseTransform
         {
           var r = C2 > 0 || C2 < 0 ? -C1 / C2 : max;
           var g = C2 > 0 || C2 < 0 ? (C1 * C1 - C0 * C2) / (C2 * C2) : max;
+          return new RGPoint { R = r, G = g };
+        }
+        catch (Exception)
+        {
+          return new RGPoint { R = max, G = max };
+        }
+      }
+    }
+
+    public RGPoint RGDirect
+    {
+      get
+      {
+        const double max = double.MaxValue;
+        try
+        {
+          var r = C0 > 0 || C0 < 0 ? -C2 / C0 : max;
+          var g = C0 > 0 || C0 < 0 ? (C1 * C1 - C0 * C2) / (C0 * C0) : max;
           return new RGPoint { R = r, G = g };
         }
         catch (Exception)
@@ -105,101 +137,94 @@ namespace ReverseTransform
       return string.Format("({0};{1};{2})", C0, C1, C2);
     }
 
-    public static double Lambda = 0;
-
-    public static double LambdaMinus1 = 0;
-
-    public static double LambdaMinus2 = 0;
-
-    public static double NLambdaMinus2 = 0;
-
-    public CPoint DirectIterated(double alpha, double n)
+    public CPoint DirectIterated()
     {
       var c1MinusC0 = C1 - C0;
       var c2MunusC1 = C2 - C1;
       var c0C2MinusC1Sq = C0 * C2 - C1 * C1;
-      var n1 = 1 / n;
+      var n1 = RGSettings.OneDivN;
 
       var c0 = (c1MinusC0 * c1MinusC0 + n1 * c0C2MinusC1Sq);
-      var c1 = Lambda * (c1MinusC0 * c2MunusC1 + n1 * c0C2MinusC1Sq);
-      var c2 = Lambda * Lambda * (c2MunusC1 * c2MunusC1 + n1 * c0C2MinusC1Sq);
+      var c1 = RGSettings.Lambda * (c1MinusC0 * c2MunusC1 + n1 * c0C2MinusC1Sq);
+      var c2 = RGSettings.Lambda2 * (c2MunusC1 * c2MunusC1 + n1 * c0C2MinusC1Sq);
 
       var res = new CPoint(c0, c1, c2);
       return res;
     }
 
-    public CPoint ReverseIterated(double alpha, double n)
+    public CPoint ReverseIterated()
     {
       var c0C2MinusC1 = C0 * C2 - C1 * C1;
-      var c0MinusLambdaMinus1C1 = C0 - LambdaMinus1 * C1;
-      var c1MinusLambdaMinus1C2 = C1 - LambdaMinus1 * C2;
+      var c0MinusLambdaMinus1C1 = C0 - RGSettings.LambdaMinus1 * C1;
+      var c1MinusLambdaMinus1C2 = C1 - RGSettings.LambdaMinus1 * C2;
 
-      var c0 = c0MinusLambdaMinus1C1 * c0MinusLambdaMinus1C1 + NLambdaMinus2 * c0C2MinusC1;
-      var c1 = LambdaMinus1 * c0MinusLambdaMinus1C1 * c1MinusLambdaMinus1C2 + NLambdaMinus2 * c0C2MinusC1;
-      var c2 = LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + NLambdaMinus2 * c0C2MinusC1;
+      var c0 = c0MinusLambdaMinus1C1 * c0MinusLambdaMinus1C1 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c1 = RGSettings.LambdaMinus1 * c0MinusLambdaMinus1C1 * c1MinusLambdaMinus1C2 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c2 = RGSettings.LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
 
       var res = new CPoint(c0, c1, c2);
-      res.ToUpperSphere();
+      res.ToUpperSphereC0C1();
       return res;
     }
 
-    public void IterateReverse(double alpha, double n)
+    public void IterateReverse()
     {
       var c0C2MinusC1 = C0 * C2 - C1 * C1;
-      var c0MinusLambdaMinus1C1 = C0 - LambdaMinus1 * C1;
-      var c1MinusLambdaMinus1C2 = C1 - LambdaMinus1 * C2;
+      var c0MinusLambdaMinus1C1 = C0 - RGSettings.LambdaMinus1 * C1;
+      var c1MinusLambdaMinus1C2 = C1 - RGSettings.LambdaMinus1 * C2;
 
-      var c0 = c0MinusLambdaMinus1C1 * c0MinusLambdaMinus1C1 + NLambdaMinus2 * c0C2MinusC1;
-      var c1 = LambdaMinus1 * c0MinusLambdaMinus1C1 * c1MinusLambdaMinus1C2 + NLambdaMinus2 * c0C2MinusC1;
-      var c2 = LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + NLambdaMinus2 * c0C2MinusC1;
+      var c0 = c0MinusLambdaMinus1C1 * c0MinusLambdaMinus1C1 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c1 = RGSettings.LambdaMinus1 * c0MinusLambdaMinus1C1 * c1MinusLambdaMinus1C2 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c2 = RGSettings.LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
 
       Build(c0, c1, c2);
     }
 
-    public IEnumerable<CPoint> DirectTrack(CPoint crit, double alpha, double n, double acc, int k)
+    public IEnumerable<CPoint> DirectTrack(CPoint crit)
     {
       var pt = this;
       const double max = double.MaxValue;
       var d = max;
       var i = 0;
       var res = new List<CPoint>();
-      while (d > acc && i < k)
+      while (d > Config.Acc && i < Config.Count)
       {
         res.Add(pt);
-        pt = pt.DirectIterated(alpha, n);
+        pt = pt.DirectIterated();
         d = pt.DistanceTo(crit);
         i++;
       }
       return res;
     }
 
-    public IEnumerable<CPoint> ReverseTrack(CPoint crit, double alpha, double n, double acc = 0.0000001, int k = 100)
+    public IEnumerable<CPoint> ReverseTrack(CPoint crit)
     {
       var pt = this;
       const double max = double.MaxValue;
       var d = max;
       var i = 0;
       var res = new List<CPoint>();
-      while (d > acc && i < k)
+      while (d > Config.Acc && i < Config.Count)
       {
-        pt.ToUpperSphere();
+        pt.ToUpperSphereC0C1();
         res.Add(pt);
-        pt = pt.ReverseIterated(alpha, n);
+        pt = pt.ReverseIterated();
         d = pt.DistanceTo(crit);
         i++;
       }
       return res;
     }
 
-    public CPoint ReverseTrackEndPoint(CPoint crit, double alpha, double n, out int cnt, double acc, int k)
+    public CPoint ReverseTrackEndPoint(CPoint crit, out int cnt)
     {
       var pt = this;
       const double max = double.MaxValue;
       var d = max;
       var i = 0;
-      while (d > acc && i < k)
+      while (d > Config.Acc && i < Config.Count)
       {
-        pt.IterateReverse(alpha, n);
+        pt.IterateReverse();
+        pt.ToUpperSphereC0C1();
         d = pt.DistanceTo(crit);
         i++;
       }
