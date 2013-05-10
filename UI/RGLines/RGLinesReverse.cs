@@ -10,7 +10,7 @@ using ReverseTransform;
 
 namespace RGLines
 {
-  public partial class RGLines : Form
+  public partial class RGLinesReverse : Form
   {
     #region Private
 
@@ -72,6 +72,8 @@ namespace RGLines
 
     private int _areaStep;
 
+    private bool _arc;
+
     private List<CPoint> _areaInitialSetCPositive;
 
     private List<CPoint> _areaInitialSetCNegative;
@@ -84,7 +86,7 @@ namespace RGLines
 
     #region Constructors
 
-    public RGLines()
+    public RGLinesReverse()
     {
       InitializeComponent();
 
@@ -250,7 +252,8 @@ namespace RGLines
     {
       trackArea.Value = 0;
       _areaStep = 0;
-      _c1 = double.Parse(txtAreaC1.Text);
+      _arc = checkBoxHOnlyArc.Checked;
+      _c1 = double.Parse(txtAreaH.Text);
     }
 
     private void ChangePictureBoxPicture(ICloneable newImageSource)
@@ -294,24 +297,24 @@ namespace RGLines
       {
         var gr = Graphics.FromImage(_bgWithLines);
 
-        var pen1 = new Pen(Color.Black);
+        var pen1 = new Pen(Config.Black);
         for (var i = 0; i < _line1.Count - 1; i++)
         {
           var c1 = _line1[i];
           var c2 = _line1[i + 1];
-          RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen1, c1, c2, gr);
+          RG.DrawLineReversed(X, Y, _xpxsz, _ypxsz, _sz, pen1, c1, c2, gr);
         }
 
-        var pen2 = new Pen(Color.White);
+        var pen2 = new Pen(Config.White);
         for (var i = 0; i < _line2.Count - 1; i++)
         {
           var c1 = _line2[i];
           var c2 = _line2[i + 1];
-          RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr);
+          RG.DrawLineReversed(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr);
         }
 
-        if (cNearestToB != null) RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, cNearestToB, gr);
-        if (cNearesToL != null) RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Yellow, cNearesToL, gr);
+        if (cNearestToB != null) RG.FillPointReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, cNearestToB, gr);
+        if (cNearesToL != null) RG.FillPointReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, cNearesToL, gr);
         gr.Save();
       }
       ChangePictureBoxPicture(_bgWithLines);
@@ -326,13 +329,13 @@ namespace RGLines
       }
       _bgWithArea = _bg.Clone() as Bitmap;
 
-      var initialLstPositive = RGPoint.GetPositiveNumbersGreaterThanC1ProjC0C1Positive(_c1, _xpxsz, _ypxsz).ToList();
-      var initialLstNegative = RGPoint.GetPositiveNumbersGreaterThanC1ProjC0C1Negative(_c1, _xpxsz, _ypxsz).ToList();
+      var initialLstPositive = (_arc ? RGPoint.GetReversedTriangleArcPositive(_c1, _xpxsz) : RGPoint.GetReversedTrianglePositive(_c1, _xpxsz, _ypxsz)).ToList();
+      var initialLstNegative = (_arc ? RGPoint.GetReversedTriangleArcNegative(_c1, _xpxsz) : RGPoint.GetReversedTriangleNegative(_c1, _xpxsz, _ypxsz)).ToList();
       _areaInitialSetCPositive = initialLstPositive.Select(e => e.Key).ToList();
       _areaInitialSetCNegative = initialLstNegative.Select(e => e.Key).ToList();
 
-      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.GhostWhite, _areaInitialSetCPositive, _bgWithArea);
-      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, _areaInitialSetCNegative, _bgWithArea);
+      RG.FillAreaReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, _areaInitialSetCPositive, _bgWithArea);
+      RG.FillAreaReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, _areaInitialSetCNegative, _bgWithArea);
 
       var iteratedPositive = RGPoint.ReverseIteratedMany(_areaInitialSetCPositive, trackArea.Maximum).ToList();
       var iteratedNegative = RGPoint.ReverseIteratedMany(_areaInitialSetCNegative, trackArea.Maximum).ToList();
@@ -371,9 +374,9 @@ namespace RGLines
       ChangePictureBoxPicture(_bgWithLines);
       var gr = Graphics.FromImage(pictureBox.Image);
       var p1 = _line1[_currentStep];
-      RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Black, p1, gr);
+      RG.FillPointReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, p1, gr);
       var p2 = _line2[_currentStep];
-      RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.White, p2, gr);
+      RG.FillPointReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.White, p2, gr);
     }
 
     private void RedrawArea()
@@ -382,8 +385,8 @@ namespace RGLines
       var img = pictureBox.Image.Clone() as Bitmap;
       var ptsPositive = _iteratedAreasCPositive[_areaStep];
       var ptsNegative = _iteratedAreasCNegative[_areaStep];
-      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.GhostWhite, ptsPositive, img);
-      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, ptsNegative, img);
+      RG.FillAreaReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, ptsPositive, img);
+      RG.FillAreaReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, ptsNegative, img);
       ChangePictureBoxPicture(img);
     }
 

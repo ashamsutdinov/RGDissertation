@@ -22,6 +22,14 @@ namespace ReverseTransform
       }
     }
 
+    public static Color GetBgColorDirect(CPoint pt)
+    {
+      var rp = pt.RGDirect;
+      {
+        return rp.G < 0 ? Color.Green : Color.Blue;
+      }
+    }
+
     public static Color ColorMixer(Color c1, Color c2)
     {
 
@@ -65,7 +73,42 @@ namespace ReverseTransform
           img.SetPixel(i, j, clr);
         }
       }
+      return img;
+    }
 
+    public static Image GetBgDirect(int width, int height)
+    {
+      var img = new Bitmap(width, height);
+
+      var onePtWidth = 2.0 / width;
+      var onePtHeight = 2.0 / height;
+      const double x1 = -1.0;
+      const double y1 = -1.0;
+
+      for (var i = 0; i < width; i++)
+      {
+        for (var j = 0; j < height; j++)
+        {
+          var x = x1 + i * onePtWidth;
+          var y = y1 + j * onePtHeight;
+          var c1 = x;
+          var c2 = y;
+          var rd = c1 * c1 + c2 * c2;
+          var c0 = 1 - rd;
+          Color clr;
+          if (rd <= 1)
+          {
+            c0 = Math.Sqrt(c0);
+            var cpt = new CPoint(c0, c1, c2);
+            clr = GetBgColorDirect(cpt);
+          }
+          else
+          {
+            clr = Color.White;
+          }
+          img.SetPixel(i, j, clr);
+        }
+      }
       return img;
     }
 
@@ -107,7 +150,31 @@ namespace ReverseTransform
       return value;
     }
 
-    public static void DrawLine(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
+    public static void SetPixel(int i, int j, Bitmap bmp, Color clr)
+    {
+      bmp.SetPixel(i,j,clr);
+      /*
+      var i11 = i - 1;
+      var i12 = i + 1;
+      var j11 = j - 1;
+      var j12 = j + 1;
+
+      lock (bmp)
+      {
+        bmp.SetPixelSafe(i11, j11, clr);
+        bmp.SetPixelSafe(i11, j, clr);
+        bmp.SetPixelSafe(i11, j12, clr);
+        bmp.SetPixelSafe(i, j11, clr);
+        bmp.SetPixelSafe(i, j, clr);
+        bmp.SetPixelSafe(i, j12, clr);
+        bmp.SetPixelSafe(i12, j11, clr);
+        bmp.SetPixelSafe(i12, j, clr);
+        bmp.SetPixelSafe(i12, j12, clr);
+      }
+       * */
+    }
+
+    public static void DrawLineReversed(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
     {
       var i1 = Correct((cp1.C0 - x) / xsz, sz);
       var i2 = Correct((cp2.C0 - x) / xsz, sz);
@@ -130,7 +197,7 @@ namespace ReverseTransform
       }
     }
 
-    public static void FillPoint(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
+    public static void FillPointReversed(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
     {
       var i1 = Correct((cp1.C0 - x) / xsz, sz);
       var j1 = Correct((cp1.C1 - y) / ysz, sz);
@@ -143,22 +210,69 @@ namespace ReverseTransform
       }
     }
 
-    public static void SetPixel(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
+    public static void SetPixelReversed(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
     {
       var i1 = (int)Correct((cp1.C0 - x) / xsz, sz);
       var j1 = (int)Correct((cp1.C1 - y) / ysz, sz);
-
-      lock (bmp)
-      {
-        bmp.SetPixel(i1, j1, clr);
-      }
+      SetPixel(i1, j1, bmp, clr);
     }
 
-    public static void FillArea(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
+    public static void FillAreaReversed(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
     {
       foreach (var cPoint in cpts)
       {
-        SetPixel(x, y, xsz, ysz, sz, clr, cPoint, bmp);
+        SetPixelReversed(x, y, xsz, ysz, sz, clr, cPoint, bmp);
+      }
+    }
+
+    public static void DrawLineDirect(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
+    {
+      var i1 = Correct((cp1.C1 - x) / xsz, sz);
+      var i2 = Correct((cp2.C1 - x) / xsz, sz);
+      var j1 = Correct((cp1.C2 - y) / ysz, sz);
+      var j2 = Correct((cp2.C2 - y) / ysz, sz);
+
+      var di = Math.Abs(i2 - i1);
+      var dj = Math.Abs(j2 - j1);
+      var d = Math.Sqrt(di * di + dj * dj);
+
+      var check = sz / 3;
+      if (d >= check && verify)
+      {
+        return;
+      }
+
+      lock (gr)
+      {
+        gr.DrawLine(pen, (float)i1, (float)j1, (float)i2, (float)j2);
+      }
+    }
+
+    public static void FillPointDirect(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
+    {
+      var i1 = Correct((cp1.C1 - x) / xsz, sz);
+      var j1 = Correct((cp1.C2 - y) / ysz, sz);
+
+      var brush = new SolidBrush(clr);
+
+      lock (gr)
+      {
+        gr.FillEllipse(brush, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
+      }
+    }
+
+    public static void SetPixelDirect(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
+    {
+      var i1 = (int)Correct((cp1.C1 - x) / xsz, sz);
+      var j1 = (int)Correct((cp1.C2 - y) / ysz, sz);
+      SetPixel(i1, j1, bmp, clr);
+    }
+
+    public static void FillAreaDirect(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
+    {
+      foreach (var cPoint in cpts)
+      {
+        SetPixelDirect(x, y, xsz, ysz, sz, clr, cPoint, bmp);
       }
     }
   }

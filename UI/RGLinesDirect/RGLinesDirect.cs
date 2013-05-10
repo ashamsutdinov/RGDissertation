@@ -10,11 +10,11 @@ using ReverseTransform;
 
 namespace RGLines
 {
-  public partial class RGLines : Form
+  public partial class RGLinesDirect : Form
   {
     #region Private
 
-    private const string BgFileName = "bg.bmp";
+    private const string BgFileName = "bgdir.bmp";
 
     private Bitmap _bg;
 
@@ -72,6 +72,8 @@ namespace RGLines
 
     private int _areaStep;
 
+    private bool _arc;
+
     private List<CPoint> _areaInitialSetCPositive;
 
     private List<CPoint> _areaInitialSetCNegative;
@@ -84,7 +86,7 @@ namespace RGLines
 
     #region Constructors
 
-    public RGLines()
+    public RGLinesDirect()
     {
       InitializeComponent();
 
@@ -109,7 +111,7 @@ namespace RGLines
 
     private void BtnDefBClick(object sender, EventArgs e)
     {
-      _b = -(RGSettings.N - 1) / (RGSettings.N - RGSettings.Lambda);
+      _b = -(RGSettings.Lambda * RGSettings.N - RGSettings.Lambda) / (RGSettings.Lambda * RGSettings.N - 1);
       txtLineB.Text = _b.ToString(CultureInfo.InvariantCulture).Replace(".", ",");
     }
 
@@ -211,7 +213,7 @@ namespace RGLines
       }
       else
       {
-        var img = RG.GetBgReversed(pictureBox.Width, pictureBox.Height);
+        var img = RG.GetBgDirect(pictureBox.Width, pictureBox.Height);
         img.Save(BgFileName, ImageFormat.Bmp);
         _bg = img as Bitmap;
       }
@@ -231,11 +233,11 @@ namespace RGLines
     private void ApplyLineSettings()
     {
       _a = double.Parse(txtLineA.Text);
-      _a1 = ((RGSettings.N - 1) * _a) / (_a - _b + (RGSettings.N + 1) * Math.Pow(RGSettings.Lambda, -1));
+      _a1 = ((RGSettings.NMinus1 - 1) * _a) / (_a - _b - 1 + RGSettings.NMinus1);
       _a11 = RGSettings.Lambda * _a;
       _b = double.Parse(txtLineB.Text);
-      _b1 = (_b - RGSettings.N * _a) / (1 - RGSettings.N);
-      _b11 = (1 + RGSettings.Lambda * _b) / RGSettings.N - 1;
+      _b1 = (_b - RGSettings.NMinus1 * _a) / (1 - RGSettings.NMinus1);
+      _b11 = RGSettings.Lambda * (RGSettings.N * (_b + 1) - 1);
       _rmin = double.Parse(txtRMin.Text);
       _rmax = double.Parse(txtRMax.Text);
       _rstep = double.Parse(txtRStep.Text);
@@ -250,7 +252,8 @@ namespace RGLines
     {
       trackArea.Value = 0;
       _areaStep = 0;
-      _c1 = double.Parse(txtAreaC1.Text);
+      _arc = checkBoxOnlyArc.Checked;
+      _c1 = double.Parse(txtAreaH.Text);
     }
 
     private void ChangePictureBoxPicture(ICloneable newImageSource)
@@ -270,48 +273,39 @@ namespace RGLines
         _bgWithLines.Dispose();
       }
       _bgWithLines = _bg.Clone() as Bitmap;
-      _rline1 = RGPoint.ParabolaReversed(_a, _b, _rmin, _rmax, _rstep).ToList();
-      _line1 = _rline1.Select(rg => rg.CReversed).ToList();
+      _rline1 = RGPoint.ParabolaDirect(_a, _b, _rmin, _rmax, _rstep).ToList();
+      _line1 = _rline1.Select(rg => rg.CDirect).ToList();
 
       _rline2 = new List<RGPoint>();
       foreach (var rp1 in _rline1)
       {
         var r = rp1.R;
-        var r1 = RGSettings.Lambda * ((_a - _b + (RGSettings.N - 1) * Math.Pow(RGSettings.Lambda, -1)) / (1 - RGSettings.N)) * ((r - _a1) / (r - _b1));
-        var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + 1, 2);
+        var r1 = RGSettings.Lambda * ((_a - _b - 1 + RGSettings.NMinus1) / (1 - RGSettings.NMinus1)) * ((r - _a1) / (r - _b1));
+        var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + RGSettings.Lambda, 2);
         var rp2 = new RGPoint { R = r1, G = g1 };
         _rline2.Add(rp2);
       }
-      _line2 = _rline2.Select(rg => rg.CReversed).ToList();
-
-      var nearestToB = _rline1.OrderBy(rp => Math.Abs(rp.R - _b)).FirstOrDefault();
-      var nearestToL = _rline1.OrderBy(rp => Math.Abs(rp.R - (-Math.Pow(RGSettings.Lambda, -1)))).FirstOrDefault();
-
-      var cNearestToB = nearestToB != null ? nearestToB.CReversed : null;
-      var cNearesToL = nearestToL != null ? nearestToL.CReversed : null;
+      _line2 = _rline2.Select(rg => rg.CDirect).ToList();
 
       if (_bgWithLines != null)
       {
         var gr = Graphics.FromImage(_bgWithLines);
 
-        var pen1 = new Pen(Color.Black);
+        var pen1 = new Pen(Config.Black);
         for (var i = 0; i < _line1.Count - 1; i++)
         {
           var c1 = _line1[i];
           var c2 = _line1[i + 1];
-          RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen1, c1, c2, gr);
+          RG.DrawLineDirect(X, Y, _xpxsz, _ypxsz, _sz, pen1, c1, c2, gr);
         }
 
-        var pen2 = new Pen(Color.White);
+        var pen2 = new Pen(Config.White);
         for (var i = 0; i < _line2.Count - 1; i++)
         {
           var c1 = _line2[i];
           var c2 = _line2[i + 1];
-          RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr);
+          RG.DrawLineDirect(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr);
         }
-
-        if (cNearestToB != null) RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, cNearestToB, gr);
-        if (cNearesToL != null) RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Yellow, cNearesToL, gr);
         gr.Save();
       }
       ChangePictureBoxPicture(_bgWithLines);
@@ -326,16 +320,16 @@ namespace RGLines
       }
       _bgWithArea = _bg.Clone() as Bitmap;
 
-      var initialLstPositive = RGPoint.GetPositiveNumbersGreaterThanC1ProjC0C1Positive(_c1, _xpxsz, _ypxsz).ToList();
-      var initialLstNegative = RGPoint.GetPositiveNumbersGreaterThanC1ProjC0C1Negative(_c1, _xpxsz, _ypxsz).ToList();
+      var initialLstPositive = (_arc ? RGPoint.GetDirectTriangleArcPositive(_c1, _ypxsz) : RGPoint.GetDirectTrianglePositive(_c1, _xpxsz, _ypxsz)).ToList();
+      var initialLstNegative = (_arc ? RGPoint.GetDirectTriangleArcNegative(_c1, _ypxsz) : RGPoint.GetDirectTriangleNegative(_c1, _xpxsz, _ypxsz)).ToList();
       _areaInitialSetCPositive = initialLstPositive.Select(e => e.Key).ToList();
       _areaInitialSetCNegative = initialLstNegative.Select(e => e.Key).ToList();
 
-      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.GhostWhite, _areaInitialSetCPositive, _bgWithArea);
-      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, _areaInitialSetCNegative, _bgWithArea);
+      RG.FillAreaDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, _areaInitialSetCPositive, _bgWithArea);
+      RG.FillAreaDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, _areaInitialSetCNegative, _bgWithArea);
 
-      var iteratedPositive = RGPoint.ReverseIteratedMany(_areaInitialSetCPositive, trackArea.Maximum).ToList();
-      var iteratedNegative = RGPoint.ReverseIteratedMany(_areaInitialSetCNegative, trackArea.Maximum).ToList();
+      var iteratedPositive = RGPoint.DirectIteratedMany(_areaInitialSetCPositive, trackArea.Maximum).ToList();
+      var iteratedNegative = RGPoint.DirectIteratedMany(_areaInitialSetCNegative, trackArea.Maximum).ToList();
       _iteratedAreasCPositive = iteratedPositive.Select(e => e.Key.ToList()).ToList();
       _iteratedAreasCPositive.Insert(0, _areaInitialSetCPositive);
       _iteratedAreasCNegative = iteratedNegative.Select(e => e.Key.ToList()).ToList();
@@ -371,9 +365,9 @@ namespace RGLines
       ChangePictureBoxPicture(_bgWithLines);
       var gr = Graphics.FromImage(pictureBox.Image);
       var p1 = _line1[_currentStep];
-      RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.Black, p1, gr);
+      RG.FillPointDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, p1, gr);
       var p2 = _line2[_currentStep];
-      RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Color.White, p2, gr);
+      RG.FillPointDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.White, p2, gr);
     }
 
     private void RedrawArea()
@@ -382,8 +376,8 @@ namespace RGLines
       var img = pictureBox.Image.Clone() as Bitmap;
       var ptsPositive = _iteratedAreasCPositive[_areaStep];
       var ptsNegative = _iteratedAreasCNegative[_areaStep];
-      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.GhostWhite, ptsPositive, img);
-      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Color.Red, ptsNegative, img);
+      RG.FillAreaDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, ptsPositive, img);
+      RG.FillAreaDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, ptsNegative, img);
       ChangePictureBoxPicture(img);
     }
 

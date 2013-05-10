@@ -5,9 +5,9 @@ namespace ReverseTransform
 {
   public class Config : RGSettings
   {
-    public static readonly double Acc;
+    public static readonly double Acc = 0.000001;
 
-    public static readonly int Count;
+    public static readonly int Count = 100;
 
     public static readonly CPoint ReserverInterestedPoint = new CPoint(1, 0, 0);
 
@@ -31,22 +31,23 @@ namespace ReverseTransform
 
     public static readonly Color Black = Color.Black;
 
+    public static readonly Color GhostWhite = Color.GhostWhite;
+
     public static readonly Brush BlackBrush = new SolidBrush(Color.Black);
 
     public static readonly Color BgColor = Color.IndianRed;
 
     static Config()
     {
-      var conf = ConfigurationManager.AppSettings;
-      double.TryParse(conf["Alpha"], out Alpha);
-      double.TryParse(conf["N"], out N);
-      var parsedCount = int.TryParse(conf["Count"], out Count);
-      if (!parsedCount)
-        Count = 100;
-      var parsedAcc = double.TryParse(conf["Acc"], out Acc);
-      if (!parsedAcc)
-        Acc = 0.000001d;
-      Build(Alpha, N);
+      if (!Built)
+      {
+        var conf = ConfigurationManager.AppSettings;
+        double.TryParse(conf["Alpha"], out Alpha);
+        double.TryParse(conf["N"], out N);
+        int.TryParse(conf["Count"], out Count);
+        double.TryParse(conf["Acc"], out Acc);
+        Build(Alpha, N);
+      }
     }
   }
 }

@@ -8,6 +8,8 @@ namespace ReverseTransform
 
     public static double N;
 
+    public static double NMinus1;
+
     public static double Lambda;
 
     public static double LambdaMinus1;
@@ -20,6 +22,8 @@ namespace ReverseTransform
 
     public static double OneDivN;
 
+    public static bool Built;
+
     public static void Build(double alpha, double n)
     {
       Alpha = alpha;
@@ -30,6 +34,8 @@ namespace ReverseTransform
       NLambdaMinus2 = N * LambdaMinus2;
       Lambda2 = Lambda * Lambda;
       OneDivN = 1 / N;
+      NMinus1 = Math.Pow(N, -1);
+      Built = true;
     }
   }
 }

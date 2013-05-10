@@ -149,6 +149,7 @@ namespace ReverseTransform
       var c2 = RGSettings.Lambda2 * (c2MunusC1 * c2MunusC1 + n1 * c0C2MinusC1Sq);
 
       var res = new CPoint(c0, c1, c2);
+      res.ToUpperSphereC1C2();
       return res;
     }
 

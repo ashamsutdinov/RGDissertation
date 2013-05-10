@@ -13,7 +13,7 @@ namespace RGLines
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new RGLines());
+            Application.Run(new RGLinesReverse());
         }
     }
 }

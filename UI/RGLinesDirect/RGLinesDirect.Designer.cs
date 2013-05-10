@@ -1,6 +1,6 @@
 ﻿namespace RGLines
 {
-    partial class RGLines
+    partial class RGLinesDirect
     {
         /// <summary>
         /// Required designer variable.
@@ -60,12 +60,13 @@
       this.btnHideArea = new System.Windows.Forms.Button();
       this.btnApplyArea = new System.Windows.Forms.Button();
       this.label11 = new System.Windows.Forms.Label();
-      this.txtAreaC1 = new System.Windows.Forms.TextBox();
+      this.txtAreaH = new System.Windows.Forms.TextBox();
       this.trackAreaGroup = new System.Windows.Forms.GroupBox();
       this.txtAreaIteration = new System.Windows.Forms.TextBox();
       this.trackArea = new System.Windows.Forms.TrackBar();
       this.btnAreaNextIteration = new System.Windows.Forms.Button();
       this.btnAreaPrevIteration = new System.Windows.Forms.Button();
+      this.checkBoxOnlyArc = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
       this.rgParamsGroup.SuspendLayout();
       this.lineParamsGroup.SuspendLayout();
@@ -349,20 +350,21 @@
       // 
       // areaParamsGroup
       // 
+      this.areaParamsGroup.Controls.Add(this.checkBoxOnlyArc);
       this.areaParamsGroup.Controls.Add(this.btnHideArea);
       this.areaParamsGroup.Controls.Add(this.btnApplyArea);
       this.areaParamsGroup.Controls.Add(this.label11);
-      this.areaParamsGroup.Controls.Add(this.txtAreaC1);
+      this.areaParamsGroup.Controls.Add(this.txtAreaH);
       this.areaParamsGroup.Location = new System.Drawing.Point(730, 475);
       this.areaParamsGroup.Name = "areaParamsGroup";
-      this.areaParamsGroup.Size = new System.Drawing.Size(272, 75);
+      this.areaParamsGroup.Size = new System.Drawing.Size(272, 109);
       this.areaParamsGroup.TabIndex = 13;
       this.areaParamsGroup.TabStop = false;
       this.areaParamsGroup.Text = "Area Params";
       // 
       // btnHideArea
       // 
-      this.btnHideArea.Location = new System.Drawing.Point(6, 42);
+      this.btnHideArea.Location = new System.Drawing.Point(6, 80);
       this.btnHideArea.Name = "btnHideArea";
       this.btnHideArea.Size = new System.Drawing.Size(50, 23);
       this.btnHideArea.TabIndex = 12;
@@ -372,7 +374,7 @@
       // 
       // btnApplyArea
       // 
-      this.btnApplyArea.Location = new System.Drawing.Point(56, 42);
+      this.btnApplyArea.Location = new System.Drawing.Point(56, 80);
       this.btnApplyArea.Name = "btnApplyArea";
       this.btnApplyArea.Size = new System.Drawing.Size(210, 23);
       this.btnApplyArea.TabIndex = 7;
@@ -385,17 +387,17 @@
       this.label11.AutoSize = true;
       this.label11.Location = new System.Drawing.Point(12, 19);
       this.label11.Name = "label11";
-      this.label11.Size = new System.Drawing.Size(20, 13);
+      this.label11.Size = new System.Drawing.Size(15, 13);
       this.label11.TabIndex = 6;
-      this.label11.Text = "C1";
+      this.label11.Text = "H";
       // 
-      // txtAreaC1
+      // txtAreaH
       // 
-      this.txtAreaC1.Location = new System.Drawing.Point(56, 16);
-      this.txtAreaC1.Name = "txtAreaC1";
-      this.txtAreaC1.Size = new System.Drawing.Size(210, 20);
-      this.txtAreaC1.TabIndex = 4;
-      this.txtAreaC1.Text = "0";
+      this.txtAreaH.Location = new System.Drawing.Point(56, 16);
+      this.txtAreaH.Name = "txtAreaH";
+      this.txtAreaH.Size = new System.Drawing.Size(210, 20);
+      this.txtAreaH.TabIndex = 4;
+      this.txtAreaH.Text = "0";
       // 
       // trackAreaGroup
       // 
@@ -403,7 +405,7 @@
       this.trackAreaGroup.Controls.Add(this.trackArea);
       this.trackAreaGroup.Controls.Add(this.btnAreaNextIteration);
       this.trackAreaGroup.Controls.Add(this.btnAreaPrevIteration);
-      this.trackAreaGroup.Location = new System.Drawing.Point(730, 556);
+      this.trackAreaGroup.Location = new System.Drawing.Point(730, 590);
       this.trackAreaGroup.Name = "trackAreaGroup";
       this.trackAreaGroup.Size = new System.Drawing.Size(272, 100);
       this.trackAreaGroup.TabIndex = 13;
@@ -448,7 +450,17 @@
       this.btnAreaPrevIteration.UseVisualStyleBackColor = true;
       this.btnAreaPrevIteration.Click += new System.EventHandler(this.BtnAreaPrevIterationClick);
       // 
-      // RGLines
+      // checkBoxOnlyArc
+      // 
+      this.checkBoxOnlyArc.AutoSize = true;
+      this.checkBoxOnlyArc.Location = new System.Drawing.Point(56, 43);
+      this.checkBoxOnlyArc.Name = "checkBoxOnlyArc";
+      this.checkBoxOnlyArc.Size = new System.Drawing.Size(42, 17);
+      this.checkBoxOnlyArc.TabIndex = 13;
+      this.checkBoxOnlyArc.Text = "Arc";
+      this.checkBoxOnlyArc.UseVisualStyleBackColor = true;
+      // 
+      // RGLinesDirect
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -460,7 +472,7 @@
       this.Controls.Add(this.rgParamsGroup);
       this.Controls.Add(this.pictureBox);
       this.MaximizeBox = false;
-      this.Name = "RGLines";
+      this.Name = "RGLinesDirect";
       this.Text = "RG Lines";
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
       this.rgParamsGroup.ResumeLayout(false);
@@ -513,12 +525,13 @@
         private System.Windows.Forms.Button btnHideArea;
         private System.Windows.Forms.Button btnApplyArea;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox txtAreaC1;
+        private System.Windows.Forms.TextBox txtAreaH;
         private System.Windows.Forms.GroupBox trackAreaGroup;
         private System.Windows.Forms.TextBox txtAreaIteration;
         private System.Windows.Forms.TrackBar trackArea;
         private System.Windows.Forms.Button btnAreaNextIteration;
         private System.Windows.Forms.Button btnAreaPrevIteration;
+        private System.Windows.Forms.CheckBox checkBoxOnlyArc;
     }
 }
 
