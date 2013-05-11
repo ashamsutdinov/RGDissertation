@@ -45,7 +45,7 @@ namespace rg
 
     private static Color GetColorReversed(CPoint pt)
     {
-      var rp = pt.RGReversed;
+      var rp = pt.RG(CProjection.C0C1);
 
       if (!Dynamics)
       {
@@ -54,7 +54,7 @@ namespace rg
 
       var baseClr = rp.G <= 0 ? Config.White : Config.Black;
 
-      var track = pt.ReverseTrack(Config.ReserverInterestedPoint).ToList();
+      var track = pt.ReverseTrack(Config.ReserverInterestedPoint, CProjection.UpC0C1).ToList();
       if (track.Count == 100)
       {
         return baseClr;
@@ -111,7 +111,7 @@ namespace rg
 
     private static void DrawParabolaReversed(double a, double b, Graphics gr, DashStyle dash = DashStyle.Dot, bool beforeTrans = true)
     {
-      var rgParabola = RGPoint.ParabolaReversed(a, b, beforeTrans);
+      var rgParabola = RGPoint.ParabolaReversed(a, b, -1000, 1000, 0.1, beforeTrans);
       var rgPoints = rgParabola as RGPoint[] ?? rgParabola.ToArray();
       var beforeB = rgPoints.Where(rg => rg.R <= b).ToList();
       var fromBtoL = rgPoints.Where(rg => rg.R >= b && rg.R <= RGSettings.LambdaMinus1).ToList();
@@ -267,7 +267,7 @@ namespace rg
     private static void ProcessBitmap()
     {
       DrawDynamicsReversed();
-      DrawParabolasReversed();
+      //DrawParabolasReversed();
     }
 
     private static void DrawParabolasReversed()

@@ -68,11 +68,82 @@ namespace ReverseTransform
       }
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetReversedTriangleNegative(double c1Lim, double xacc, double yacc)
+    private static void CorrectAcc(double h1, double h2, ref double xacc, ref double yacc)
     {
-      xacc = xacc / 3;
-      yacc = yacc / 3;
-      for (var x = c1Lim; x <= 1.0; x += xacc)
+      var d = h2 - h1;
+      var div = 1.1;
+      if (d > 1.5)
+      {
+        div = 1.5;
+      }
+      else if (d > 1)
+      {
+        div = 1.7;
+      }
+      else if (d > 0.5)
+      {
+        div = 2;
+      }
+      else if (d > 0.3)
+      {
+        div = 2.5;
+      }
+      else if (d > 0.2)
+      {
+        div = 3;
+      }
+      else if (d <= 0.2)
+      {
+        div = 5;
+      }
+      xacc = xacc / div;
+      yacc = yacc / div;
+    }
+
+    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetTriangleNegative(double h1, double h2, double xacc, double yacc, CProjection proj)
+    {
+      var sgn = proj.HasFlag(CProjection.Down) ? -1 : 1;
+      if (proj.HasFlag(CProjection.C0C1))
+        return GetC0C1TriangleNegative(h1, h2, xacc, yacc, sgn);
+      if (proj.HasFlag(CProjection.C1C2))
+        return GetC1C2TriangleNegative(h1, h2, xacc, yacc, sgn);
+      throw new NotSupportedException();
+    }
+
+    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetTrianglePositive(double h1, double h2, double xacc, double yacc, CProjection proj)
+    {
+      var sgn = proj.HasFlag(CProjection.Down) ? -1 : 1;
+      if (proj.HasFlag(CProjection.C0C1))
+        return GetC0C1TrianglePositive(h1, h2, xacc, yacc, sgn);
+      if (proj.HasFlag(CProjection.C1C2))
+        return GetC1C2TrianglePositive(h1, h2, xacc, yacc, sgn);
+      throw new NotSupportedException();
+    }
+
+    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetArcNegative(double h1, double h2, double acc, CProjection proj)
+    {
+      var sgn = proj.HasFlag(CProjection.Down) ? -1 : 1;
+      if (proj.HasFlag(CProjection.C0C1))
+        return GetC0C1ArcNegative(h1, h2, acc, sgn);
+      if (proj.HasFlag(CProjection.C1C2))
+        return GetC1C2ArcNegative(h1, h2, acc, sgn);
+      throw new NotSupportedException();
+    }
+
+    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetArcPositive(double h1, double h2, double acc, CProjection proj)
+    {
+      var sgn = proj.HasFlag(CProjection.Down) ? -1 : 1;
+      if (proj.HasFlag(CProjection.C0C1))
+        return GetC0C1ArcPositive(h1, h2, acc, sgn);
+      if (proj.HasFlag(CProjection.C1C2))
+        return GetC1C2ArcPositive(h1, h2, acc, sgn);
+      throw new NotSupportedException();
+    }
+
+    private static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetC0C1TriangleNegative(double h1, double h2, double xacc, double yacc, int sgn)
+    {
+      CorrectAcc(h1, h2, ref xacc, ref yacc);
+      for (var x = h1; x <= h2; x += xacc)
       {
         for (var y = -1.0; y <= 0; y += yacc)
         {
@@ -82,9 +153,9 @@ namespace ReverseTransform
           var c2 = 1 - rd;
           if (rd <= 1)
           {
-            c2 = Math.Sqrt(c2);
+            c2 = sgn * Math.Sqrt(c2);
             var cpt = new CPoint(c0, c1, c2);
-            var rg = cpt.RGReversed;
+            var rg = cpt.RG(CProjection.C0C1);
             if (rg.G >= 0)
             {
               yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
@@ -94,11 +165,35 @@ namespace ReverseTransform
       }
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetReversedTrianglePositive(double c1Lim, double xacc, double yacc)
+    private static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetC1C2TriangleNegative(double h1, double h2, double xacc, double yacc, int sgn)
     {
-      xacc = xacc / 3;
-      yacc = yacc / 3;
-      for (var x = c1Lim; x <= 1.0; x += xacc)
+      CorrectAcc(h1, h2, ref xacc, ref yacc);
+      for (var x = -1.0; x <= 0; x += xacc)
+      {
+        for (var y = h1; y <= h2; y += yacc)
+        {
+          var c1 = x;
+          var c2 = y;
+          var rd = c1 * c1 + c2 * c2;
+          var c0 = 1 - rd;
+          if (rd <= 1)
+          {
+            c0 = sgn * Math.Sqrt(c0);
+            var cpt = new CPoint(c0, c1, c2);
+            var rg = cpt.RG(CProjection.C1C2);
+            if (rg.G >= 0)
+            {
+              yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
+            }
+          }
+        }
+      }
+    }
+
+    private static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetC0C1TrianglePositive(double h1, double h2, double xacc, double yacc, int sgn)
+    {
+      CorrectAcc(h1, h2, ref xacc, ref yacc);
+      for (var x = h1; x <= h2; x += xacc)
       {
         for (var y = 0.0; y <= 1.0; y += yacc)
         {
@@ -108,9 +203,9 @@ namespace ReverseTransform
           var c2 = 1 - rd;
           if (rd <= 1)
           {
-            c2 = Math.Sqrt(c2);
+            c2 = sgn * Math.Sqrt(c2);
             var cpt = new CPoint(c0, c1, c2);
-            var rg = cpt.RGReversed;
+            var rg = cpt.RG(CProjection.C0C1);
             if (rg.G >= 0)
             {
               yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
@@ -120,10 +215,35 @@ namespace ReverseTransform
       }
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetReversedTriangleArcNegative(double c1Lim, double xacc)
+    private static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetC1C2TrianglePositive(double h1, double h2, double xacc, double yacc, int sgn)
+    {
+      CorrectAcc(h1, h2, ref xacc, ref yacc);
+      for (var x = 0.0; x <= 1.0; x += xacc)
+      {
+        for (var y = h1; y <= h2; y += yacc)
+        {
+          var c1 = x;
+          var c2 = y;
+          var rd = c1 * c1 + c2 * c2;
+          var c0 = 1 - rd;
+          if (rd <= 1)
+          {
+            c0 = sgn * Math.Sqrt(c0);
+            var cpt = new CPoint(c0, c1, c2);
+            var rg = cpt.RG(CProjection.C1C2);
+            if (rg.G >= 0)
+            {
+              yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
+            }
+          }
+        }
+      }
+    }
+
+    private static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetC0C1ArcNegative(double h1, double h2, double xacc, int sgn)
     {
       xacc = xacc / 100;
-      for (var x = c1Lim; x <= 1.0; x += xacc)
+      for (var x = h1; x <= h2; x += xacc)
       {
         var c0 = x;
         var c1 = -Math.Sqrt(1 - Math.Pow(c0, 2));
@@ -131,9 +251,9 @@ namespace ReverseTransform
         var c2 = 1 - rd;
         if (rd <= 1)
         {
-          c2 = Math.Sqrt(c2);
+          c2 = sgn * Math.Sqrt(c2);
           var cpt = new CPoint(c0, c1, c2);
-          var rg = cpt.RGReversed;
+          var rg = cpt.RG(CProjection.C0C1);
           if (rg.G >= 0)
           {
             yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
@@ -142,10 +262,10 @@ namespace ReverseTransform
       }
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetReversedTriangleArcPositive(double c1Lim, double xacc)
+    private static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetC0C1ArcPositive(double h1, double h2, double xacc, int sgn)
     {
       xacc = xacc / 100;
-      for (var x = c1Lim; x <= 1.0; x += xacc)
+      for (var x = h1; x <= h2; x += xacc)
       {
         var c0 = x;
         var c1 = Math.Sqrt(1 - Math.Pow(c0, 2));
@@ -153,9 +273,9 @@ namespace ReverseTransform
         var c2 = 1 - rd;
         if (rd <= 1)
         {
-          c2 = Math.Sqrt(c2);
+          c2 = sgn * Math.Sqrt(c2);
           var cpt = new CPoint(c0, c1, c2);
-          var rg = cpt.RGReversed;
+          var rg = cpt.RG(CProjection.C0C1);
           if (rg.G >= 0)
           {
             yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
@@ -164,62 +284,10 @@ namespace ReverseTransform
       }
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetDirectTriangleNegative(double c1Lim, double xacc, double yacc)
-    {
-      xacc = xacc / 3;
-      yacc = yacc / 3;
-      for (var x = -1.0; x <= 0; x += xacc)
-      {
-        for (var y = c1Lim; y <= 1.0; y += yacc)
-        {
-          var c1 = x;
-          var c2 = y;
-          var rd = c1 * c1 + c2 * c2;
-          var c0 = 1 - rd;
-          if (rd <= 1)
-          {
-            c0 = Math.Sqrt(c0);
-            var cpt = new CPoint(c0, c1, c2);
-            var rg = cpt.RGDirect;
-            if (rg.G >= 0)
-            {
-              yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
-            }
-          }
-        }
-      }
-    }
-
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetDirectTrianglePositive(double c1Lim, double xacc, double yacc)
-    {
-      xacc = xacc / 3;
-      yacc = yacc / 3;
-      for (var x = 0.0; x <= 1.0; x += xacc)
-      {
-        for (var y = c1Lim; y <= 1.0; y += yacc)
-        {
-          var c1 = x;
-          var c2 = y;
-          var rd = c1 * c1 + c2 * c2;
-          var c0 = 1 - rd;
-          if (rd <= 1)
-          {
-            c0 = Math.Sqrt(c0);
-            var cpt = new CPoint(c0, c1, c2);
-            var rg = cpt.RGDirect;
-            if (rg.G >= 0)
-            {
-              yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
-            }
-          }
-        }
-      }
-    }
-
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetDirectTriangleArcNegative(double c1Lim, double yacc)
+    private static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetC1C2ArcNegative(double h1, double h2, double yacc, int sgn)
     {
       yacc = yacc / 100;
-      for (var y = c1Lim; y <= 1; y += yacc)
+      for (var y = h1; y <= h2; y += yacc)
       {
         var c2 = y;
         var c1 = -Math.Sqrt(1 - Math.Pow(c2, 2));
@@ -227,9 +295,9 @@ namespace ReverseTransform
         var c0 = 1 - rd;
         if (rd <= 1)
         {
-          c0 = Math.Sqrt(c0);
+          c0 = sgn * Math.Sqrt(c0);
           var cpt = new CPoint(c0, c1, c2);
-          var rg = cpt.RGDirect;
+          var rg = cpt.RG(CProjection.C1C2);
           if (rg.G >= 0)
           {
             yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
@@ -238,10 +306,10 @@ namespace ReverseTransform
       }
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetDirectTriangleArcPositive(double c1Lim, double yacc)
+    private static IEnumerable<KeyValuePair<CPoint, RGPoint>> GetC1C2ArcPositive(double h1, double h2, double yacc, int sgn)
     {
       yacc = yacc / 100;
-      for (var y = c1Lim; y <= 1; y += yacc)
+      for (var y = h1; y <= h2; y += yacc)
       {
         var c2 = y;
         var c1 = Math.Sqrt(1 - Math.Pow(c2, 2));
@@ -249,9 +317,9 @@ namespace ReverseTransform
         var c0 = 1 - rd;
         if (rd <= 1)
         {
-          c0 = Math.Sqrt(c0);
+          c0 = sgn * Math.Sqrt(c0);
           var cpt = new CPoint(c0, c1, c2);
-          var rg = cpt.RGDirect;
+          var rg = cpt.RG(CProjection.C1C2);
           if (rg.G >= 0)
           {
             yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
@@ -260,15 +328,15 @@ namespace ReverseTransform
       }
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> ReverseIterated(IEnumerable<CPoint> points)
+    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> ReverseIterated(IEnumerable<CPoint> points, CProjection projection)
     {
-      return points.Select(cPoint => cPoint.ReverseIterated()).Select(cpt => new KeyValuePair<CPoint, RGPoint>(cpt, cpt.RGReversed));
+      return points.Select(cPoint => cPoint.ReverseIterated(projection)).Select(cpt => new KeyValuePair<CPoint, RGPoint>(cpt, cpt.RG(projection)));
     }
 
-    public static IEnumerable<KeyValuePair<List<CPoint>, List<RGPoint>>> ReverseIteratedMany(IEnumerable<CPoint> points, int count)
+    public static IEnumerable<KeyValuePair<List<CPoint>, List<RGPoint>>> ReverseIteratedMany(IEnumerable<CPoint> points, int count, CProjection projection)
     {
       var lst = new List<KeyValuePair<List<CPoint>, List<RGPoint>>>();
-      var curIterated = ReverseIterated(points).ToList();
+      var curIterated = ReverseIterated(points, projection).ToList();
       lst.Add(
         new KeyValuePair<List<CPoint>, List<RGPoint>>(
           curIterated.Select(e => e.Key).ToList(),
@@ -277,7 +345,7 @@ namespace ReverseTransform
         );
       for (var i = 2; i <= count; i++)
       {
-        curIterated = ReverseIterated(curIterated.Select(c => c.Key)).ToList();
+        curIterated = ReverseIterated(curIterated.Select(c => c.Key), projection).ToList();
         lst.Add(
         new KeyValuePair<List<CPoint>, List<RGPoint>>(
           curIterated.Select(e => e.Key).ToList(),
@@ -288,15 +356,15 @@ namespace ReverseTransform
       return lst;
     }
 
-    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> DirectIterated(IEnumerable<CPoint> points)
+    public static IEnumerable<KeyValuePair<CPoint, RGPoint>> DirectIterated(IEnumerable<CPoint> points, CProjection projection)
     {
-      return points.Select(cPoint => cPoint.DirectIterated()).Select(cpt => new KeyValuePair<CPoint, RGPoint>(cpt, cpt.RGDirect));
+      return points.Select(cPoint => cPoint.DirectIterated(projection)).Select(cpt => new KeyValuePair<CPoint, RGPoint>(cpt, cpt.RG(projection)));
     }
 
-    public static IEnumerable<KeyValuePair<List<CPoint>, List<RGPoint>>> DirectIteratedMany(IEnumerable<CPoint> points, int count)
+    public static IEnumerable<KeyValuePair<List<CPoint>, List<RGPoint>>> DirectIteratedMany(IEnumerable<CPoint> points, int count, CProjection projection)
     {
       var lst = new List<KeyValuePair<List<CPoint>, List<RGPoint>>>();
-      var curIterated = DirectIterated(points).ToList();
+      var curIterated = DirectIterated(points, projection).ToList();
       lst.Add(
         new KeyValuePair<List<CPoint>, List<RGPoint>>(
           curIterated.Select(e => e.Key).ToList(),
@@ -305,7 +373,7 @@ namespace ReverseTransform
         );
       for (var i = 2; i <= count; i++)
       {
-        curIterated = DirectIterated(curIterated.Select(c => c.Key)).ToList();
+        curIterated = DirectIterated(curIterated.Select(c => c.Key), projection).ToList();
         lst.Add(
         new KeyValuePair<List<CPoint>, List<RGPoint>>(
           curIterated.Select(e => e.Key).ToList(),

@@ -57,16 +57,17 @@
       this.btnNext = new System.Windows.Forms.Button();
       this.trackLineGroup = new System.Windows.Forms.GroupBox();
       this.areaParamsGroup = new System.Windows.Forms.GroupBox();
+      this.txtAreaH2 = new System.Windows.Forms.TextBox();
+      this.checkBoxHOnlyArc = new System.Windows.Forms.CheckBox();
       this.btnHideArea = new System.Windows.Forms.Button();
       this.btnApplyArea = new System.Windows.Forms.Button();
       this.label11 = new System.Windows.Forms.Label();
-      this.txtAreaH = new System.Windows.Forms.TextBox();
+      this.txtAreaH1 = new System.Windows.Forms.TextBox();
       this.trackAreaGroup = new System.Windows.Forms.GroupBox();
       this.txtAreaIteration = new System.Windows.Forms.TextBox();
       this.trackArea = new System.Windows.Forms.TrackBar();
       this.btnAreaNextIteration = new System.Windows.Forms.Button();
       this.btnAreaPrevIteration = new System.Windows.Forms.Button();
-      this.checkBoxHOnlyArc = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
       this.rgParamsGroup.SuspendLayout();
       this.lineParamsGroup.SuspendLayout();
@@ -350,17 +351,36 @@
       // 
       // areaParamsGroup
       // 
+      this.areaParamsGroup.Controls.Add(this.txtAreaH2);
       this.areaParamsGroup.Controls.Add(this.checkBoxHOnlyArc);
       this.areaParamsGroup.Controls.Add(this.btnHideArea);
       this.areaParamsGroup.Controls.Add(this.btnApplyArea);
       this.areaParamsGroup.Controls.Add(this.label11);
-      this.areaParamsGroup.Controls.Add(this.txtAreaH);
+      this.areaParamsGroup.Controls.Add(this.txtAreaH1);
       this.areaParamsGroup.Location = new System.Drawing.Point(730, 475);
       this.areaParamsGroup.Name = "areaParamsGroup";
       this.areaParamsGroup.Size = new System.Drawing.Size(272, 99);
       this.areaParamsGroup.TabIndex = 13;
       this.areaParamsGroup.TabStop = false;
       this.areaParamsGroup.Text = "Area Params";
+      // 
+      // txtAreaH2
+      // 
+      this.txtAreaH2.Location = new System.Drawing.Point(160, 16);
+      this.txtAreaH2.Name = "txtAreaH2";
+      this.txtAreaH2.Size = new System.Drawing.Size(98, 20);
+      this.txtAreaH2.TabIndex = 14;
+      this.txtAreaH2.Text = "1";
+      // 
+      // checkBoxHOnlyArc
+      // 
+      this.checkBoxHOnlyArc.AutoSize = true;
+      this.checkBoxHOnlyArc.Location = new System.Drawing.Point(56, 42);
+      this.checkBoxHOnlyArc.Name = "checkBoxHOnlyArc";
+      this.checkBoxHOnlyArc.Size = new System.Drawing.Size(42, 17);
+      this.checkBoxHOnlyArc.TabIndex = 13;
+      this.checkBoxHOnlyArc.Text = "Arc";
+      this.checkBoxHOnlyArc.UseVisualStyleBackColor = true;
       // 
       // btnHideArea
       // 
@@ -391,13 +411,13 @@
       this.label11.TabIndex = 6;
       this.label11.Text = "H";
       // 
-      // txtAreaH
+      // txtAreaH1
       // 
-      this.txtAreaH.Location = new System.Drawing.Point(56, 16);
-      this.txtAreaH.Name = "txtAreaH";
-      this.txtAreaH.Size = new System.Drawing.Size(210, 20);
-      this.txtAreaH.TabIndex = 4;
-      this.txtAreaH.Text = "0";
+      this.txtAreaH1.Location = new System.Drawing.Point(56, 16);
+      this.txtAreaH1.Name = "txtAreaH1";
+      this.txtAreaH1.Size = new System.Drawing.Size(98, 20);
+      this.txtAreaH1.TabIndex = 4;
+      this.txtAreaH1.Text = "0";
       // 
       // trackAreaGroup
       // 
@@ -424,7 +444,7 @@
       // trackArea
       // 
       this.trackArea.Location = new System.Drawing.Point(9, 48);
-      this.trackArea.Maximum = 50;
+      this.trackArea.Maximum = 25;
       this.trackArea.Name = "trackArea";
       this.trackArea.Size = new System.Drawing.Size(257, 45);
       this.trackArea.TabIndex = 8;
@@ -450,17 +470,7 @@
       this.btnAreaPrevIteration.UseVisualStyleBackColor = true;
       this.btnAreaPrevIteration.Click += new System.EventHandler(this.BtnAreaPrevIterationClick);
       // 
-      // checkBoxHOnlyArc
-      // 
-      this.checkBoxHOnlyArc.AutoSize = true;
-      this.checkBoxHOnlyArc.Location = new System.Drawing.Point(56, 42);
-      this.checkBoxHOnlyArc.Name = "checkBoxHOnlyArc";
-      this.checkBoxHOnlyArc.Size = new System.Drawing.Size(42, 17);
-      this.checkBoxHOnlyArc.TabIndex = 13;
-      this.checkBoxHOnlyArc.Text = "Arc";
-      this.checkBoxHOnlyArc.UseVisualStyleBackColor = true;
-      // 
-      // RGLines
+      // RGLinesReverse
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -472,7 +482,7 @@
       this.Controls.Add(this.rgParamsGroup);
       this.Controls.Add(this.pictureBox);
       this.MaximizeBox = false;
-      this.Name = "RGLines";
+      this.Name = "RGLinesReverse";
       this.Text = "RG Lines";
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
       this.rgParamsGroup.ResumeLayout(false);
@@ -525,13 +535,14 @@
         private System.Windows.Forms.Button btnHideArea;
         private System.Windows.Forms.Button btnApplyArea;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox txtAreaH;
+        private System.Windows.Forms.TextBox txtAreaH1;
         private System.Windows.Forms.GroupBox trackAreaGroup;
         private System.Windows.Forms.TextBox txtAreaIteration;
         private System.Windows.Forms.TrackBar trackArea;
         private System.Windows.Forms.Button btnAreaNextIteration;
         private System.Windows.Forms.Button btnAreaPrevIteration;
         private System.Windows.Forms.CheckBox checkBoxHOnlyArc;
+        private System.Windows.Forms.TextBox txtAreaH2;
     }
 }
 

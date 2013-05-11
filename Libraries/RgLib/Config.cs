@@ -23,7 +23,13 @@ namespace ReverseTransform
 
     public static readonly Color Blue = Color.Blue;
 
+    public static readonly Color LightBlue = Color.LightBlue;
+
     public static readonly Color Green = Color.Green;
+
+    public static readonly Color LightGreen = Color.LightGreen;
+
+    public static readonly Color Pink = Color.Pink;
 
     public static readonly Color Yellow = Color.Yellow;
 

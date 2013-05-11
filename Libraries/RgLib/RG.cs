@@ -14,33 +14,24 @@ namespace ReverseTransform
       return Color.FromArgb(r, g, b);
     }
 
-    public static Color GetBgColorReversed(CPoint pt)
+    private static Color GetBgColor(CPoint pt, CProjection projection)
     {
-      var rp = pt.RGReversed;
-      {
-        return rp.G < 0 ? Color.Green : Color.Blue;
-      }
+      var rp = pt.RG(projection);
+      return rp.G < 0 ? Config.Green : Config.Blue;
     }
 
-    public static Color GetBgColorDirect(CPoint pt)
+    public static Image GetBg(int width, int height, CProjection proj)
     {
-      var rp = pt.RGDirect;
-      {
-        return rp.G < 0 ? Color.Green : Color.Blue;
-      }
+      if (proj.HasFlag(CProjection.C0C1))
+        return GetBgC0C1(width, height);
+      if (proj.HasFlag(CProjection.C1C2))
+        return GetBgC1C2(width, height);
+      if (proj.HasFlag(CProjection.C0C2))
+        return GetBgC0C2(width, height);
+      throw new NotSupportedException();
     }
 
-    public static Color ColorMixer(Color c1, Color c2)
-    {
-
-      var r = Math.Min((c1.R + c2.R), 255);
-      var g = Math.Min((c1.G + c2.G), 255);
-      var b = Math.Min((c1.B + c2.B), 255);
-
-      return Color.FromArgb(255, r, g, b);
-    }
-
-    public static Image GetBgReversed(int width, int height)
+    private static Image GetBgC0C1(int width, int height)
     {
       var img = new Bitmap(width, height);
 
@@ -64,7 +55,7 @@ namespace ReverseTransform
           {
             c2 = Math.Sqrt(c2);
             var cpt = new CPoint(c0, c1, c2);
-            clr = GetBgColorReversed(cpt);
+            clr = GetBgColor(cpt, CProjection.C0C1);
           }
           else
           {
@@ -76,7 +67,7 @@ namespace ReverseTransform
       return img;
     }
 
-    public static Image GetBgDirect(int width, int height)
+    private static Image GetBgC1C2(int width, int height)
     {
       var img = new Bitmap(width, height);
 
@@ -100,7 +91,7 @@ namespace ReverseTransform
           {
             c0 = Math.Sqrt(c0);
             var cpt = new CPoint(c0, c1, c2);
-            clr = GetBgColorDirect(cpt);
+            clr = GetBgColor(cpt, CProjection.C1C2);
           }
           else
           {
@@ -112,11 +103,47 @@ namespace ReverseTransform
       return img;
     }
 
-    public static Color GetColorReversed(CPoint pt)
+    private static Image GetBgC0C2(int width, int height)
     {
-      var rp = pt.RGReversed;
+      var img = new Bitmap(width, height);
+
+      var onePtWidth = 2.0 / width;
+      var onePtHeight = 2.0 / height;
+      const double x1 = -1.0;
+      const double y1 = -1.0;
+
+      for (var i = 0; i < width; i++)
+      {
+        for (var j = 0; j < height; j++)
+        {
+          var x = x1 + i * onePtWidth;
+          var y = y1 + j * onePtHeight;
+          var c0 = x;
+          var c2 = y;
+          var rd = c0 * c0 + c2 * c2;
+          var c1 = 1 - rd;
+          Color clr;
+          if (rd <= 1)
+          {
+            c1 = Math.Sqrt(c0);
+            var cpt = new CPoint(c0, c1, c2);
+            clr = GetBgColor(cpt, CProjection.C0C2);
+          }
+          else
+          {
+            clr = Color.White;
+          }
+          img.SetPixel(i, j, clr);
+        }
+      }
+      return img;
+    }
+
+    public static Color GetColorReversed(CPoint pt, CProjection projection)
+    {
+      var rp = pt.RG(projection);
       var cnt = 0;
-      var end = pt.ReverseTrackEndPoint(Config.ReserverInterestedPoint, out cnt);
+      var end = pt.ReverseTrackEndPoint(Config.ReserverInterestedPoint, projection, out cnt);
       if (cnt >= Config.Count)
       {
         return Config.Black;
@@ -129,7 +156,6 @@ namespace ReverseTransform
         clr = rp.G < 0
                     ? (last.C1 < p.C1 ? Config.Yellow : Config.Green)
                     : (last.C1 < p.C1 ? Config.Red : Config.Blue);
-        clr = Blend(clr, Config.White);
       }
       else
       {
@@ -141,7 +167,7 @@ namespace ReverseTransform
       return resClr;
     }
 
-    public static double Correct(double value, double max)
+    private static double Correct(double value, double max)
     {
       if (value < 0)
         return 0;
@@ -150,31 +176,60 @@ namespace ReverseTransform
       return value;
     }
 
-    public static void SetPixel(int i, int j, Bitmap bmp, Color clr)
+    private static void SetPixel(int i, int j, Bitmap bmp, Color clr)
     {
-      bmp.SetPixel(i,j,clr);
-      /*
-      var i11 = i - 1;
-      var i12 = i + 1;
-      var j11 = j - 1;
-      var j12 = j + 1;
-
-      lock (bmp)
-      {
-        bmp.SetPixelSafe(i11, j11, clr);
-        bmp.SetPixelSafe(i11, j, clr);
-        bmp.SetPixelSafe(i11, j12, clr);
-        bmp.SetPixelSafe(i, j11, clr);
-        bmp.SetPixelSafe(i, j, clr);
-        bmp.SetPixelSafe(i, j12, clr);
-        bmp.SetPixelSafe(i12, j11, clr);
-        bmp.SetPixelSafe(i12, j, clr);
-        bmp.SetPixelSafe(i12, j12, clr);
-      }
-       * */
+      bmp.SetPixel(i, j, clr);
     }
 
-    public static void DrawLineReversed(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
+    public static void DrawLine(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1,CPoint cp2, Graphics gr, CProjection projection, bool verify = true)
+    {
+      if (projection.HasFlag(CProjection.C0C1)) 
+        DrawLineC0C1(x,y,xsz,ysz,sz,pen,cp1,cp2,gr,verify);
+      else if (projection.HasFlag(CProjection.C1C2))
+        DrawLineC1C2(x, y, xsz, ysz, sz, pen, cp1, cp2, gr, verify);
+      else if (projection.HasFlag(CProjection.C0C2))
+        DrawLineC0C2(x, y, xsz, ysz, sz, pen, cp1, cp2, gr, verify);
+      else
+        throw new NotSupportedException();
+    }
+
+    public static void FillPoint(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1,Graphics gr,CProjection projection, int radius = 3)
+    {
+      if (projection.HasFlag(CProjection.C0C1))
+        FillPointC0C1(x,y,xsz,ysz,sz,clr,cp1,gr,radius);
+      else if (projection.HasFlag(CProjection.C1C2))
+        FillPointC1C2(x, y, xsz, ysz, sz, clr, cp1, gr, radius);
+      else if (projection.HasFlag(CProjection.C0C2))
+        FillPointC0C2(x, y, xsz, ysz, sz, clr, cp1, gr, radius);
+      else
+        throw new NotSupportedException();
+    }
+
+    public static void SetPixel(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1,Bitmap bmp, CProjection projection)
+    {
+      if (projection.HasFlag(CProjection.C0C1))
+        SetPixelC0C1(x,y,xsz,ysz,sz,clr,cp1,bmp);
+      else if (projection.HasFlag(CProjection.C1C2))
+        SetPixelC1C2(x, y, xsz, ysz, sz, clr, cp1, bmp);
+      else if (projection.HasFlag(CProjection.C0C2))
+        SetPixelC0C2(x, y, xsz, ysz, sz, clr, cp1, bmp);
+      else 
+        throw new NotSupportedException();
+    }
+
+    public static void FillArea(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp, CProjection projection)
+    {
+      if (projection.HasFlag(CProjection.C0C1))
+        FillAreaC0C1(x, y, xsz, ysz, sz, clr, cpts, bmp);
+      else if (projection.HasFlag(CProjection.C1C2))
+        FillAreaC1C2(x, y, xsz, ysz, sz, clr, cpts, bmp);
+      else if (projection.HasFlag(CProjection.C0C2))
+        FillAreaC0C2(x, y, xsz, ysz, sz, clr, cpts, bmp);
+      else
+        throw new NotSupportedException();
+    }
+
+    private static void DrawLineC0C1(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
     {
       var i1 = Correct((cp1.C0 - x) / xsz, sz);
       var i2 = Correct((cp2.C0 - x) / xsz, sz);
@@ -197,7 +252,7 @@ namespace ReverseTransform
       }
     }
 
-    public static void FillPointReversed(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
+    private static void FillPointC0C1(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
     {
       var i1 = Correct((cp1.C0 - x) / xsz, sz);
       var j1 = Correct((cp1.C1 - y) / ysz, sz);
@@ -210,22 +265,22 @@ namespace ReverseTransform
       }
     }
 
-    public static void SetPixelReversed(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
+    private static void SetPixelC0C1(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
     {
       var i1 = (int)Correct((cp1.C0 - x) / xsz, sz);
       var j1 = (int)Correct((cp1.C1 - y) / ysz, sz);
       SetPixel(i1, j1, bmp, clr);
     }
 
-    public static void FillAreaReversed(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
+    private static void FillAreaC0C1(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
     {
       foreach (var cPoint in cpts)
       {
-        SetPixelReversed(x, y, xsz, ysz, sz, clr, cPoint, bmp);
+        SetPixelC0C1(x, y, xsz, ysz, sz, clr, cPoint, bmp);
       }
     }
 
-    public static void DrawLineDirect(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
+    private static void DrawLineC1C2(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
     {
       var i1 = Correct((cp1.C1 - x) / xsz, sz);
       var i2 = Correct((cp2.C1 - x) / xsz, sz);
@@ -248,7 +303,7 @@ namespace ReverseTransform
       }
     }
 
-    public static void FillPointDirect(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
+    private static void FillPointC1C2(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
     {
       var i1 = Correct((cp1.C1 - x) / xsz, sz);
       var j1 = Correct((cp1.C2 - y) / ysz, sz);
@@ -261,18 +316,69 @@ namespace ReverseTransform
       }
     }
 
-    public static void SetPixelDirect(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
+    private static void SetPixelC1C2(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
     {
       var i1 = (int)Correct((cp1.C1 - x) / xsz, sz);
       var j1 = (int)Correct((cp1.C2 - y) / ysz, sz);
       SetPixel(i1, j1, bmp, clr);
     }
 
-    public static void FillAreaDirect(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
+    private static void FillAreaC1C2(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
     {
       foreach (var cPoint in cpts)
       {
-        SetPixelDirect(x, y, xsz, ysz, sz, clr, cPoint, bmp);
+        SetPixelC1C2(x, y, xsz, ysz, sz, clr, cPoint, bmp);
+      }
+    }
+
+    private static void DrawLineC0C2(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, bool verify = true)
+    {
+      var i1 = Correct((cp1.C0 - x) / xsz, sz);
+      var i2 = Correct((cp2.C0 - x) / xsz, sz);
+      var j1 = Correct((cp1.C2 - y) / ysz, sz);
+      var j2 = Correct((cp2.C2 - y) / ysz, sz);
+
+      var di = Math.Abs(i2 - i1);
+      var dj = Math.Abs(j2 - j1);
+      var d = Math.Sqrt(di * di + dj * dj);
+
+      var check = sz / 3;
+      if (d >= check && verify)
+      {
+        return;
+      }
+
+      lock (gr)
+      {
+        gr.DrawLine(pen, (float)i1, (float)j1, (float)i2, (float)j2);
+      }
+    }
+
+    private static void FillPointC0C2(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
+    {
+      var i1 = Correct((cp1.C0 - x) / xsz, sz);
+      var j1 = Correct((cp1.C0 - y) / ysz, sz);
+
+      var brush = new SolidBrush(clr);
+
+      lock (gr)
+      {
+        gr.FillEllipse(brush, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
+      }
+    }
+
+    private static void SetPixelC0C2(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp)
+    {
+      var i1 = (int)Correct((cp1.C0 - x) / xsz, sz);
+      var j1 = (int)Correct((cp1.C0 - y) / ysz, sz);
+      SetPixel(i1, j1, bmp, clr);
+    }
+
+    private static void FillAreaC0C2(double x, double y, double xsz, double ysz, double sz, Color clr, IEnumerable<CPoint> cpts, Bitmap bmp)
+    {
+      foreach (var cPoint in cpts)
+      {
+        SetPixelC0C2(x, y, xsz, ysz, sz, clr, cPoint, bmp);
       }
     }
   }

@@ -23,7 +23,7 @@ namespace ReverseTransform
 
     private List<CPoint> PointTrack
     {
-      get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.ReserverInterestedPoint).ToList()); }
+      get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.ReserverInterestedPoint, CProjection.UpC0C1).ToList()); }
     }
 
     public int PointNumber { private get; set; }
@@ -47,7 +47,7 @@ namespace ReverseTransform
             Height = 2.0
           }
       };
-      
+
       _stack.Push(frame);
     }
 
@@ -66,7 +66,7 @@ namespace ReverseTransform
     {
       var np = NPt(p1);
       var gr = Graphics.FromImage(pictureBox.Image);
-      var bgClr = RG.GetColorReversed(new CPoint(p1));
+      var bgClr = RG.GetColorReversed(new CPoint(p1), CProjection.UpC0C1);
       var blend = RG.Blend(clr, bgClr);
       gr.TryDraw(g => g.FillEllipse(new SolidBrush(clr), np.X - 2, np.Y - 2, 4, 4));
       gr.TryDraw(g => g.DrawRectangle(new Pen(blend), np.X - 10, np.Y - 10, 20, 20));
@@ -103,7 +103,7 @@ namespace ReverseTransform
       {
         c2 = Math.Sqrt(c2);
         var cpt = new CPoint(c0, c1, c2);
-        var color = RG.GetColorReversed(cpt);
+        var color = RG.GetColorReversed(cpt, CProjection.UpC0C1);
         SetPixel(bmp, pt.X, pt.Y, color);
       }
       else
@@ -129,33 +129,6 @@ namespace ReverseTransform
           FillPixel(bmp, x, y);
         }
       }
-
-      /*
-      for (var i = 0; i < w; i++)
-      {
-        for (var j = 0; j < h; j++)
-        {
-          var x = r.X + i * onepxw;
-          var y = r.Y + j * onepxh;
-
-          var c0 = x;
-          var c1 = y;
-          var rd = c0 * c0 + c1 * c1;
-          var c2 = 1 - rd;
-          if (rd <= 1)
-          {
-            c2 = Math.Sqrt(c2);
-            var cpt = new CPoint(c0, c1, c2);
-            SetPixel(bmp, i, j, GetColorReversed(cpt));
-          }
-          else
-          {
-            SetPixel(bmp, i, j, _white);
-          }
-        }
-      }
-         * */
-
 
       var gr = Graphics.FromImage(pictureBox.Image);
 
@@ -224,7 +197,7 @@ namespace ReverseTransform
         _pointSelecting = false;
         var tr = new TrackPoint(this, PointTrack.Count);
         tr.Show(this);
-        track.Lines = PointTrack.Select(p => string.Format("{0} {1}", p, p.RGReversed)).ToArray();
+        track.Lines = PointTrack.Select(p => string.Format("{0} {1}", p, p.RG(CProjection.C0C1))).ToArray();
       }
       else
       {

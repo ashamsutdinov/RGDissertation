@@ -68,7 +68,9 @@ namespace RGLines
 
     private bool _areasShown;
 
-    private double _c1;
+    private double _h1;
+
+    private double _h2;
 
     private int _areaStep;
 
@@ -213,7 +215,7 @@ namespace RGLines
       }
       else
       {
-        var img = RG.GetBgReversed(pictureBox.Width, pictureBox.Height);
+        var img = RG.GetBg(pictureBox.Width, pictureBox.Height, CProjection.UpC0C1);
         img.Save(BgFileName, ImageFormat.Bmp);
         _bg = img as Bitmap;
       }
@@ -253,7 +255,8 @@ namespace RGLines
       trackArea.Value = 0;
       _areaStep = 0;
       _arc = checkBoxHOnlyArc.Checked;
-      _c1 = double.Parse(txtAreaH.Text);
+      _h1 = double.Parse(txtAreaH1.Text);
+      _h2 = double.Parse(txtAreaH2.Text);
     }
 
     private void ChangePictureBoxPicture(ICloneable newImageSource)
@@ -302,7 +305,7 @@ namespace RGLines
         {
           var c1 = _line1[i];
           var c2 = _line1[i + 1];
-          RG.DrawLineReversed(X, Y, _xpxsz, _ypxsz, _sz, pen1, c1, c2, gr);
+          RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen1, c1, c2, gr, CProjection.UpC0C1);
         }
 
         var pen2 = new Pen(Config.White);
@@ -310,11 +313,11 @@ namespace RGLines
         {
           var c1 = _line2[i];
           var c2 = _line2[i + 1];
-          RG.DrawLineReversed(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr);
+          RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr, CProjection.UpC0C1);
         }
 
-        if (cNearestToB != null) RG.FillPointReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, cNearestToB, gr);
-        if (cNearesToL != null) RG.FillPointReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, cNearesToL, gr);
+        if (cNearestToB != null) RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, cNearestToB, gr, CProjection.UpC0C1);
+        if (cNearesToL != null) RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, cNearesToL, gr, CProjection.UpC0C1);
         gr.Save();
       }
       ChangePictureBoxPicture(_bgWithLines);
@@ -329,16 +332,16 @@ namespace RGLines
       }
       _bgWithArea = _bg.Clone() as Bitmap;
 
-      var initialLstPositive = (_arc ? RGPoint.GetReversedTriangleArcPositive(_c1, _xpxsz) : RGPoint.GetReversedTrianglePositive(_c1, _xpxsz, _ypxsz)).ToList();
-      var initialLstNegative = (_arc ? RGPoint.GetReversedTriangleArcNegative(_c1, _xpxsz) : RGPoint.GetReversedTriangleNegative(_c1, _xpxsz, _ypxsz)).ToList();
+      var initialLstPositive = (_arc ? RGPoint.GetArcPositive(_h1, _h2, _xpxsz, CProjection.UpC0C1) : RGPoint.GetTrianglePositive(_h1, _h2, _xpxsz, _ypxsz, CProjection.UpC0C1)).ToList();
+      var initialLstNegative = (_arc ? RGPoint.GetArcNegative(_h1, _h2, _xpxsz, CProjection.UpC0C1) : RGPoint.GetTriangleNegative(_h1, _h2, _xpxsz, _ypxsz, CProjection.UpC0C1)).ToList();
       _areaInitialSetCPositive = initialLstPositive.Select(e => e.Key).ToList();
       _areaInitialSetCNegative = initialLstNegative.Select(e => e.Key).ToList();
 
-      RG.FillAreaReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, _areaInitialSetCPositive, _bgWithArea);
-      RG.FillAreaReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, _areaInitialSetCNegative, _bgWithArea);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, _areaInitialSetCPositive, _bgWithArea, CProjection.UpC0C1);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, _areaInitialSetCNegative, _bgWithArea, CProjection.UpC0C1);
 
-      var iteratedPositive = RGPoint.ReverseIteratedMany(_areaInitialSetCPositive, trackArea.Maximum).ToList();
-      var iteratedNegative = RGPoint.ReverseIteratedMany(_areaInitialSetCNegative, trackArea.Maximum).ToList();
+      var iteratedPositive = RGPoint.ReverseIteratedMany(_areaInitialSetCPositive, trackArea.Maximum, CProjection.UpC0C1).ToList();
+      var iteratedNegative = RGPoint.ReverseIteratedMany(_areaInitialSetCNegative, trackArea.Maximum, CProjection.UpC0C1).ToList();
       _iteratedAreasCPositive = iteratedPositive.Select(e => e.Key.ToList()).ToList();
       _iteratedAreasCPositive.Insert(0, _areaInitialSetCPositive);
       _iteratedAreasCNegative = iteratedNegative.Select(e => e.Key.ToList()).ToList();
@@ -374,9 +377,9 @@ namespace RGLines
       ChangePictureBoxPicture(_bgWithLines);
       var gr = Graphics.FromImage(pictureBox.Image);
       var p1 = _line1[_currentStep];
-      RG.FillPointReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, p1, gr);
+      RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, p1, gr, CProjection.UpC0C1);
       var p2 = _line2[_currentStep];
-      RG.FillPointReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.White, p2, gr);
+      RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Config.White, p2, gr, CProjection.UpC0C1);
     }
 
     private void RedrawArea()
@@ -385,8 +388,8 @@ namespace RGLines
       var img = pictureBox.Image.Clone() as Bitmap;
       var ptsPositive = _iteratedAreasCPositive[_areaStep];
       var ptsNegative = _iteratedAreasCNegative[_areaStep];
-      RG.FillAreaReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, ptsPositive, img);
-      RG.FillAreaReversed(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, ptsNegative, img);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, ptsPositive, img, CProjection.UpC0C1);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, ptsNegative, img, CProjection.UpC0C1);
       ChangePictureBoxPicture(img);
     }
 

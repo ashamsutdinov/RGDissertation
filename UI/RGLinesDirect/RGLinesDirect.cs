@@ -213,7 +213,7 @@ namespace RGLines
       }
       else
       {
-        var img = RG.GetBgDirect(pictureBox.Width, pictureBox.Height);
+        var img = RG.GetBg(pictureBox.Width, pictureBox.Height, CProjection.DownC1C2);
         img.Save(BgFileName, ImageFormat.Bmp);
         _bg = img as Bitmap;
       }
@@ -296,7 +296,7 @@ namespace RGLines
         {
           var c1 = _line1[i];
           var c2 = _line1[i + 1];
-          RG.DrawLineDirect(X, Y, _xpxsz, _ypxsz, _sz, pen1, c1, c2, gr);
+          RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen1, c1, c2, gr, CProjection.UpC1C2);
         }
 
         var pen2 = new Pen(Config.White);
@@ -304,7 +304,7 @@ namespace RGLines
         {
           var c1 = _line2[i];
           var c2 = _line2[i + 1];
-          RG.DrawLineDirect(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr);
+          RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, pen2, c1, c2, gr, CProjection.UpC1C2);
         }
         gr.Save();
       }
@@ -320,16 +320,16 @@ namespace RGLines
       }
       _bgWithArea = _bg.Clone() as Bitmap;
 
-      var initialLstPositive = (_arc ? RGPoint.GetDirectTriangleArcPositive(_c1, _ypxsz) : RGPoint.GetDirectTrianglePositive(_c1, _xpxsz, _ypxsz)).ToList();
-      var initialLstNegative = (_arc ? RGPoint.GetDirectTriangleArcNegative(_c1, _ypxsz) : RGPoint.GetDirectTriangleNegative(_c1, _xpxsz, _ypxsz)).ToList();
+      var initialLstPositive = (_arc ? RGPoint.GetArcPositive(_c1,1, _ypxsz, CProjection.UpC1C2) : RGPoint.GetTrianglePositive(_c1,1, _xpxsz, _ypxsz, CProjection.UpC1C2)).ToList();
+      var initialLstNegative = (_arc ? RGPoint.GetArcNegative(_c1,1, _ypxsz, CProjection.UpC1C2) : RGPoint.GetTriangleNegative(_c1,1, _xpxsz, _ypxsz, CProjection.UpC1C2)).ToList();
       _areaInitialSetCPositive = initialLstPositive.Select(e => e.Key).ToList();
       _areaInitialSetCNegative = initialLstNegative.Select(e => e.Key).ToList();
 
-      RG.FillAreaDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, _areaInitialSetCPositive, _bgWithArea);
-      RG.FillAreaDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, _areaInitialSetCNegative, _bgWithArea);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, _areaInitialSetCPositive, _bgWithArea, CProjection.UpC1C2);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, _areaInitialSetCNegative, _bgWithArea, CProjection.UpC1C2);
 
-      var iteratedPositive = RGPoint.DirectIteratedMany(_areaInitialSetCPositive, trackArea.Maximum).ToList();
-      var iteratedNegative = RGPoint.DirectIteratedMany(_areaInitialSetCNegative, trackArea.Maximum).ToList();
+      var iteratedPositive = RGPoint.DirectIteratedMany(_areaInitialSetCPositive, trackArea.Maximum, CProjection.C1C2).ToList();
+      var iteratedNegative = RGPoint.DirectIteratedMany(_areaInitialSetCNegative, trackArea.Maximum, CProjection.C1C2).ToList();
       _iteratedAreasCPositive = iteratedPositive.Select(e => e.Key.ToList()).ToList();
       _iteratedAreasCPositive.Insert(0, _areaInitialSetCPositive);
       _iteratedAreasCNegative = iteratedNegative.Select(e => e.Key.ToList()).ToList();
@@ -365,9 +365,9 @@ namespace RGLines
       ChangePictureBoxPicture(_bgWithLines);
       var gr = Graphics.FromImage(pictureBox.Image);
       var p1 = _line1[_currentStep];
-      RG.FillPointDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, p1, gr);
+      RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, p1, gr, CProjection.UpC1C2);
       var p2 = _line2[_currentStep];
-      RG.FillPointDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.White, p2, gr);
+      RG.FillPoint(X, Y, _xpxsz, _ypxsz, _sz, Config.White, p2, gr, CProjection.UpC1C2);
     }
 
     private void RedrawArea()
@@ -376,8 +376,8 @@ namespace RGLines
       var img = pictureBox.Image.Clone() as Bitmap;
       var ptsPositive = _iteratedAreasCPositive[_areaStep];
       var ptsNegative = _iteratedAreasCNegative[_areaStep];
-      RG.FillAreaDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, ptsPositive, img);
-      RG.FillAreaDirect(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, ptsNegative, img);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, ptsPositive, img, CProjection.UpC1C2);
+      RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, ptsNegative, img, CProjection.UpC1C2);
       ChangePictureBoxPicture(img);
     }
 

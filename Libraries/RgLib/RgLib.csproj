@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="CPoint.cs" />
+    <Compile Include="CProjection.cs" />
     <Compile Include="DRect.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ProcessingFrame.cs" />
