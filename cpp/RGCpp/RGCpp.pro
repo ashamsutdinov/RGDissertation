@@ -1,11 +1,10 @@
 TEMPLATE = subdirs
-
 CONFIG += ordered
 
 SUBDIRS += \
     RgLib \
-    RgUi
+    RgGui
 
-RgUi.depends = RgLib
+
 
 VERSION = 0.0.1
