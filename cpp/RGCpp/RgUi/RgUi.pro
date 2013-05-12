@@ -20,3 +20,11 @@ SOURCES += main.cpp
 # Please do not modify the following two lines. Required for deployment.
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
+
+LIBS += -L../build/lib \
+   -lRgLib
+
+INCLUDEPATH += $$PWD/../RgLib
+DEPENDPATH += $$PWD/../RgLib
+
+include(../settings.pri)

@@ -30,3 +30,5 @@ unix:!symbian {
     }
     INSTALLS += target
 }
+
+include(../settings.pri)

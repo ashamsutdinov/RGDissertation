@@ -1,6 +1,6 @@
 #include "point.h"
 
-explicit Point::Point(const double* d, const int size)
+Point::Point(const double* d, const int size)
 {
   if (checkInput(d, size))
   {
@@ -14,12 +14,12 @@ explicit Point::Point(const double* d, const int size)
   }
 }
 
-explicit Point::Point(const Point& cpy)
+Point::Point(const Point& cpy)
 {
   copy(cpy);
 }
 
-virtual Point::~Point()
+Point::~Point()
 {
 
 }
