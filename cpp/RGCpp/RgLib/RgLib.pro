@@ -25,7 +25,9 @@ HEADERS +=\
     point.h
 
 LIBS += -L../build/lib \
-         -lIoC
+         -lIoC \
+		 -lKernel
+
 
 INCLUDEPATH += $$PWD/../IoC
 DEPENDPATH += $$PWD/../IoC

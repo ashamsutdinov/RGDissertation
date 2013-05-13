@@ -2,10 +2,8 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS += \
-    RgLib \
-    RgGui \
-    IoC
-
-
-
+   	RgGui \
+    Kernel \
+    RgGuiLib \
+	IoC
 VERSION = 0.0.1

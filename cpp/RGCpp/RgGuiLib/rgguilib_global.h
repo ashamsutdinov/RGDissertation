@@ -1,0 +1,12 @@
+#ifndef RGGUILIB_GLOBAL_H
+#define RGGUILIB_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(RGGUILIB_LIBRARY)
+#  define RGGUILIBSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define RGGUILIBSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // RGGUILIB_GLOBAL_H
