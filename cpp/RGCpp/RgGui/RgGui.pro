@@ -22,7 +22,15 @@ HEADERS  += mainwindow.h
 FORMS    += mainwindow.ui
 
 LIBS += -L../build/lib \
-         -lRgLib
+         -lKernel \
+         -lRgLib \
+         -lRgGuiLib
+
+INCLUDEPATH += $$PWD/../Kernel
+DEPENDPATH += $$PWD/../Kernel
 
 INCLUDEPATH += $$PWD/../RgLib
 DEPENDPATH += $$PWD/../RgLib
+
+INCLUDEPATH += $$PWD/../RgGuiLib
+DEPENDPATH += $$PWD/../RgGuiLib

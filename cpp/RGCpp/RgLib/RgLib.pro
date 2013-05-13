@@ -9,6 +9,8 @@ QT       -= gui
 TARGET = RgLib
 TEMPLATE = lib
 
+include(../settings.pri)
+
 DEFINES += RGLIB_LIBRARY
 
 SOURCES += \
@@ -31,4 +33,8 @@ unix:!symbian {
     INSTALLS += target
 }
 
-include(../settings.pri)
+LIBS += -L../build/lib \
+         -lKernel
+
+INCLUDEPATH += $$PWD/../Kernel
+DEPENDPATH += $$PWD/../Kernel
