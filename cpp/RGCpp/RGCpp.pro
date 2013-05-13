@@ -3,7 +3,8 @@ CONFIG += ordered
 
 SUBDIRS += \
     RgLib \
-    RgGui
+    RgGui \
+    IoC
 
 
 

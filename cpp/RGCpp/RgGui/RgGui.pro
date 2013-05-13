@@ -23,6 +23,11 @@ FORMS    += mainwindow.ui
 
 LIBS += -L../build/lib \
          -lRgLib
+         -lIoC
 
 INCLUDEPATH += $$PWD/../RgLib
 DEPENDPATH += $$PWD/../RgLib
+
+INCLUDEPATH += $$PWD/../IoC
+DEPENDPATH += $$PWD/../IoC
+

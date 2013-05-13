@@ -9,6 +9,8 @@ QT       -= gui
 TARGET = RgLib
 TEMPLATE = lib
 
+include(../settings.pri)
+
 DEFINES += RGLIB_LIBRARY
 
 SOURCES += \
@@ -22,13 +24,8 @@ HEADERS +=\
     bits.h \
     point.h
 
-unix:!symbian {
-    maemo5 {
-        target.path = /opt/usr/lib
-    } else {
-        target.path = /usr/lib
-    }
-    INSTALLS += target
-}
+LIBS += -L../build/lib \
+         -lIoC
 
-include(../settings.pri)
+INCLUDEPATH += $$PWD/../IoC
+DEPENDPATH += $$PWD/../IoC
