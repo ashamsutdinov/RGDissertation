@@ -16,13 +16,13 @@ DEFINES += RGGUILIB_LIBRARY
 SOURCES += rgguilib.cpp
 
 HEADERS += rgguilib.h\
-        rgguilib_global.h \
+    rgguilib_global.h \
     rggui.h
 
 
 LIBS += -L../build/lib \
-         -lKernel \
-         -lRgLib
+    -lKernel \
+    -lRgLib
 
 INCLUDEPATH += $$PWD/../Kernel
 DEPENDPATH += $$PWD/../Kernel

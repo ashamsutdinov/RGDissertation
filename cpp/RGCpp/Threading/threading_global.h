@@ -1,0 +1,12 @@
+#ifndef THREADING_GLOBAL_H
+#define THREADING_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(THREADING_LIBRARY)
+#  define THREADINGSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define THREADINGSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // THREADING_GLOBAL_H

@@ -13,18 +13,12 @@ include(../settings.pri)
 
 DEFINES += IOC_LIBRARY
 
-SOURCES += ioc.cpp \
-    iocontainer.cpp
+SOURCES += \
+    ioccontainer.cpp \
+    ioclib.cpp
 
 HEADERS += ioc.h\
-        ioc_global.h \
-    iocontainer.h
+    ioc_global.h \
+    ioccontainer.h \
+    ioclib.h
 
-unix:!symbian {
-    maemo5 {
-        target.path = /opt/usr/lib
-    } else {
-        target.path = /usr/lib
-    }
-    INSTALLS += target
-}

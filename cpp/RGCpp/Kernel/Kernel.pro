@@ -13,10 +13,13 @@ include(../settings.pri)
 
 DEFINES += KERNEL_LIBRARY
 
-SOURCES += kernel.cpp \
+SOURCES += \
     kernellib.cpp
 
 HEADERS += kernel.h\
-        kernel_global.h \
+    kernel_global.h \
     kernellib.h
+
+INCLUDEPATH += $$PWD/../IoC
+DEPENDPATH += $$PWD/../IoC
 

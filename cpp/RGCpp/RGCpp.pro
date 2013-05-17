@@ -5,5 +5,6 @@ SUBDIRS += \
    	RgGui \
     Kernel \
     RgGuiLib \
-	IoC
+	IoC \
+    Threading
 VERSION = 0.0.1

@@ -5,4 +5,7 @@
 
 typedef int TYPEID;
 
+#include "ioclib.h"
+#include "ioccontainer.h"
+
 #endif // IOC_H
