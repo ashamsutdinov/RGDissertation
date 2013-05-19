@@ -2,10 +2,10 @@
 #define SINGLETON_H
 
 #include "kernel_global.h"
-#include "interfacesbuffer.h"
+#include "iservice.h"
 #include "defines.h"
+#include <QCoreApplication>
 
-class IInterface;
 template<typename TSingle> class Singleton
 {
 private:
@@ -18,10 +18,8 @@ public:
       LOCK();
       if (!_instance)
       {
-        _instance = new TSingle();
-        static InterfacesBuffer buffer;
-        auto ptr = dynamic_cast<IInterface*>(_instance);
-        buffer.registerInterface(ptr);
+        auto app = QCoreApplication::instance();
+        _instance = new TSingle(app);
       }
     }
     return _instance;

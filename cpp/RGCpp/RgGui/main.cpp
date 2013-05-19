@@ -5,12 +5,14 @@
 
 class I : public IService
 {
-
+public:
+  I(QObject* parent) : IService(parent){}
 };
 
 class II : public I
 {
-
+public:
+  II(QObject* parent) : I(parent){}
 };
 
 int main(int argc, char *argv[])

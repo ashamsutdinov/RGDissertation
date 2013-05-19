@@ -6,9 +6,8 @@
 
 #include "defines.h"
 #include "bits.h"
-#include "iinterface.h"
+#include "iservice.h"
 #include "ioccontainer.h"
-#include "interfacesbuffer.h"
 #include "singleton.h"
 
 #endif // KERNEL_H

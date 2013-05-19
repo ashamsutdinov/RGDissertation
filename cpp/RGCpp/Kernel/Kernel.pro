@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
+QT  -= gui
 
 include(../settings.pri)
 
@@ -15,17 +15,15 @@ DEFINES += KERNEL_LIBRARY
 
 SOURCES += \
     kernellib.cpp \
-    interfacesbuffer.cpp \
     ioccontainer.cpp \
-    iinterface.cpp
+    iservice.cpp
 
 HEADERS += \
     kernel.h\
     kernel_global.h \
     kernellib.h \
     bitmask.h \
-    interfacesbuffer.h \
     ioccontainer.h \
     defines.h \
     singleton.h \
-    iinterface.h
+    iservice.h

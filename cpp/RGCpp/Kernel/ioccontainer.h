@@ -2,49 +2,54 @@
 #define IOCONTAINER_H
 
 #include "kernel_global.h"
-#include "iinterface.h"
+#include "iservice.h"
 #include "singleton.h"
 #include <typeinfo>
 #include <typeindex>
+#include <QObject>
 #include <QMap>
 
 class KERNELSHARED_EXPORT IoCContainerImpl : public IService
 {
+  Q_OBJECT
+
 private:
-  QMap<size_t,IService*> _services;
-public:
-  virtual ~IoCContainerImpl()
-  {
-    for (auto e : _services)
-    {
-      delete e;
-    }
-  }
+  QMap<QString,IService*> _services;
 
 public:
-  template<typename TInterface, typename TService> bool registerService()
+  IoCContainerImpl(QObject* parent);
+
+public:
+  template<typename TInterface, typename TService> IService* registerService()
   {
     LOCK();
     auto tpI = std::type_index(typeid(TInterface));
-    auto tpIN = tpI.hash_code();
+    auto tpIN = tpI.name();
     auto count = _services.count(tpIN);
     if (!count)
     {
-      auto instance = new TService();
+      auto instance = new TService(this);
       auto ptrI = dynamic_cast<TInterface*>(instance);
       auto ptrS = dynamic_cast<IService*>(ptrI);
-      _services.insert(tpIN,ptrS);
-      return true;
+      _services.insert(tpIN, ptrS);
+      return ptrS;
     }
-    return false;
+    return resolve<TInterface>();
   }
   template<typename TInterface> TInterface* resolve()
   {
     LOCK();
     auto tpI = std::type_index(typeid(TInterface));
-    auto found = _services[tpI.hash_code()];
+    auto tpIN = tpI.name();
+    auto found = _services[tpIN];
     auto ptrI = dynamic_cast<TInterface*>(found);
     return ptrI;
+  }
+  IService* resolve(const QString& name)
+  {
+    LOCK();
+    auto found = _services[name];
+    return found;
   }
 };
 
