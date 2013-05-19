@@ -3,8 +3,6 @@
 
 #include "rglib_global.h"
 
-#include "bits.h"
-
 #include "projection.h"
 #include "point.h"
 

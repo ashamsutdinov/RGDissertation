@@ -1,7 +1,7 @@
 #ifndef BITS_H
 #define BITS_H
 
-#include "rg.h"
+#include "kernel.h"
 
 enum Bits
 {

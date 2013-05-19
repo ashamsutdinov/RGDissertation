@@ -6,25 +6,23 @@
 
 QT       -= gui
 
+include(../settings.pri)
+
 TARGET = IoC
 TEMPLATE = lib
-
-include(../settings.pri)
 
 DEFINES += IOC_LIBRARY
 
 SOURCES += ioc.cpp \
-    iocontainer.cpp
+    ioccontainer.cpp
 
-HEADERS += ioc.h\
-        ioc_global.h \
-    iocontainer.h
+HEADERS += \
+    ioc.h\
+    ioc_global.h \
+    ioccontainer.h
 
-unix:!symbian {
-    maemo5 {
-        target.path = /opt/usr/lib
-    } else {
-        target.path = /usr/lib
-    }
-    INSTALLS += target
-}
+INCLUDEPATH += $$PWD/../Kernel
+DEPENDPATH += $$PWD/../Kernel
+
+LIBS += -L../build/lib \
+    -lKernel

@@ -6,17 +6,23 @@
 
 QT       -= gui
 
+include(../settings.pri)
+
 TARGET = Kernel
 TEMPLATE = lib
 
-include(../settings.pri)
-
 DEFINES += KERNEL_LIBRARY
 
-SOURCES += kernel.cpp \
-    kernellib.cpp
+SOURCES += \
+    kernellib.cpp \
+    interfacesbuffer.cpp \
+    lock.cpp
 
-HEADERS += kernel.h\
-        kernel_global.h \
-    kernellib.h
-
+HEADERS += \
+    kernel.h\
+    kernel_global.h \
+    kernellib.h \
+    bitmask.h \
+    interfacesbuffer.h \
+    defines.h \
+    lock.h
