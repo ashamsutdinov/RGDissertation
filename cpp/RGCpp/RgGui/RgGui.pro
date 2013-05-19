@@ -23,15 +23,11 @@ FORMS    += \
 
 LIBS += -L../build/lib \
     -lKernel \
-    -lIoC \
     -lRgLib \
     -lRgGuiLib
 
 INCLUDEPATH += $$PWD/../Kernel
 DEPENDPATH += $$PWD/../Kernel
-
-INCLUDEPATH += $$PWD/../IoC
-DEPENDPATH += $$PWD/../IoC
 
 INCLUDEPATH += $$PWD/../RgLib
 DEPENDPATH += $$PWD/../RgLib

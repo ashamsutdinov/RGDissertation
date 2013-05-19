@@ -3,7 +3,6 @@ CONFIG += ordered
 
 SUBDIRS += \
     Kernel \
-    IoC \
     RgLib \
     RgGuiLib \
     RgGui \

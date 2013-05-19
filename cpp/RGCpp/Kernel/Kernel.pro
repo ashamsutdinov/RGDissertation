@@ -16,7 +16,8 @@ DEFINES += KERNEL_LIBRARY
 SOURCES += \
     kernellib.cpp \
     interfacesbuffer.cpp \
-    lock.cpp
+    ioccontainer.cpp \
+    iinterface.cpp
 
 HEADERS += \
     kernel.h\
@@ -24,5 +25,7 @@ HEADERS += \
     kernellib.h \
     bitmask.h \
     interfacesbuffer.h \
+    ioccontainer.h \
     defines.h \
-    lock.h
+    singleton.h \
+    iinterface.h

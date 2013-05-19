@@ -1,21 +1,25 @@
 #ifndef INTERFACESBUFFER_H
 #define INTERFACESBUFFER_H
 
-#include "kernel.h"
+#include "kernel_global.h"
+#include "iinterface.h"
+#include <QList>
 
 class KERNELSHARED_EXPORT InterfacesBuffer
 {
 private:
-  pinterface* _buffer;
-  int _bufSize;
-  int _interfacesCnt;
+  int                _interfacesCnt;
+  QList<IInterface*> _buffer;
 
 public:
   InterfacesBuffer();
   ~InterfacesBuffer();
 
 public:
-  void registerInterface(pinterface pi) volatile;
+  void registerInterface(IInterface*& pi);
+
+private:
+  void flush();
 };
 
 #endif // INTERFACESBUFFER_H
