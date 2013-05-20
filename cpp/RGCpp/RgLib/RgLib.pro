@@ -15,16 +15,26 @@ DEFINES += RGLIB_LIBRARY
 
 SOURCES += \
     rg.cpp \
-    point.cpp
+    point.cpp \
+    irgmap.cpp \
+    irgdirecttransformmap.cpp \
+    irgreversetransformmap.cpp
 
 HEADERS +=\
     rglib_global.h \
     rg.h \
     projection.h \    
-    point.h
+    point.h \
+    irgmap.h \
+    irgdirecttransformmap.h \
+    irgreversetransformmap.h
 
 LIBS += -L../build/lib \
-    -lKernel
+    -lKernel \
+    -lMaps
 
 INCLUDEPATH += $$PWD/../Kernel
 DEPENDPATH += $$PWD/../Kernel
+
+INCLUDEPATH += $$PWD/../Maps
+DEPENDPATH += $$PWD/../Maps

@@ -1,9 +1,9 @@
 #ifndef ISERVICE_H
 #define ISERVICE_H
 
-#include "kernel_global.h"
 #include <QObject>
 #include <QStringList>
+#include "kernel_global.h"
 
 class IConfig;
 class ILog;

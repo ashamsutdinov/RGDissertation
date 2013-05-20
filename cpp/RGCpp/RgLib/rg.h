@@ -5,5 +5,8 @@
 
 #include "projection.h"
 #include "point.h"
+#include "irgmap.h"
+#include "irgdirecttransformmap.h"
+#include "irgreversetransformmap.h"
 
 #endif // RG_H

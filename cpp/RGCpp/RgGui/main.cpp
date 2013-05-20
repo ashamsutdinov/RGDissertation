@@ -2,6 +2,7 @@
 #include <QApplication>
 
 #include "kernel.h"
+#include "rg.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,8 @@ int main(int argc, char *argv[])
   ioc->registerService<IThreadPool,ThreadPool>();
   ioc->registerService<IFactory,Factory>();  
   ioc->registerService<IDatabase,Database>();
+  ioc->registerService<IRgDirectTransformMap,RgDirectTransformMap>();
+  ioc->registerService<IRgReverseTransformMap,RgReverseTransformMap>();
 
   ioc->initialize();
   

@@ -1,13 +1,13 @@
 #ifndef IOCONTAINER_H
 #define IOCONTAINER_H
 
-#include "kernel_global.h"
-#include "iservice.h"
-#include "singleton.h"
 #include <typeinfo>
 #include <typeindex>
 #include <QObject>
 #include <QMap>
+#include "kernel_global.h"
+#include "iservice.h"
+#include "singleton.h"
 
 class KERNELSHARED_EXPORT IoCContainerImpl :
     public IService

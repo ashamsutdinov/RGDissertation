@@ -35,4 +35,14 @@
 #endif // DEFINES_DYN_ARRAY_MULTIPLIER
 
 
+#ifndef DEFINES_SETTINGS
+#define DEFINES_SETTINGS
+
+#define SETTINGS_ORG_NAME   "Aydario"
+#define SETTINGS_ORG_DOMAIN "senior-software-developer.com"
+#define SETTINGS_APP_NAME   "RgLab"
+
+#endif
+
+
 #endif // DEFINES_H

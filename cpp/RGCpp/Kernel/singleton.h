@@ -1,12 +1,12 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
-#include "kernel_global.h"
-#include "iservice.h"
-#include "defines.h"
 #include <typeinfo>
 #include <typeindex>
 #include <QCoreApplication>
+#include "kernel_global.h"
+#include "defines.h"
+#include "iservice.h"
 
 template<typename TSingle> class Singleton
 {
