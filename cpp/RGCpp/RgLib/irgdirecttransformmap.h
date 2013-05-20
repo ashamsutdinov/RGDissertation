@@ -5,7 +5,7 @@
 #include "irgmap.h"
 
 class RGLIBSHARED_EXPORT IRgDirectTransformMap :
-        public IRgMap
+        public RgMap
 {
     Q_OBJECT
 

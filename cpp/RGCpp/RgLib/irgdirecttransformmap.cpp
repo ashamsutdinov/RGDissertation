@@ -1,7 +1,7 @@
 #include "irgdirecttransformmap.h"
 
 IRgDirectTransformMap::IRgDirectTransformMap(QObject* parent) :
-    IRgMap(parent)
+    RgMap(parent)
 {
 }
 

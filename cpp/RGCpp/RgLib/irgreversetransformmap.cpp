@@ -1,7 +1,7 @@
 #include "irgreversetransformmap.h"
 
 IRgReverseTransformMap::IRgReverseTransformMap(QObject* parent) :
-    IRgMap(parent)
+    RgMap(parent)
 {
 }
 

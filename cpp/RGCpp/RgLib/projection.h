@@ -1,7 +1,6 @@
 #ifndef PROJECTION_H
 #define PROJECTION_H
 
-#include "rg.h"
 #include "bitmask.h"
 
 enum CProjection
