@@ -3,18 +3,6 @@
 
 #include "kernel.h"
 
-class I : public IService
-{
-public:
-  I(QObject* parent) : IService(parent){}
-};
-
-class II : public I
-{
-public:
-  II(QObject* parent) : I(parent){}
-};
-
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
@@ -22,8 +10,13 @@ int main(int argc, char *argv[])
   w.show();
 
   auto ioc = IoCContainer::instance();
-  ioc->registerService<I,II>();
-  auto s = ioc->resolve<I>();
+  ioc->registerService<IConfig,Config>();
+  ioc->registerService<ILog,Log>();
+  ioc->registerService<IThreadPool,ThreadPool>();
+  ioc->registerService<IFactory,Factory>();  
+  ioc->registerService<IDatabase,Database>();
+
+  ioc->initialize();
   
   return a.exec();
 }

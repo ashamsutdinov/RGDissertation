@@ -9,7 +9,8 @@
 #include <QObject>
 #include <QMap>
 
-class KERNELSHARED_EXPORT IoCContainerImpl : public IService
+class KERNELSHARED_EXPORT IoCContainerImpl :
+    public IService
 {
   Q_OBJECT
 
@@ -17,7 +18,7 @@ private:
   QMap<QString,IService*> _services;
 
 public:
-  IoCContainerImpl(QObject* parent);
+  explicit IoCContainerImpl(QObject* parent);
 
 public:
   template<typename TInterface, typename TService> IService* registerService()
@@ -31,6 +32,10 @@ public:
       auto instance = new TService(this);
       auto ptrI = dynamic_cast<TInterface*>(instance);
       auto ptrS = dynamic_cast<IService*>(ptrI);
+      emit serviceRegistered(ptrS);
+      connect(ptrS, SIGNAL(initialized(IService*)), this, SIGNAL(serviceInitialized(IService*)));
+      connect(ptrS, SIGNAL(destroyed(QObject*)), this, SIGNAL(serviceDestroyed(QObject*)));
+      ptrS->setObjectName(tpIN);
       _services.insert(tpIN, ptrS);
       return ptrS;
     }
@@ -45,15 +50,19 @@ public:
     auto ptrI = dynamic_cast<TInterface*>(found);
     return ptrI;
   }
-  IService* resolve(const QString& name)
-  {
-    LOCK();
-    auto found = _services[name];
-    return found;
-  }
+  IService* resolve(const QString& name);
+
+signals:
+  void serviceRegistered(IService* instance);
+  void serviceInitialized(IService* instance);
+  void serviceDestroyed(QObject* instance);
+
+public:
+  virtual void initializeInternal();
 };
 
-class IoCContainer : public Singleton<IoCContainerImpl>
+class IoCContainer :
+    public Singleton<IoCContainerImpl>
 {
 };
 IoCContainerImpl* Singleton<IoCContainerImpl>::_instance = NULL;

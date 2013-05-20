@@ -5,24 +5,52 @@
 #include <QObject>
 #include <QStringList>
 
+class IConfig;
+class ILog;
+class IThreadPool;
+class IFactory;
+class IDatabase;
+struct KERNELSHARED_EXPORT _Services
+{
+private:
+  static IConfig*      _config;
+  static ILog*         _log;
+  static IThreadPool*  _threadPool;
+  static IFactory*     _factory;
+  static IDatabase*    _database;
+
+public:
+  const IConfig*      config() volatile;
+  const ILog*         log() volatile;
+  const IThreadPool*  threadPool() volatile;
+  const IFactory*     factory() volatile;
+  const IDatabase*    database() volatile;
+};
+
 class KERNELSHARED_EXPORT IService :
     public QObject
 {
   Q_OBJECT
 
 private:
-  QStringList _dependencies;
-  bool  _initialized;
+  bool      _initialized;
+
+protected:
+  _Services _;
 
 public:
-  IService(QObject* parent);
+  explicit IService(QObject* parent);
   virtual ~IService();
 
 public:
-  const QStringList& dependencies() const;
-  void addDependency(const QString& dep);
   void initialize();
-  bool initialized() const;
+  bool isInitialized() const;
+
+protected:
+  virtual void initializeInternal() = 0;
+
+signals:
+  void initialized(IService* instance);
 };
 
 #endif // ISERVICE_H

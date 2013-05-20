@@ -14,16 +14,27 @@ TEMPLATE = lib
 DEFINES += KERNEL_LIBRARY
 
 SOURCES += \
-    kernellib.cpp \
     ioccontainer.cpp \
-    iservice.cpp
+    iservice.cpp \
+    ithreadpool.cpp \
+    ifactory.cpp \
+    iconfig.cpp \
+    ilog.cpp \
+    idatabase.cpp
 
 HEADERS += \
     kernel.h\
     kernel_global.h \
-    kernellib.h \
     bitmask.h \
     ioccontainer.h \
     defines.h \
     singleton.h \
-    iservice.h
+    iservice.h \
+    ithreadpool.h \
+    ifactory.h \
+    iconfig.h \
+    ilog.h \
+    idatabase.h
+
+RESOURCES += \
+    Resources.qrc
