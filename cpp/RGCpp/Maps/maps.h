@@ -3,6 +3,7 @@
 
 #include "maps_global.h"
 
-#include"imap.h"
+#include "map_defaults.h"
+#include "imap.h"
 
 #endif // MAPS_H

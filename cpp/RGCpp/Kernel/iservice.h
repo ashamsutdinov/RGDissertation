@@ -10,8 +10,9 @@ class ILog;
 class IThreadPool;
 class IFactory;
 class IDatabase;
-struct KERNELSHARED_EXPORT _Services
-{
+
+class KERNELSHARED_EXPORT Services
+{    
 private:
   static IConfig*      _config;
   static ILog*         _log;
@@ -20,11 +21,11 @@ private:
   static IDatabase*    _database;
 
 public:
-  const IConfig*      config() volatile;
-  const ILog*         log() volatile;
-  const IThreadPool*  threadPool() volatile;
-  const IFactory*     factory() volatile;
-  const IDatabase*    database() volatile;
+  IConfig*      config();
+  ILog*         log();
+  IThreadPool*  threadPool();
+  IFactory*     factory();
+  IDatabase*    database();
 };
 
 class KERNELSHARED_EXPORT IService :
@@ -36,7 +37,7 @@ private:
   bool      _initialized;
 
 protected:
-  _Services _;
+  Services _;
 
 public:
   explicit IService(QObject* parent);

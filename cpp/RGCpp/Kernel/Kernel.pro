@@ -20,7 +20,8 @@ SOURCES += \
     ifactory.cpp \
     iconfig.cpp \
     ilog.cpp \
-    idatabase.cpp
+    idatabase.cpp \
+    idisposable.cpp
 
 HEADERS += \
     kernel.h\
@@ -34,7 +35,8 @@ HEADERS += \
     ifactory.h \
     iconfig.h \
     ilog.h \
-    idatabase.h
+    idatabase.h \
+    idisposable.h
 
 RESOURCES += \
     Resources.qrc

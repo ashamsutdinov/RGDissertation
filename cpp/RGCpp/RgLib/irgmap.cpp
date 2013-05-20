@@ -34,7 +34,7 @@ void RgMap::initializeInternal()
     initializeTransform();
 }
 
-QBitmap* RgMap::createBlank()
+QBitmap* RgMap::createBlank(int level, int x, int y)
 {
     return NULL;
 }

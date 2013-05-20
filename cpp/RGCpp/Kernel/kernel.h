@@ -7,6 +7,7 @@
 #include "bits.h"
 #include "iservice.h"
 #include "ioccontainer.h"
+#include "idisposable.h"
 #include "singleton.h"
 #include "iconfig.h"
 #include "ilog.h"

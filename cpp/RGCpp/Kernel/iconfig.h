@@ -18,7 +18,7 @@ public:
 
 public:
   virtual void set(const QString& key, const QVariant& value) = 0;
-  virtual QVariant get(const QString& key, const QVariant& defaultValue = QVariant()) const = 0;
+  virtual QVariant get(const QString& key, const QVariant& defaultValue = QVariant()) = 0;
 
 signals:
     void configurationChanged(IConfig* sender, const QString& key, const QVariant& value);
@@ -41,7 +41,7 @@ protected:
 
 public:
     virtual void set(const QString& key, const QVariant& value);
-    virtual QVariant get(const QString& key, const QVariant& defaultValue = QVariant()) const;
+    virtual QVariant get(const QString& key, const QVariant& defaultValue = QVariant());
 };
 
 #endif // ICONFIG_H

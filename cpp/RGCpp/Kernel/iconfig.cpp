@@ -35,7 +35,13 @@ void Config::set(const QString& key, const QVariant& value)
     emit configurationChanged(this, key, value);
 }
 
-QVariant Config::get(const QString& key, const QVariant& defaultValue) const
+QVariant Config::get(const QString& key, const QVariant& defaultValue)
 {
-    return _settings->value(key, defaultValue);
+    auto value = _settings->value(key);
+    if (value.isNull())
+    {
+        set(key, defaultValue);
+        value = defaultValue;
+    }
+    return value;
 }

@@ -19,7 +19,8 @@ SOURCES += \
 HEADERS += \
   maps.h\
   maps_global.h \
-  imap.h
+  imap.h \
+    map_defaults.h
 
 LIBS += -L../build/lib \
     -lKernel

@@ -38,11 +38,11 @@ public:
     virtual ~RgMap();
 
 public:
-    virtual QBitmap* createBlank();
     virtual CProjection projection() const;
     virtual void setProjection(const CProjection proj);
 
 protected:
+    virtual QBitmap* createBlank(int level = 0, int x = 0, int y = 0);
     virtual void initializeInternal();
 };
 

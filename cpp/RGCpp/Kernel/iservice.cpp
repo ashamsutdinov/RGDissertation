@@ -8,13 +8,13 @@
 #include "idatabase.h"
 #include "ioccontainer.h"
 
-IConfig*      _Services::_config = NULL;
-ILog*         _Services::_log = NULL;
-IFactory*     _Services::_factory = NULL;
-IThreadPool*  _Services::_threadPool = NULL;
-IDatabase*    _Services::_database = NULL;
+IConfig*      Services::_config = NULL;
+ILog*         Services::_log = NULL;
+IFactory*     Services::_factory = NULL;
+IThreadPool*  Services::_threadPool = NULL;
+IDatabase*    Services::_database = NULL;
 
-const IConfig* _Services::config() volatile
+IConfig* Services::config()
 {
   if (!_config)
   {
@@ -28,7 +28,7 @@ const IConfig* _Services::config() volatile
   return _config;
 }
 
-const ILog* _Services::log() volatile
+ILog* Services::log()
 {
   if (!_log)
   {
@@ -42,7 +42,7 @@ const ILog* _Services::log() volatile
   return _log;
 }
 
-const IFactory* _Services::factory() volatile
+IFactory* Services::factory()
 {
   if (!_factory)
   {
@@ -56,7 +56,7 @@ const IFactory* _Services::factory() volatile
   return _factory;
 }
 
-const IThreadPool* _Services::threadPool() volatile
+IThreadPool* Services::threadPool()
 {
   if (!_threadPool)
   {
@@ -70,7 +70,7 @@ const IThreadPool* _Services::threadPool() volatile
   return _threadPool;
 }
 
-const IDatabase* _Services::database() volatile
+IDatabase* Services::database()
 {
   if (!_database)
   {
