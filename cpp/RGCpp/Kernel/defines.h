@@ -9,9 +9,9 @@
 #include <QMutexLocker>
 #include <QReadWriteLock>
 
-#define Q_LOCK()          QMutex __m; QMutexLocker __ml(&__m);
-#define Q_BEGIN_LOCK()    { QMutex __m; __m.lock();
-#define Q_END_LOCK()        __m.unlock(); }
+#define _Q_LOCK()          QMutex __m; QMutexLocker __ml(&__m);
+#define _Q_BEGIN_LOCK()    { QMutex __m; __m.lock();
+#define _Q_END_LOCK()        __m.unlock(); }
 
 #endif // DEFINES_Q_LOCKS
 
@@ -19,21 +19,11 @@
 #ifndef DEFINES_LOCK_MACROS
 #define DEFINES_LOCK_MACROS
 
-#define LOCK()        Q_LOCK()
-#define BEGIN_LOCK()  Q_BEGIN_LOCK()
-#define END_LOCK()    Q_END_LOCK()
+#define LOCK()        _Q_LOCK()
+#define BEGIN_LOCK()  _Q_BEGIN_LOCK()
+#define END_LOCK()    _Q_END_LOCK()
 
 #endif // DEFINES_LOCK_MACROS
-
-
-#ifndef DEFINES_DYN_ARRAY_MULTIPLIER
-#define DEFINES_DYN_ARRAY_MULTIPLIER
-
-#define DYN_ARRAY_INITIAL_SIZE  1
-#define DYN_ARRAY_MULTIPLIER    2
-
-#endif // DEFINES_DYN_ARRAY_MULTIPLIER
-
 
 #ifndef DEFINES_SETTINGS
 #define DEFINES_SETTINGS

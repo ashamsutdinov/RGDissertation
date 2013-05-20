@@ -9,6 +9,8 @@ int main(int argc, char *argv[])
   if (!a.shouldContinue())
       return 0;
 
+  a.initialize();
+
   MainWindow w;
   w.show();
   
