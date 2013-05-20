@@ -1,8 +1,6 @@
 #ifndef BITS_H
 #define BITS_H
 
-#include "rg.h"
-
 enum Bits
 {
   Zero  = 0x0,

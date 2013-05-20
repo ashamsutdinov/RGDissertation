@@ -4,34 +4,33 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui widgets
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+include(../settings.pri)
 
 TARGET = RgGui
 TEMPLATE = app
 
-include(../settings.pri)
+SOURCES += \
+    main.cpp\
+    mainwindow.cpp
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+HEADERS  += \
+    mainwindow.h
 
-HEADERS  += mainwindow.h
-
-FORMS    += mainwindow.ui
+FORMS    += \
+    mainwindow.ui
 
 LIBS += -L../build/lib \
-         -lKernel \
-         -lRgLib \
-         -lRgGuiLib
-         -lIoC
+    -lKernel \
+    -lRgLib \
+    -lRgGuiLib
 
 INCLUDEPATH += $$PWD/../Kernel
 DEPENDPATH += $$PWD/../Kernel
 
-INCLUDEPATH += $$PWD/../IoC
-DEPENDPATH += $$PWD/../IoC
-
-
 INCLUDEPATH += $$PWD/../RgLib
 DEPENDPATH += $$PWD/../RgLib
+
+INCLUDEPATH += $$PWD/../RgGuiLib
+DEPENDPATH += $$PWD/../RgGuiLib

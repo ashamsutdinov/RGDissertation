@@ -4,22 +4,37 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
+QT  -= gui
+
+include(../settings.pri)
 
 TARGET = Kernel
 TEMPLATE = lib
 
-include(../settings.pri)
-
 DEFINES += KERNEL_LIBRARY
 
 SOURCES += \
-    kernellib.cpp
+    ioccontainer.cpp \
+    iservice.cpp \
+    ithreadpool.cpp \
+    ifactory.cpp \
+    iconfig.cpp \
+    ilog.cpp \
+    idatabase.cpp
 
-HEADERS += kernel.h\
+HEADERS += \
+    kernel.h\
     kernel_global.h \
-    kernellib.h
+    bitmask.h \
+    ioccontainer.h \
+    defines.h \
+    singleton.h \
+    iservice.h \
+    ithreadpool.h \
+    ifactory.h \
+    iconfig.h \
+    ilog.h \
+    idatabase.h
 
-INCLUDEPATH += $$PWD/../IoC
-DEPENDPATH += $$PWD/../IoC
-
+RESOURCES += \
+    Resources.qrc

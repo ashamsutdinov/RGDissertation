@@ -6,10 +6,10 @@
 
 QT       -= gui
 
+include(../settings.pri)
+
 TARGET = RgLib
 TEMPLATE = lib
-
-include(../settings.pri)
 
 DEFINES += RGLIB_LIBRARY
 
@@ -18,16 +18,13 @@ SOURCES += \
     point.cpp
 
 HEADERS +=\
-        rglib_global.h \
+    rglib_global.h \
     rg.h \
-    projection.h \
-    bits.h \
+    projection.h \    
     point.h
 
 LIBS += -L../build/lib \
-         -lIoC \
-		 -lKernel
+    -lKernel
 
-
-INCLUDEPATH += $$PWD/../IoC
-DEPENDPATH += $$PWD/../IoC
+INCLUDEPATH += $$PWD/../Kernel
+DEPENDPATH += $$PWD/../Kernel

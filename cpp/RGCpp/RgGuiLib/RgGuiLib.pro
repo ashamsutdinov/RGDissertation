@@ -6,16 +6,17 @@
 
 QT       += widgets
 
+include(../settings.pri)
+
 TARGET = RgGuiLib
 TEMPLATE = lib
-
-include(../settings.pri)
 
 DEFINES += RGGUILIB_LIBRARY
 
 SOURCES += rgguilib.cpp
 
-HEADERS += rgguilib.h\
+HEADERS += \
+    rgguilib.h\
     rgguilib_global.h \
     rggui.h
 

@@ -26,7 +26,7 @@ Point::~Point()
 
 void Point::copy(const Point &cpy)
 {
-
+  Q_UNUSED(cpy);
 }
 
 bool Point::checkInput(const double *d, const int size)
