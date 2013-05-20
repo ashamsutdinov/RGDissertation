@@ -9,7 +9,7 @@
 #include "defines.h"
 
 class LocalServer :
-        public QThread
+    public QThread
 {
   Q_OBJECT
 

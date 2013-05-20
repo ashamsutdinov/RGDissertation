@@ -21,7 +21,7 @@ LocalServer::~LocalServer()
   _server->close();
   for(auto c : _clients)
   {
-      c->close();
+    c->close();
   }
 }
 

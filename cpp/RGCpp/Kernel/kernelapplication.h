@@ -9,7 +9,7 @@
  * @brief The Application class handles trivial application initialization procedures
  */
 class KERNELSHARED_EXPORT SingleApplication :
-        public QApplication
+    public QApplication
 {
   Q_OBJECT
 
@@ -33,17 +33,17 @@ private:
 };
 
 class KERNELSHARED_EXPORT KernelApplication :
-        public SingleApplication
+    public SingleApplication
 {
 public:
-    explicit KernelApplication(int, char *[]);
-    virtual ~KernelApplication();
+  explicit KernelApplication(int, char *[]);
+  virtual ~KernelApplication();
 
 public:
-    void initialize();
+  void initialize();
 
 protected:
-    virtual void initializeInternal();
+  virtual void initializeInternal();
 };
 
 #endif // KERNELAPPLICATION_H

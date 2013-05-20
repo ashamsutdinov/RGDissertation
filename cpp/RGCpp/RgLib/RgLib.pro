@@ -14,7 +14,6 @@ TEMPLATE = lib
 DEFINES += RGLIB_LIBRARY
 
 SOURCES += \
-    rg.cpp \
     point.cpp \
     irgmap.cpp \
     irgdirecttransformmap.cpp \

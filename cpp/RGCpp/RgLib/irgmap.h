@@ -6,44 +6,44 @@
 #include "maps.h"
 
 class RGLIBSHARED_EXPORT IRgMap :
-        public MapBase
+    public MapBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit IRgMap(QObject* parent);
-    virtual ~IRgMap();
+  explicit IRgMap(QObject* parent);
+  virtual ~IRgMap();
 
 public:
-    virtual CProjection projection() const = 0;
-    virtual void setProjection(const CProjection proj) = 0;
+  virtual CProjection projection() const = 0;
+  virtual void setProjection(const CProjection proj) = 0;
 
 protected:
-    virtual void initializeTransform() = 0;
+  virtual void initializeTransform() = 0;
 
 signals:
-    void projectionChanged(IRgMap* instance, CProjection projection);
+  void projectionChanged(IRgMap* instance, CProjection projection);
 };
 
 class RGLIBSHARED_EXPORT RgMap :
-        public IRgMap
+    public IRgMap
 {
-    Q_OBJECT
+  Q_OBJECT
 
 private:
-    CProjection _projection;
+  CProjection _projection;
 
 public:
-    explicit RgMap( QObject* parent);
-    virtual ~RgMap();
+  explicit RgMap( QObject* parent);
+  virtual ~RgMap();
 
 public:
-    virtual CProjection projection() const;
-    virtual void setProjection(const CProjection proj);
+  virtual CProjection projection() const;
+  virtual void setProjection(const CProjection proj);
 
 protected:
-    virtual QBitmap* createBlank(int level = 0, int x = 0, int y = 0);
-    virtual void initializeInternal();
+  virtual QBitmap* createBlank(int level = 0, int x = 0, int y = 0);
+  virtual void initializeInternal();
 };
 
 #endif // IRGMAP_H

@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
   RgApplication a(argc, argv);
   if (!a.shouldContinue())
-      return 0;
+    return 0;
 
   a.initialize();
 

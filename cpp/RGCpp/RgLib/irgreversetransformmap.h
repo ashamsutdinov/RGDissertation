@@ -5,26 +5,26 @@
 #include "irgmap.h"
 
 class RGLIBSHARED_EXPORT IRgReverseTransformMap :
-        public RgMap
+    public RgMap
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit IRgReverseTransformMap(QObject* parent);
-    virtual ~IRgReverseTransformMap();
+  explicit IRgReverseTransformMap(QObject* parent);
+  virtual ~IRgReverseTransformMap();
 };
 
 class RGLIBSHARED_EXPORT RgReverseTransformMap :
-        public IRgReverseTransformMap
+    public IRgReverseTransformMap
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit RgReverseTransformMap(QObject* parent);
-    virtual ~RgReverseTransformMap();
+  explicit RgReverseTransformMap(QObject* parent);
+  virtual ~RgReverseTransformMap();
 
 protected:
-    virtual void initializeTransform();
+  virtual void initializeTransform();
 };
 
 #endif // IRGREVERSETRANSFORMMAP_H

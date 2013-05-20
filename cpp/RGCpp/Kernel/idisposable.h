@@ -6,9 +6,9 @@
 class KERNELSHARED_EXPORT IDisposable
 {
 public:
-    IDisposable();
+  IDisposable();
 public:
-    virtual void dispose() = 0;
+  virtual void dispose() = 0;
 };
 
 #endif // IDISPOSABLE_H

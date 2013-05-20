@@ -21,7 +21,7 @@ public:
   virtual QVariant get(const QString& key, const QVariant& defaultValue = QVariant()) = 0;
 
 signals:
-    void configurationChanged(IConfig* sender, const QString& key, const QVariant& value);
+  void configurationChanged(IConfig* sender, const QString& key, const QVariant& value);
 };
 
 class KERNELSHARED_EXPORT Config :
@@ -30,7 +30,7 @@ class KERNELSHARED_EXPORT Config :
   Q_OBJECT
 
 private:
-    QSettings* _settings;
+  QSettings* _settings;
 
 public:
   explicit Config(QObject* parent);
@@ -40,8 +40,8 @@ protected:
   virtual void initializeInternal();
 
 public:
-    virtual void set(const QString& key, const QVariant& value);
-    virtual QVariant get(const QString& key, const QVariant& defaultValue = QVariant());
+  virtual void set(const QString& key, const QVariant& value);
+  virtual QVariant get(const QString& key, const QVariant& defaultValue = QVariant());
 };
 
 #endif // ICONFIG_H

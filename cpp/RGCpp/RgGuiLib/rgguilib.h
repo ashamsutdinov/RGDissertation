@@ -5,9 +5,9 @@
 
 class RGGUILIBSHARED_EXPORT RgGuiLib
 {
-    
+
 public:
-    RgGuiLib();
+  RgGuiLib();
 };
 
 #endif // RGGUILIB_H

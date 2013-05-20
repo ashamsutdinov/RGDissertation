@@ -5,14 +5,14 @@
 #include "rglib_global.h"
 
 class RGLIBSHARED_EXPORT RgApplication :
-        public KernelApplication
+    public KernelApplication
 {
 public:
-    explicit RgApplication(int args, char* argv[]);
-    virtual ~RgApplication();
+  explicit RgApplication(int args, char* argv[]);
+  virtual ~RgApplication();
 
 protected:
-    virtual void initializeInternal();
+  virtual void initializeInternal();
 };
 
 #endif // RGAPPLICATION_H
