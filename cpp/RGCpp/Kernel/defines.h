@@ -45,4 +45,9 @@
 #endif
 
 
+#ifndef LOCAL_SERVER_NAME
+#define LOCAL_SERVER_NAME "localhost"
+#endif
+
+
 #endif // DEFINES_H

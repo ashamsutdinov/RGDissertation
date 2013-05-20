@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui widgets network
 
 include(../settings.pri)
 
@@ -18,7 +18,8 @@ SOURCES += \
     point.cpp \
     irgmap.cpp \
     irgdirecttransformmap.cpp \
-    irgreversetransformmap.cpp
+    irgreversetransformmap.cpp \
+    rgapplication.cpp
 
 HEADERS +=\
     rglib_global.h \
@@ -27,7 +28,8 @@ HEADERS +=\
     point.h \
     irgmap.h \
     irgdirecttransformmap.h \
-    irgreversetransformmap.h
+    irgreversetransformmap.h \
+    rgapplication.h
 
 LIBS += -L../build/lib \
     -lKernel \

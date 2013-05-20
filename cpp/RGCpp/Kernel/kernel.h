@@ -14,5 +14,6 @@
 #include "ithreadpool.h"
 #include "ifactory.h"
 #include "idatabase.h"
+#include "kernelapplication.h"
 
 #endif // KERNEL_H

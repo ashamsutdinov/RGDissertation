@@ -8,5 +8,6 @@
 #include "irgmap.h"
 #include "irgdirecttransformmap.h"
 #include "irgreversetransformmap.h"
+#include "rgapplication.h"
 
 #endif // RG_H

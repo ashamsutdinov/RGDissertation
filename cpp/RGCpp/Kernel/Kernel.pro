@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui widgets network
 
 include(../settings.pri)
 
@@ -21,7 +21,9 @@ SOURCES += \
     iconfig.cpp \
     ilog.cpp \
     idatabase.cpp \
-    idisposable.cpp
+    idisposable.cpp \
+    kernelapplication.cpp \
+    localserver.cpp
 
 HEADERS += \
     kernel.h\
@@ -36,7 +38,9 @@ HEADERS += \
     iconfig.h \
     ilog.h \
     idatabase.h \
-    idisposable.h
+    idisposable.h \
+    kernelapplication.h \
+    localserver.h
 
 RESOURCES += \
     Resources.qrc
