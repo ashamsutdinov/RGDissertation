@@ -14,14 +14,22 @@ TEMPLATE = lib
 DEFINES += MAPS_LIBRARY
 
 SOURCES += \
-    imap.cpp \
-    imaptransformation.cpp
+    src/maps/interfaces/imap.cpp \
+    src/maps/mapfragment.cpp \
+    src/maps/interfaces/imaplayer.cpp \
+    src/maps/maplayer.cpp \
+    src/maps/blankmaplayer.cpp \
+    src/maps/map.cpp
 
 HEADERS += \
   maps.h\
-  maps_global.h \
-  imap.h \
-    map_defaults.h
+  maps/interfaces/imap.h \
+  defines.h \
+    maps/mapfragment.h \
+    maps/interfaces/imaplayer.h \
+    maps/maplayer.h \
+    maps/blankmaplayer.h \
+    maps/map.h
 
 LIBS += -L../build/lib \
     -lKernel
