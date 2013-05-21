@@ -1,7 +1,7 @@
 #include "irgmap.h"
 
 IRgMap::IRgMap(QObject* parent) :
-  MapBase(parent)
+  Map(parent)
 {
 }
 
@@ -34,7 +34,7 @@ void RgMap::initializeInternal()
   initializeTransform();
 }
 
-QBitmap* RgMap::createBlank(int level, int x, int y)
+QBitmap* RgMap::createBlankSquare(int level, int x, int y)
 {
   return NULL;
 }

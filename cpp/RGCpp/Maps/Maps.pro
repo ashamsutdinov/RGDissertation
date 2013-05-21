@@ -14,7 +14,8 @@ TEMPLATE = lib
 DEFINES += MAPS_LIBRARY
 
 SOURCES += \
-    imap.cpp
+    imap.cpp \
+    imaptransformation.cpp
 
 HEADERS += \
   maps.h\

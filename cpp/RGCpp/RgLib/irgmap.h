@@ -6,7 +6,7 @@
 #include "maps.h"
 
 class RGLIBSHARED_EXPORT IRgMap :
-    public MapBase
+    public Map
 {
   Q_OBJECT
 
@@ -42,7 +42,7 @@ public:
   virtual void setProjection(const CProjection proj);
 
 protected:
-  virtual QBitmap* createBlank(int level = 0, int x = 0, int y = 0);
+  virtual QBitmap* createBlankSquare(int level = 0, int x = 0, int y = 0);
   virtual void initializeInternal();
 };
 

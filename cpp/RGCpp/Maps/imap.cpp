@@ -104,6 +104,46 @@ void MapFragment::dispose()
   }
 }
 
+IMapLayer::IMapLayer()
+{
+}
+
+IMapLayer::~IMapLayer()
+{
+}
+
+MapLayer::MapLayer(const IMap *map) :
+  _map(map)
+{
+}
+
+MapLayer::~MapLayer()
+{
+}
+
+const IMap* MapLayer::map() const
+{
+  return _map;
+}
+
+QBitmap* MapLayer::getSquare(int level, int x, int y)
+{
+  auto cfg = _.config();
+  auto dPath = cfg->get(MAPS_LAYERS_PATH_KEY, DEFAULT_LAYERS_MAPS_PATH).toString();
+  auto flPath = _map->getPath(dPath, level, x, y, name(), params());
+  QFile fl(flPath);
+  QBitmap* pImg;
+  if (!fl.exists())
+  {
+    pImg = createSquare(level, x, y);
+  }
+  else
+  {
+    pImg = new QBitmap(flPath);
+  }
+  return pImg;
+}
+
 IMap::IMap(QObject* parent) :
   IService(parent)
 {
@@ -113,27 +153,30 @@ IMap::~IMap()
 {
 }
 
-MapBase::MapBase(QObject* parent) :
+Map::Map(QObject* parent) :
   IMap(parent)
 {
 }
 
-MapBase::~MapBase()
+Map::~Map()
 {
+  for (auto l : _layers)
+  {
+    delete l;
+  }
 }
 
-QBitmap* MapBase::getBlank(int level, int x, int y)
+QBitmap* Map::getBlankSquare(int level, int x, int y)
 {
   LOCK();
   auto cfg = _.config();
-  auto dPath = cfg->get(MAPS_PATH_KEY, DEFAULT_MAPS_PATH).toString();
   auto bPath = cfg->get(MAPS_BLANK_PATH_KEY, DEFAULT_BLANK_MAPS_PATH).toString();
-  auto flPath = getPath(dPath, bPath, level, x, y);
+  auto flPath = getPath(bPath, level, x, y);
   QFile fl(flPath);
   QBitmap* pImg;
   if (!fl.exists())
   {
-    pImg = createBlank(level, x, y);
+    pImg = createBlankSquare(level, x, y);
   }
   else
   {
@@ -142,20 +185,26 @@ QBitmap* MapBase::getBlank(int level, int x, int y)
   return pImg;
 }
 
-QString MapBase::getPath(const QString &category, const QString &directory, int level, int x, int y, const QString &params)
+QString Map::getPath(const QString &directory, int level, int x, int y, const QString &layer, const QVariant& layerParams)
 {
-  QString dir = category + "/" + directory + "/";
-  if (!params.isNull() && !params.isEmpty())
+  auto dPath = cfg->get(MAPS_PATH_KEY, DEFAULT_MAPS_PATH).toString();
+  QString dir = dPath + "/" + directory + "/";
+  if (!layer.isNull() && !layer.isEmpty())
   {
-    dir += params + "/";
+    dir += layer + "/";
   }
   dir += level + "/";
   checkDirectory(dir);
-  QString filePath = dir + x + "." + y + ".bmp";
+  QString filePath = dir + layerParams + "-" + x + "." + y + MAPS_FILE_EXT;
   return filePath;
 }
 
-void MapBase::checkDirectory(const QString& path)
+const MapLayerList& Map::layers() const
+{
+  return _layers;
+}
+
+void Map::checkDirectory(const QString& path)
 {
   QDir directory(path);
   if (!directory.exists())
