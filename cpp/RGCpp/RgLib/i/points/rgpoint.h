@@ -2,6 +2,7 @@
 #define RGPOINT_H
 
 #include "./../defines.h"
+#include "./../enums/projection.h"
 #include "./point.h"
 
 class CPoint;
@@ -14,7 +15,7 @@ public:
     virtual ~RGPoint();
 
 public:
-    virtual CPoint c() const;
+    virtual CPoint c(CProjection proj);
 };
 
 #endif // RGPOINT_H

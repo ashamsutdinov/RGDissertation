@@ -16,7 +16,7 @@ RGPoint::~RGPoint()
 {
 }
 
-CPoint RGPoint::c() const
+CPoint RGPoint::c(CProjection proj)
 {
     return CPoint(COORD_ZERO,COORD_ZERO,COORD_ZERO);
 }
