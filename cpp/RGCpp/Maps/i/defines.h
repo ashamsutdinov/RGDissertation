@@ -1,5 +1,5 @@
-#ifndef MAP_DEFAULTS_H
-#define MAP_DEFAULTS_H
+#ifndef MAPS_DEFAULTS_H
+#define MAPS_DEFAULTS_H
 
 #include <QtCore>
 #include <QtGui>
@@ -32,4 +32,4 @@ typedef double coord;
 class IMapLayer;
 typedef QList<IMapLayer*> MapLayerList;
 
-#endif // MAP_DEFAULTS_H
+#endif // MAPS_DEFAULTS_H

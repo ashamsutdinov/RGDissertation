@@ -12,14 +12,15 @@ TARGET = RgGui
 TEMPLATE = app
 
 SOURCES += \
-    main.cpp\
-    mainwindow.cpp
+    src/main.cpp\
+    src/mainwindow.cpp
 
 HEADERS  += \
-    mainwindow.h
+    i/mainwindow.h \
+    defines.h
 
 FORMS    += \
-    mainwindow.ui
+    ui/mainwindow.ui
 
 LIBS += -L../build/lib \
     -lKernel \

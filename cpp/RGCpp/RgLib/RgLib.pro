@@ -15,18 +15,12 @@ DEFINES += RGLIB_LIBRARY
 
 SOURCES += \
     src/points/point.cpp \
-    src/maps/interfaces/irgmap.cpp \
-    src/maps/interfaces/irgdirecttransformmap.cpp \
-    src/maps/interfaces/irgreversetransformmap.cpp \
     src/application/rgapplication.cpp
 
 HEADERS +=\
     rg.h \
     i/enums/projection.h \
     i/points/point.h \
-    i/maps/interfaces/irgmap.h \
-    i/maps/interfaces/irgdirecttransformmap.h \
-    i/maps/interfaces/irgreversetransformmap.h \
     i/application/rgapplication.h \
     i/defines.h
 

@@ -1,8 +1,7 @@
 #ifndef RGAPPLICATION_H
 #define RGAPPLICATION_H
 
-#include "kernel.h"
-#include "rglib_global.h"
+#include "./../defines.h"
 
 class RGLIBSHARED_EXPORT RgApplication :
     public KernelApplication

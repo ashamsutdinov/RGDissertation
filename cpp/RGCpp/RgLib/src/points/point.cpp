@@ -1,4 +1,4 @@
-#include "point.h"
+#include "./../../i/points/point.h"
 
 Point::Point(const double* d, const int size)
 {

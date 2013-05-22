@@ -58,4 +58,4 @@ HEADERS += \
     i/defines.h
 
 RESOURCES += \
-    Resources.qrc
+    res/Resources.qrc
