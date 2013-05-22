@@ -15,6 +15,8 @@
 #  define RGLIBSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
+#define RGSPACE_DIM     2
 #define CSPACE_DIM      3
+#define COORD_ZERO      0.0
 
 #endif // RG_DEFINES_H

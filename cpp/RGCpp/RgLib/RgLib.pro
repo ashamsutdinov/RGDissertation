@@ -17,7 +17,9 @@ SOURCES += \
     src/points/point.cpp \
     src/application/rgapplication.cpp \
     src/maps/interfaces/irgmap.cpp \
-    src/maps/rgmap.cpp
+    src/maps/rgmap.cpp \
+    src/points/rgpoint.cpp \
+    src/points/cpoint.cpp
 
 HEADERS +=\
     rg.h \
@@ -26,7 +28,9 @@ HEADERS +=\
     i/application/rgapplication.h \
     i/defines.h \
     i/maps/interfaces/irgmap.h \
-    i/maps/rgmap.h
+    i/maps/rgmap.h \
+    i/points/rgpoint.h \
+    i/points/cpoint.h
 
 LIBS += -L../build/lib \
     -lKernel \

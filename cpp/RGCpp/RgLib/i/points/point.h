@@ -3,25 +3,37 @@
 
 #include "./../defines.h"
 
-class RGLIBSHARED_EXPORT Point
+class RGLIBSHARED_EXPORT Point :
+        public IDisposable
 {
 private:
-  double* _d;
-  int     _size;
-  double  _norm;
+  coord*    _d;
+  int       _size;
+  coord     _norm;
+
+protected:
+  explicit Point();
 
 public:
-  explicit Point(const double* d, const int size);
+  explicit Point(const coord* d, const int size);
   explicit Point(const Point& cpy);
   virtual ~Point();
 
 public:
-  double value(int num) const;
-  double norm() const;
+  coord v(int num) const;
+  int dim() const;
+  coord norm();
+  coord distanceTo(const Point& pt) const;
+
+  virtual Point& operator = (const Point& cpy);
+
+  virtual void dispose();
+
+protected:
+  void copy(const coord* d, const int size);
 
 private:
-  void copy(const Point& cpy);
-  bool checkInput(const double* d, const int size);
+  bool checkInput(const coord* d, const int size);
 };
 
 #endif // POINT_H
