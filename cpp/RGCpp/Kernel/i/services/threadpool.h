@@ -2,7 +2,7 @@
 #define THREADPOOL_H
 
 #include "./../defines.h"
-#include "./../services/interfaces/ithreadpool.h"
+#include "./interfaces/ithreadpool.h"
 
 class KERNELSHARED_EXPORT ThreadPool :
     public IThreadPool

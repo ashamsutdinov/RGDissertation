@@ -29,7 +29,8 @@ HEADERS += \
   i/maps/interfaces/imaplayer.h \
   i/maps/maplayer.h \
   i/maps/blankmaplayer.h \
-  i/maps/map.h
+  i/maps/map.h \
+  i/maps/projectedmap.h
 
 LIBS += -L../build/lib \
     -lKernel

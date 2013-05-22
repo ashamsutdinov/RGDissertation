@@ -2,7 +2,7 @@
 #define FACTORY_H
 
 #include "./../defines.h"
-#include "./../services/interfaces/ifactory.h"
+#include "./interfaces/ifactory.h"
 
 class KERNELSHARED_EXPORT Factory :
     public IFactory

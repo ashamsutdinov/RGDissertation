@@ -2,8 +2,8 @@
 #define MAPLAYER_H
 
 #include "./../defines.h"
-#include "./../maps/interfaces/imaplayer.h"
-#include "./../maps/map.h"
+#include "./interfaces/imaplayer.h"
+#include "./map.h"
 
 class MAPSSHARED_EXPORT MapLayer :
   public IMapLayer

@@ -15,14 +15,18 @@ DEFINES += RGLIB_LIBRARY
 
 SOURCES += \
     src/points/point.cpp \
-    src/application/rgapplication.cpp
+    src/application/rgapplication.cpp \
+    src/maps/interfaces/irgmap.cpp \
+    src/maps/rgmap.cpp
 
 HEADERS +=\
     rg.h \
     i/enums/projection.h \
     i/points/point.h \
     i/application/rgapplication.h \
-    i/defines.h
+    i/defines.h \
+    i/maps/interfaces/irgmap.h \
+    i/maps/rgmap.h
 
 LIBS += -L../build/lib \
     -lKernel \

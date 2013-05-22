@@ -2,8 +2,8 @@
 #define SERVICE_H
 
 #include "./../defines.h"
-#include "./../services/interfaces/iservice.h"
-#include "./../services/services.h"
+#include "./interfaces/iservice.h"
+#include "./services.h"
 
 class KERNELSHARED_EXPORT Service :
     public IService

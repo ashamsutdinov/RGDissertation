@@ -2,7 +2,7 @@
 #define MAP_H
 
 #include "./../defines.h"
-#include "./../maps/interfaces/imap.h"
+#include "./interfaces/imap.h"
 
 class MAPSSHARED_EXPORT Map :
     public IMap

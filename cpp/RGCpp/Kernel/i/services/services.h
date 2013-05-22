@@ -2,7 +2,7 @@
 #define SERVICES_H
 
 #include "./../defines.h"
-#include "./../services/interfaces/iservice.h"
+#include "./interfaces/iservice.h"
 
 class IConfig;
 class ILog;
