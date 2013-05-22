@@ -16,7 +16,6 @@ public:
 
 public:
   virtual QString getPath(const QString& directory, int level, int x, int y, const QString& layer = QString(), const QVariant& layerParams = QVariant());
-
   virtual const MapLayerList& layers() const;
   virtual void addLayer(IMapLayer *layer);
   virtual void removeLayer(const QString& name);

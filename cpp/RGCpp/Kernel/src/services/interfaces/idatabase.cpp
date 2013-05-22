@@ -1,4 +1,4 @@
-#include "./../../../services/interfaces/idatabase.h"
+#include "./../../../i/services/interfaces/idatabase.h"
 
 IDatabase::IDatabase(QObject* parent) :
   Service(parent)

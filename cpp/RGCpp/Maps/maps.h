@@ -1,13 +1,13 @@
 #ifndef MAPS_H
 #define MAPS_H
 
-#include "./defines.h"
+#include "./i/defines.h"
 
-#include "./maps/mapfragment.h"
-#include "./maps/interfaces/imaplayer.h"
-#include "./maps/maplayer.h"
-#include "./maps/blankmaplayer.h"
-#include "./maps/interfaces/imap.h"
-#include "./maps/map.h"
+#include "./i/maps/mapfragment.h"
+#include "./i/maps/interfaces/imaplayer.h"
+#include "./i/maps/maplayer.h"
+#include "./i/maps/blankmaplayer.h"
+#include "./i/maps/interfaces/imap.h"
+#include "./i/maps/map.h"
 
 #endif // MAPS_H

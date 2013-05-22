@@ -1,4 +1,4 @@
-#include "./../../services/factory.h"
+#include "./../../i/services/factory.h"
 
 Factory::Factory(QObject* parent) :
   IFactory(parent)

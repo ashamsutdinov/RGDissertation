@@ -1,4 +1,4 @@
-#include "./../../application/singleapplication.h"
+#include "./../../i/application/singleapplication.h"
 
 SingleApplication::SingleApplication(int argc, char *argv[]) :
   QApplication(argc, argv)

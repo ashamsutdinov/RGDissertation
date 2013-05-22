@@ -1,4 +1,4 @@
-#include "./../../maps/blankmaplayer.h"
+#include "./../../i/maps/blankmaplayer.h"
 
 BlankMapLayer::BlankMapLayer(IMap* map) :
   MapLayer(map)

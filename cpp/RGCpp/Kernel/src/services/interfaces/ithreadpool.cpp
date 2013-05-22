@@ -1,4 +1,4 @@
-#include "./../../../services/interfaces/ithreadpool.h"
+#include "./../../../i/services/interfaces/ithreadpool.h"
 
 IThreadPool::IThreadPool(QObject* parent) :
   Service(parent)

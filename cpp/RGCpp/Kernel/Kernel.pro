@@ -35,27 +35,27 @@ SOURCES += \
 
 HEADERS += \
     kernel.h\
-    enums/bitmask.h \
-    utils/ioccontainer.h \
-    utils/singleton.h \
-    services/interfaces/iservice.h \
-    services/interfaces/ithreadpool.h \
-    services/interfaces/ifactory.h \
-    services/interfaces/iconfig.h \
-    services/interfaces/ilog.h \
-    services/interfaces/idatabase.h \
-    interfaces/idisposable.h \
-    application/kernelapplication.h \
-    utils/localserver.h \
-    services/service.h \
-    services/services.h \
-    services/config.h \
-    services/database.h \
-    services/factory.h \
-    services/log.h \
-    services/threadpool.h \
-    application/singleapplication.h \
-    defines.h
+    i/enums/bitmask.h \
+    i/utils/ioccontainer.h \
+    i/utils/singleton.h \
+    i/services/interfaces/iservice.h \
+    i/services/interfaces/ithreadpool.h \
+    i/services/interfaces/ifactory.h \
+    i/services/interfaces/iconfig.h \
+    i/services/interfaces/ilog.h \
+    i/services/interfaces/idatabase.h \
+    i/interfaces/idisposable.h \
+    i/application/kernelapplication.h \
+    i/utils/localserver.h \
+    i/services/service.h \
+    i/services/services.h \
+    i/services/config.h \
+    i/services/database.h \
+    i/services/factory.h \
+    i/services/log.h \
+    i/services/threadpool.h \
+    i/application/singleapplication.h \
+    i/defines.h
 
 RESOURCES += \
     Resources.qrc

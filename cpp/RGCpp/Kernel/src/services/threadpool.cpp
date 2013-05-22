@@ -1,4 +1,4 @@
-#include "./../../services/threadpool.h"
+#include "./../../i/services/threadpool.h"
 
 ThreadPool::ThreadPool(QObject* parent)
   : IThreadPool(parent)

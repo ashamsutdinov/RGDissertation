@@ -1,4 +1,4 @@
-#include "./../../maps/mapfragment.h"
+#include "./../../i/maps/mapfragment.h"
 
 MapFragment::MapFragment(QBitmap *leftTop, QBitmap *rightTop, QBitmap *leftBottom, QBitmap *rightBottom)
 {

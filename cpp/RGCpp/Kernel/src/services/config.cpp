@@ -1,4 +1,4 @@
-#include "./../../services/config.h"
+#include "./../../i/services/config.h"
 
 Config::Config(QObject* parent) :
   IConfig(parent)

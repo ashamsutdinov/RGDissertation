@@ -23,13 +23,13 @@ SOURCES += \
 
 HEADERS += \
   maps.h\
-  maps/interfaces/imap.h \
-  defines.h \
-    maps/mapfragment.h \
-    maps/interfaces/imaplayer.h \
-    maps/maplayer.h \
-    maps/blankmaplayer.h \
-    maps/map.h
+  i/maps/interfaces/imap.h \
+  i/defines.h \
+  i/maps/mapfragment.h \
+  i/maps/interfaces/imaplayer.h \
+  i/maps/maplayer.h \
+  i/maps/blankmaplayer.h \
+  i/maps/map.h
 
 LIBS += -L../build/lib \
     -lKernel

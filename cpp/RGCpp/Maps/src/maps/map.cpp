@@ -1,5 +1,5 @@
-#include "./../../maps/map.h"
-#include "./../../maps/interfaces/imaplayer.h"
+#include "./../../i/maps/map.h"
+#include "./../../i/maps/interfaces/imaplayer.h"
 
 Map::Map(QObject* parent) :
   IMap(parent)

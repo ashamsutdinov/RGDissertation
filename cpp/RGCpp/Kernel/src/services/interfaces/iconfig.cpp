@@ -1,4 +1,4 @@
-#include "./../../../services/interfaces/iconfig.h"
+#include "./../../../i/services/interfaces/iconfig.h"
 
 IConfig::IConfig(QObject* parent) :
   Service(parent)

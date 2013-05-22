@@ -1,6 +1,11 @@
 #ifndef MAP_DEFAULTS_H
 #define MAP_DEFAULTS_H
 
+#include <QtCore>
+#include <QtGui>
+#include <QtWidgets>
+#include <QtNetwork>
+
 #include <kernel.h>
 
 #if defined(MAPS_LIBRARY)

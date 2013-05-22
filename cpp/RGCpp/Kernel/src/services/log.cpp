@@ -1,4 +1,4 @@
-#include "./../../services/log.h"
+#include "./../../i/services/log.h"
 
 Log::Log(QObject* parent) :
   ILog(parent)

@@ -1,4 +1,4 @@
-#include "./../../utils/ioccontainer.h"
+#include "./../../i/utils/ioccontainer.h"
 
 IoCContainerImpl::IoCContainerImpl(QObject *parent) :
   Service(parent)

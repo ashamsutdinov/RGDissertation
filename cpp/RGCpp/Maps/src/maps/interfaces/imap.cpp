@@ -1,4 +1,4 @@
-#include "./../../../maps/interfaces/imap.h"
+#include "./../../../i/maps/interfaces/imap.h"
 
 IMap::IMap(QObject* parent) :
   Service(parent)

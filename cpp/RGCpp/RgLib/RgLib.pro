@@ -14,21 +14,21 @@ TEMPLATE = lib
 DEFINES += RGLIB_LIBRARY
 
 SOURCES += \
-    point.cpp \
-    irgmap.cpp \
-    irgdirecttransformmap.cpp \
-    irgreversetransformmap.cpp \
-    rgapplication.cpp
+    src/points/point.cpp \
+    src/maps/interfaces/irgmap.cpp \
+    src/maps/interfaces/irgdirecttransformmap.cpp \
+    src/maps/interfaces/irgreversetransformmap.cpp \
+    src/application/rgapplication.cpp
 
 HEADERS +=\
-    rglib_global.h \
     rg.h \
-    projection.h \    
-    point.h \
-    irgmap.h \
-    irgdirecttransformmap.h \
-    irgreversetransformmap.h \
-    rgapplication.h
+    i/enums/projection.h \
+    i/points/point.h \
+    i/maps/interfaces/irgmap.h \
+    i/maps/interfaces/irgdirecttransformmap.h \
+    i/maps/interfaces/irgreversetransformmap.h \
+    i/application/rgapplication.h \
+    i/defines.h
 
 LIBS += -L../build/lib \
     -lKernel \

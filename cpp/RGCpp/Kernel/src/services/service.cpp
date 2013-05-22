@@ -1,4 +1,4 @@
-#include "./../../services/service.h"
+#include "./../../i/services/service.h"
 
 Service::Service(QObject* parent) :
   IService(parent)
