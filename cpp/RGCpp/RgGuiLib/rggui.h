@@ -1,8 +1,7 @@
 #ifndef RGGUI_H
 #define RGGUI_H
 
-#include "rgguilib_global.h"
-
-#include "rgguilib.h"
+#include "./i/defines.h"
+#include "./i/windows/rgmainwindow.h"
 
 #endif // RGGUI_H

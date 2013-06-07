@@ -1,13 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include "./../defines.h"
 
 namespace Ui {
   class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow :
+        public RgMainWindow
 {
   Q_OBJECT
   

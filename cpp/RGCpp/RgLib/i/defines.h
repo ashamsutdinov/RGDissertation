@@ -1,5 +1,5 @@
-#ifndef RGLIB_GLOBAL_H
-#define RGLIB_GLOBAL_H
+#ifndef RG_DEFINES_H
+#define RG_DEFINES_H
 
 #include <QtCore>
 #include <QtGui>
@@ -15,4 +15,8 @@
 #  define RGLIBSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // RGLIB_GLOBAL_H
+#define RGSPACE_DIM     2
+#define CSPACE_DIM      3
+#define COORD_ZERO      0.0
+
+#endif // RG_DEFINES_H

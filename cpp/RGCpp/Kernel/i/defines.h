@@ -1,5 +1,5 @@
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef KERNEL_DEFINES_H
+#define KERNEL_DEFINES_H
 
 #include <typeinfo>
 #include <typeindex>
@@ -25,4 +25,4 @@
 
 #define LOCAL_SERVER_NAME "localhost"
 
-#endif // DEFINES_H
+#endif // KERNEL_DEFINES_H

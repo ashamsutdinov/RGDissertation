@@ -13,20 +13,25 @@ TEMPLATE = lib
 
 DEFINES += RGGUILIB_LIBRARY
 
-SOURCES += rgguilib.cpp
+SOURCES += \
+    src/windows/rgmainwindow.cpp
 
 HEADERS += \
-    rgguilib.h\
-    rgguilib_global.h \
-    rggui.h
+    rggui.h \
+    i/defines.h \
+    i/windows/rgmainwindow.h
 
 
 LIBS += -L../build/lib \
     -lKernel \
+    -lMaps \
     -lRgLib
 
 INCLUDEPATH += $$PWD/../Kernel
 DEPENDPATH += $$PWD/../Kernel
+
+INCLUDEPATH += $$PWD/../Maps
+DEPENDPATH += $$PWD/../Maps
 
 INCLUDEPATH += $$PWD/../RgLib
 DEPENDPATH += $$PWD/../RgLib

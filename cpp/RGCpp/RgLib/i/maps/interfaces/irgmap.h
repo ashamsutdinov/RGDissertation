@@ -1,49 +1,20 @@
 #ifndef IRGMAP_H
 #define IRGMAP_H
 
-#include "rglib_global.h"
-#include "projection.h"
-#include "maps.h"
+#include "./../../defines.h"
+#include "./../../enums/projection.h"
 
 class RGLIBSHARED_EXPORT IRgMap :
-    public Map
+        public ProjectedMap<CProjection, CSPACE_DIM>
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit IRgMap(QObject* parent);
-  virtual ~IRgMap();
-
-public:
-  virtual CProjection projection() const = 0;
-  virtual void setProjection(const CProjection proj) = 0;
-
-protected:
-  virtual void initializeTransform() = 0;
+    explicit IRgMap(QObject* parent);
+    virtual ~IRgMap();
 
 signals:
-  void projectionChanged(IRgMap* instance, CProjection projection);
-};
-
-class RGLIBSHARED_EXPORT RgMap :
-    public IRgMap
-{
-  Q_OBJECT
-
-private:
-  CProjection _projection;
-
-public:
-  explicit RgMap( QObject* parent);
-  virtual ~RgMap();
-
-public:
-  virtual CProjection projection() const;
-  virtual void setProjection(const CProjection proj);
-
-protected:
-  virtual QBitmap* createBlankSquare(int level = 0, int x = 0, int y = 0);
-  virtual void initializeInternal();
+    void projectionChanged(IMap* map, const CProjection& proj);
 };
 
 #endif // IRGMAP_H

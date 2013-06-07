@@ -2,7 +2,7 @@
 #define LOG_H
 
 #include "./../defines.h"
-#include "./../services/interfaces/ilog.h"
+#include "./interfaces/ilog.h"
 
 class KERNELSHARED_EXPORT Log :    
     public ILog

@@ -9,5 +9,6 @@
 #include "./i/maps/blankmaplayer.h"
 #include "./i/maps/interfaces/imap.h"
 #include "./i/maps/map.h"
+#include "./i/maps/projectedmap.h"
 
 #endif // MAPS_H

@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 #include "./../defines.h"
-#include "./../services/interfaces/iconfig.h"
+#include "./interfaces/iconfig.h"
 
 class KERNELSHARED_EXPORT Config :
     public IConfig

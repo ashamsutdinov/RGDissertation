@@ -2,7 +2,7 @@
 #define DATABASE_H
 
 #include "./../defines.h"
-#include "./../services/interfaces/idatabase.h"
+#include "./interfaces/idatabase.h"
 
 class KERNELSHARED_EXPORT Database :
     public IDatabase
