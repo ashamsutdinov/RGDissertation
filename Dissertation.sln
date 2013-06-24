@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReverseTransformC0C2", "UI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReverseTransformC1C2", "UI\ReverseTransformC1C2\ReverseTransformC1C2.csproj", "{C022C860-39E7-46C7-B2B1-B704B9DD4FFB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGTransform", "UI\ReverseTransform\RGTransform\RGTransform.csproj", "{0F9BCC90-4652-4282-920A-4EF7060033E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -185,6 +187,18 @@ Global
 		{C022C860-39E7-46C7-B2B1-B704B9DD4FFB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C022C860-39E7-46C7-B2B1-B704B9DD4FFB}.Release|x64.ActiveCfg = Release|Any CPU
 		{C022C860-39E7-46C7-B2B1-B704B9DD4FFB}.Release|x86.ActiveCfg = Release|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Release|x64.ActiveCfg = Release|Any CPU
+		{0F9BCC90-4652-4282-920A-4EF7060033E2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -202,5 +216,6 @@ Global
 		{469CA298-3F34-43E3-9BC2-9EF313351837} = {908408D4-D744-4AA7-B914-8EB691EA6867}
 		{DB437030-BC7C-4B70-855C-1736F704C3F6} = {908408D4-D744-4AA7-B914-8EB691EA6867}
 		{C022C860-39E7-46C7-B2B1-B704B9DD4FFB} = {908408D4-D744-4AA7-B914-8EB691EA6867}
+		{0F9BCC90-4652-4282-920A-4EF7060033E2} = {908408D4-D744-4AA7-B914-8EB691EA6867}
 	EndGlobalSection
 EndGlobal
