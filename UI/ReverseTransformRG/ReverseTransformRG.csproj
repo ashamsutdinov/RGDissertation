@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{469CA298-3F34-43E3-9BC2-9EF313351837}</ProjectGuid>
+    <ProjectGuid>{69EA6480-909A-4435-B316-7FEBA10E12BA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReverseTransform</RootNamespace>

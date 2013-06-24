@@ -23,7 +23,7 @@ namespace ReverseTransform
 
     private List<CPoint> PointTrack
     {
-      get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.ReserverInterestedPoint, CProjection.UpC0C1).ToList()); }
+      get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.ReserverInterestedPoint, CProjection.UpC1C2).ToList()); }
     }
 
     public int PointNumber { private get; set; }
@@ -40,12 +40,12 @@ namespace ReverseTransform
       var frame = new ProcessingFrame
       {
         Rectangle = new DRect
-          {
-            X = -1.0,
-            Y = -1.0,
-            Width = 2.0,
-            Height = 2.0
-          }
+        {
+          X = -1.0,
+          Y = -1.0,
+          Width = 2.0,
+          Height = 2.0
+        }
       };
 
       _stack.Push(frame);
@@ -66,7 +66,7 @@ namespace ReverseTransform
     {
       var np = NPt(p1);
       var gr = Graphics.FromImage(pictureBox.Image);
-      var bgClr = RG.GetColorReversed(new CPoint(p1), CProjection.UpC0C1);
+      var bgClr = RG.GetColorReversed(new CPoint(p1), CProjection.UpC1C2);
       var blend = RG.Blend(clr, bgClr);
       gr.TryDraw(g => g.FillEllipse(new SolidBrush(clr), np.X - 2, np.Y - 2, 4, 4));
       gr.TryDraw(g => g.DrawRectangle(new Pen(blend), np.X - 10, np.Y - 10, 20, 20));
@@ -89,27 +89,19 @@ namespace ReverseTransform
 
     private Point NPt(CPoint p)
     {
-      return NPt(p.C0, p.C1);
+      var rg = p.RG(CProjection.UpC1C2);
+      return NPt(rg.R, rg.G);
     }
 
     private void FillPixel(Bitmap bmp, double x, double y)
     {
-      var c0 = x;
-      var c1 = y;
-      var rd = c0 * c0 + c1 * c1;
-      var c2 = 1 - rd;
-      var pt = NPt(c0, c1);
-      if (rd <= 1)
-      {
-        c2 = Math.Sqrt(c2);
-        var cpt = new CPoint(c0, c1, c2);
-        var color = RG.GetColorReversed(cpt, CProjection.UpC0C1);
-        SetPixel(bmp, pt.X, pt.Y, color);
-      }
-      else
-      {
-        SetPixel(bmp, pt.X, pt.Y, Config.White);
-      }
+      var r = x;
+      var g = y;
+      var rg = new RGPoint { R = r, G = g };
+      var cpt = rg.CReversed;
+      var color = RG.GetColorReversed(cpt, CProjection.UpC1C2);
+      var pt = NPt(r, g);
+      SetPixel(bmp, pt.X, pt.Y, color);
     }
 
     private void Redraw()
@@ -182,22 +174,17 @@ namespace ReverseTransform
 
       if (_pointSelecting)
       {
-        var c0 = newX;
-        var c1 = newY;
-        var rd = c0 * c0 + c1 * c1;
-        var c2 = 1 - rd;
-        if (rd <= 1)
-        {
-          c2 = Math.Sqrt(c2);
-          var cpt = new CPoint(c0, c1, c2);
-          _pointSelected = cpt;
-          PointNumber = 0;
-          DrawPoint();
-        }
+        var rx = newX;
+        var gx = newY;
+        var rg = new RGPoint { R = rx, G = gx };
+        var cpt = rg.CReversed;
+        _pointSelected = cpt;
+        PointNumber = 0;
+        DrawPoint();
         _pointSelecting = false;
         var tr = new TrackPoint(this, PointTrack.Count);
         tr.Show(this);
-        track.Lines = PointTrack.Select(p => string.Format("{0} {1}", p, p.RG(CProjection.C0C1))).ToArray();
+        track.Lines = PointTrack.Select(p => string.Format("{0} {1}", p, p.RG(CProjection.C0C2))).ToArray();
       }
       else
       {
