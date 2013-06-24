@@ -52,6 +52,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrackPoint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrackPoint.Designer.cs">
+      <DependentUpon>TrackPoint.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="RGMain.resx">
       <DependentUpon>RGMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -64,6 +70,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TrackPoint.resx">
+      <DependentUpon>TrackPoint.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -76,6 +85,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\RgLib\RgLib.csproj">
+      <Project>{6286f950-cc88-493a-8139-84f3a3bf3a04}</Project>
+      <Name>RgLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

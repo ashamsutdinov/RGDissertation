@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReverseTransformC0C2", "UI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReverseTransformC1C2", "UI\ReverseTransformC1C2\ReverseTransformC1C2.csproj", "{C022C860-39E7-46C7-B2B1-B704B9DD4FFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGTransform", "UI\ReverseTransform\RGTransform\RGTransform.csproj", "{0F9BCC90-4652-4282-920A-4EF7060033E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGTransform", "UI\RGTransform\RGTransform.csproj", "{0F9BCC90-4652-4282-920A-4EF7060033E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
