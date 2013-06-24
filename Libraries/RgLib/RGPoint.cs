@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RgLib;
 
 namespace ReverseTransform
 {
@@ -58,7 +59,7 @@ namespace ReverseTransform
 
         public static IEnumerable<RGPoint> ParabolaReversed(double a, double b, double rmin, double rmax, double rstep, bool beforeTrans = true)
         {
-            var l1 = RGSettings.LambdaMinus1;
+            var l1 = RgSettings.LambdaMinus1;
             if (!beforeTrans)
             {
                 l1 = 1;
@@ -75,7 +76,7 @@ namespace ReverseTransform
             var l1 = 1d;
             if (!beforeTrans)
             {
-                l1 = RGSettings.Lambda;
+                l1 = RgSettings.Lambda;
             }
 
             for (var r = rmin; r <= rmax; r += rstep)
@@ -415,19 +416,19 @@ namespace ReverseTransform
 
         public RGPoint ReverseIterated()
         {
-            var rPlusLambda = R + RGSettings.Lambda;
+            var rPlusLambda = R + RgSettings.Lambda;
             var rPlusLambda2 = rPlusLambda * rPlusLambda;
-            var r1 = RGSettings.LambdaMinus1 * (((rPlusLambda2 - G) / (rPlusLambda2 - RGSettings.N * G)) * rPlusLambda - RGSettings.Lambda);
-            var g1 = (RGSettings.N / RGSettings.Lambda2) * Math.Pow((rPlusLambda2 - G) / (rPlusLambda2 - RGSettings.N * G), 2) * G;
+            var r1 = RgSettings.LambdaMinus1 * (((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G)) * rPlusLambda - RgSettings.Lambda);
+            var g1 = (RgSettings.N / RgSettings.Lambda2) * Math.Pow((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G), 2) * G;
             return new RGPoint { R = r1, G = g1 };
         }
 
         public void IterateReverse()
         {
-            var rPlusLambda = R + RGSettings.Lambda;
+            var rPlusLambda = R + RgSettings.Lambda;
             var rPlusLambda2 = rPlusLambda * rPlusLambda;
-            var r1 = RGSettings.LambdaMinus1 * (((rPlusLambda2 - G) / (rPlusLambda2 - RGSettings.N * G)) * rPlusLambda - RGSettings.Lambda);
-            var g1 = (RGSettings.N / RGSettings.Lambda2) * Math.Pow((rPlusLambda2 - G) / (rPlusLambda2 - RGSettings.N * G), 2) * G;
+            var r1 = RgSettings.LambdaMinus1 * (((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G)) * rPlusLambda - RgSettings.Lambda);
+            var g1 = (RgSettings.N / RgSettings.Lambda2) * Math.Pow((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G), 2) * G;
             R = r1;
             G = g1;
         }

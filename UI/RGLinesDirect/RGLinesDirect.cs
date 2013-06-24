@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using ReverseTransform;
+using RgLib;
 
 namespace RGLines
 {
@@ -111,7 +112,7 @@ namespace RGLines
 
     private void BtnDefBClick(object sender, EventArgs e)
     {
-      _b = -(RGSettings.Lambda * RGSettings.N - RGSettings.Lambda) / (RGSettings.Lambda * RGSettings.N - 1);
+      _b = -(RgSettings.Lambda * RgSettings.N - RgSettings.Lambda) / (RgSettings.Lambda * RgSettings.N - 1);
       txtLineB.Text = _b.ToString(CultureInfo.InvariantCulture).Replace(".", ",");
     }
 
@@ -227,17 +228,17 @@ namespace RGLines
     {
       var alpha = double.Parse(txtAlpha.Text);
       var n = double.Parse(txtN.Text);
-      RGSettings.Build(alpha, n);
+      RgSettings.Build(alpha, n);
     }
 
     private void ApplyLineSettings()
     {
       _a = double.Parse(txtLineA.Text);
-      _a1 = ((RGSettings.NMinus1 - 1) * _a) / (_a - _b - 1 + RGSettings.NMinus1);
-      _a11 = RGSettings.Lambda * _a;
+      _a1 = ((RgSettings.NMinus1 - 1) * _a) / (_a - _b - 1 + RgSettings.NMinus1);
+      _a11 = RgSettings.Lambda * _a;
       _b = double.Parse(txtLineB.Text);
-      _b1 = (_b - RGSettings.NMinus1 * _a) / (1 - RGSettings.NMinus1);
-      _b11 = RGSettings.Lambda * (RGSettings.N * (_b + 1) - 1);
+      _b1 = (_b - RgSettings.NMinus1 * _a) / (1 - RgSettings.NMinus1);
+      _b11 = RgSettings.Lambda * (RgSettings.N * (_b + 1) - 1);
       _rmin = double.Parse(txtRMin.Text);
       _rmax = double.Parse(txtRMax.Text);
       _rstep = double.Parse(txtRStep.Text);
@@ -280,8 +281,8 @@ namespace RGLines
       foreach (var rp1 in _rline1)
       {
         var r = rp1.R;
-        var r1 = RGSettings.Lambda * ((_a - _b - 1 + RGSettings.NMinus1) / (1 - RGSettings.NMinus1)) * ((r - _a1) / (r - _b1));
-        var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + RGSettings.Lambda, 2);
+        var r1 = RgSettings.Lambda * ((_a - _b - 1 + RgSettings.NMinus1) / (1 - RgSettings.NMinus1)) * ((r - _a1) / (r - _b1));
+        var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + RgSettings.Lambda, 2);
         var rp2 = new RGPoint { R = r1, G = g1 };
         _rline2.Add(rp2);
       }

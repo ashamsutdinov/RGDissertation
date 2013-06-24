@@ -6,9 +6,9 @@ namespace ReverseTransform
 {
   public partial class TrackPoint : Form
   {
-    private readonly RGMain _form;
+    private readonly RgMain _form;
 
-    public TrackPoint(RGMain form, int max)
+    public TrackPoint(RgMain form, int max)
     {
       InitializeComponent();
       trackBar.Minimum = 0;

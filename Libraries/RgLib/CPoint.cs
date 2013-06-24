@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RgLib;
 
 namespace ReverseTransform
 {
@@ -158,11 +159,11 @@ namespace ReverseTransform
       var c1MinusC0 = C1 - C0;
       var c2MunusC1 = C2 - C1;
       var c0C2MinusC1Sq = C0 * C2 - C1 * C1;
-      var n1 = RGSettings.OneDivN;
+      var n1 = RgSettings.OneDivN;
 
       var c0 = (c1MinusC0 * c1MinusC0 + n1 * c0C2MinusC1Sq);
-      var c1 = RGSettings.Lambda * (c1MinusC0 * c2MunusC1 + n1 * c0C2MinusC1Sq);
-      var c2 = RGSettings.Lambda2 * (c2MunusC1 * c2MunusC1 + n1 * c0C2MinusC1Sq);
+      var c1 = RgSettings.Lambda * (c1MinusC0 * c2MunusC1 + n1 * c0C2MinusC1Sq);
+      var c2 = RgSettings.Lambda2 * (c2MunusC1 * c2MunusC1 + n1 * c0C2MinusC1Sq);
 
       var res = new CPoint(c0, c1, c2);
       res.Project(projection);
@@ -172,12 +173,12 @@ namespace ReverseTransform
     public CPoint ReverseIterated(CProjection projection)
     {
       var c0C2MinusC1 = C0 * C2 - C1 * C1;
-      var c0MinusLambdaMinus1C1 = C0 - RGSettings.LambdaMinus1 * C1;
-      var c1MinusLambdaMinus1C2 = C1 - RGSettings.LambdaMinus1 * C2;
+      var c0MinusLambdaMinus1C1 = C0 - RgSettings.LambdaMinus1 * C1;
+      var c1MinusLambdaMinus1C2 = C1 - RgSettings.LambdaMinus1 * C2;
 
-      var c0 = c0MinusLambdaMinus1C1 * c0MinusLambdaMinus1C1 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
-      var c1 = RGSettings.LambdaMinus1 * c0MinusLambdaMinus1C1 * c1MinusLambdaMinus1C2 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
-      var c2 = RGSettings.LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c0 = c0MinusLambdaMinus1C1 * c0MinusLambdaMinus1C1 + RgSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c1 = RgSettings.LambdaMinus1 * c0MinusLambdaMinus1C1 * c1MinusLambdaMinus1C2 + RgSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c2 = RgSettings.LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + RgSettings.NLambdaMinus2 * c0C2MinusC1;
 
       var res = new CPoint(c0, c1, c2);
       res.Project(projection);
@@ -187,12 +188,12 @@ namespace ReverseTransform
     public void IterateReverse()
     {
       var c0C2MinusC1 = C0 * C2 - C1 * C1;
-      var c0MinusLambdaMinus1C1 = C0 - RGSettings.LambdaMinus1 * C1;
-      var c1MinusLambdaMinus1C2 = C1 - RGSettings.LambdaMinus1 * C2;
+      var c0MinusLambdaMinus1C1 = C0 - RgSettings.LambdaMinus1 * C1;
+      var c1MinusLambdaMinus1C2 = C1 - RgSettings.LambdaMinus1 * C2;
 
-      var c0 = c0MinusLambdaMinus1C1 * c0MinusLambdaMinus1C1 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
-      var c1 = RGSettings.LambdaMinus1 * c0MinusLambdaMinus1C1 * c1MinusLambdaMinus1C2 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
-      var c2 = RGSettings.LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + RGSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c0 = c0MinusLambdaMinus1C1 * c0MinusLambdaMinus1C1 + RgSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c1 = RgSettings.LambdaMinus1 * c0MinusLambdaMinus1C1 * c1MinusLambdaMinus1C2 + RgSettings.NLambdaMinus2 * c0C2MinusC1;
+      var c2 = RgSettings.LambdaMinus2 * c1MinusLambdaMinus1C2 * c1MinusLambdaMinus1C2 + RgSettings.NLambdaMinus2 * c0C2MinusC1;
 
       Build(c0, c1, c2);
     }

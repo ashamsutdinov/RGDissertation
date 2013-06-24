@@ -1,6 +1,6 @@
 ﻿namespace RGTransform
 {
-    partial class RGMain
+    partial class RgMain
     {
         /// <summary>
         /// Required designer variable.
@@ -121,7 +121,7 @@
             this.ClientSize = new System.Drawing.Size(791, 772);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.pictureBox);
-            this.Name = "RGMain";
+            this.Name = "RgMain";
             this.Text = "RG Plain";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.menuStrip1.ResumeLayout(false);

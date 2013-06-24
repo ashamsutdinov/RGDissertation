@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using ReverseTransform;
+using RgLib;
 
 namespace RGLines
 {
@@ -113,7 +114,7 @@ namespace RGLines
 
     private void BtnDefBClick(object sender, EventArgs e)
     {
-      _b = -(RGSettings.N - 1) / (RGSettings.N - RGSettings.Lambda);
+      _b = -(RgSettings.N - 1) / (RgSettings.N - RgSettings.Lambda);
       txtLineB.Text = _b.ToString(CultureInfo.InvariantCulture).Replace(".", ",");
     }
 
@@ -229,17 +230,17 @@ namespace RGLines
     {
       var alpha = double.Parse(txtAlpha.Text);
       var n = double.Parse(txtN.Text);
-      RGSettings.Build(alpha, n);
+      RgSettings.Build(alpha, n);
     }
 
     private void ApplyLineSettings()
     {
       _a = double.Parse(txtLineA.Text);
-      _a1 = ((RGSettings.N - 1) * _a) / (_a - _b + (RGSettings.N + 1) * Math.Pow(RGSettings.Lambda, -1));
-      _a11 = RGSettings.Lambda * _a;
+      _a1 = ((RgSettings.N - 1) * _a) / (_a - _b + (RgSettings.N + 1) * Math.Pow(RgSettings.Lambda, -1));
+      _a11 = RgSettings.Lambda * _a;
       _b = double.Parse(txtLineB.Text);
-      _b1 = (_b - RGSettings.N * _a) / (1 - RGSettings.N);
-      _b11 = (1 + RGSettings.Lambda * _b) / RGSettings.N - 1;
+      _b1 = (_b - RgSettings.N * _a) / (1 - RgSettings.N);
+      _b11 = (1 + RgSettings.Lambda * _b) / RgSettings.N - 1;
       _rmin = double.Parse(txtRMin.Text);
       _rmax = double.Parse(txtRMax.Text);
       _rstep = double.Parse(txtRStep.Text);
@@ -283,7 +284,7 @@ namespace RGLines
       foreach (var rp1 in _rline1)
       {
         var r = rp1.R;
-        var r1 = RGSettings.Lambda * ((_a - _b + (RGSettings.N - 1) * Math.Pow(RGSettings.Lambda, -1)) / (1 - RGSettings.N)) * ((r - _a1) / (r - _b1));
+        var r1 = RgSettings.Lambda * ((_a - _b + (RgSettings.N - 1) * Math.Pow(RgSettings.Lambda, -1)) / (1 - RgSettings.N)) * ((r - _a1) / (r - _b1));
         var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + 1, 2);
         var rp2 = new RGPoint { R = r1, G = g1 };
         _rline2.Add(rp2);
@@ -291,7 +292,7 @@ namespace RGLines
       _line2 = _rline2.Select(rg => rg.CReversed).ToList();
 
       var nearestToB = _rline1.OrderBy(rp => Math.Abs(rp.R - _b)).FirstOrDefault();
-      var nearestToL = _rline1.OrderBy(rp => Math.Abs(rp.R - (-Math.Pow(RGSettings.Lambda, -1)))).FirstOrDefault();
+      var nearestToL = _rline1.OrderBy(rp => Math.Abs(rp.R - (-Math.Pow(RgSettings.Lambda, -1)))).FirstOrDefault();
 
       var cNearestToB = nearestToB != null ? nearestToB.CReversed : null;
       var cNearesToL = nearestToL != null ? nearestToL.CReversed : null;

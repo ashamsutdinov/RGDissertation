@@ -1,15 +1,17 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Drawing;
+using ReverseTransform;
 
-namespace ReverseTransform
+namespace RgLib
 {
-    public class Config : RGSettings
+    public class Config : RgSettings
     {
         public static readonly double Acc = 0.000001;
 
         public static readonly int Count = 100;
 
-        public static readonly RGPoint ReserverInterestedPointRG = new RGPoint { R = 0, G = 0 };
+        public static readonly RGPoint ReserverInterestedPointRg = new RGPoint { R = 0, G = 0 };
 
         public static readonly CPoint ReserverInterestedPoint = new CPoint(1, 0, 0);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using RgLib;
 
 namespace ReverseTransform
 {
@@ -171,13 +172,13 @@ namespace ReverseTransform
         {
             var rp = pt;
             int cnt;
-            var end = pt.ReverseTrackEndPoint(Config.ReserverInterestedPointRG, projection, out cnt);
+            var end = pt.ReverseTrackEndPoint(Config.ReserverInterestedPointRg, projection, out cnt);
             if (cnt >= Config.Count)
             {
                 return Config.Black;
             }
             var last = end;
-            var p = Config.ReserverInterestedPointRG;
+            var p = Config.ReserverInterestedPointRg;
             var clr = rp.G < 0
                             ? (last.R < p.R ? Config.Yellow : Config.Green)
                             : (last.R < p.R ? Config.Red : Config.Blue);

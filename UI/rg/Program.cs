@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
 using ReverseTransform;
+using RgLib;
 
 namespace rg
 {
@@ -114,9 +115,9 @@ namespace rg
       var rgParabola = RGPoint.ParabolaReversed(a, b, -1000, 1000, 0.1, beforeTrans);
       var rgPoints = rgParabola as RGPoint[] ?? rgParabola.ToArray();
       var beforeB = rgPoints.Where(rg => rg.R <= b).ToList();
-      var fromBtoL = rgPoints.Where(rg => rg.R >= b && rg.R <= RGSettings.LambdaMinus1).ToList();
-      var fromLtoB = rgPoints.Where(rg => rg.R >= RGSettings.LambdaMinus1 && rg.R <= b).ToList();
-      var fromL = rgPoints.Where(rg => rg.R >= RGSettings.LambdaMinus1).ToList();
+      var fromBtoL = rgPoints.Where(rg => rg.R >= b && rg.R <= RgSettings.LambdaMinus1).ToList();
+      var fromLtoB = rgPoints.Where(rg => rg.R >= RgSettings.LambdaMinus1 && rg.R <= b).ToList();
+      var fromL = rgPoints.Where(rg => rg.R >= RgSettings.LambdaMinus1).ToList();
 
       var cParabola1 = beforeB.Select(rg => rg.CReversed).ToList();
       var cParabola2 = fromBtoL.Select(rg => rg.CReversed).ToList();
@@ -253,7 +254,7 @@ namespace rg
       }
       OnePixelX = W / Sz;
       OnePixelY = H / Sz;
-      RGSettings.Build(alpha, n);
+      RgSettings.Build(alpha, n);
     }
 
     private static void CreateBitmap()
@@ -276,8 +277,8 @@ namespace rg
         AMax = AMin;
       var clrMax = (int)Math.Abs(AMax - AMin);
       var cnt = (int)(clrMax / AStep + 1);
-      var l = RGSettings.Lambda;
-      var b = -(RGSettings.N - 1) / (RGSettings.N - l);
+      var l = RgSettings.Lambda;
+      var b = -(RgSettings.N - 1) / (RgSettings.N - l);
       var gr = Graphics.FromImage(Image);
       Parallel.For(0, cnt, POpts, p =>
       {
@@ -328,7 +329,7 @@ namespace rg
       {
         singlePart = string.Format("single_{0}", AMin);
       }
-      var fname = string.Format("img/a{0}n{1}({2};{3})({4};{5}) ({6}).png", RGSettings.Alpha, RGSettings.N, X, Y, X + W, Y + W, singlePart);
+      var fname = string.Format("img/a{0}n{1}({2};{3})({4};{5}) ({6}).png", RgSettings.Alpha, RgSettings.N, X, Y, X + W, Y + W, singlePart);
       Image.Save(fname, ImageFormat.Png);
       Image.Dispose();
     }

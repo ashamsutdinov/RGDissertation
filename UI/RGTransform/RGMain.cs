@@ -4,12 +4,13 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ReverseTransform;
+using RgLib;
 
 namespace RGTransform
 {
-    public partial class RGMain : Form
+    public partial class RgMain : Form
     {
-        public RGMain()
+        public RgMain()
         {
             InitializeComponent();
         }
@@ -24,7 +25,7 @@ namespace RGTransform
 
         private List<RGPoint> PointTrack
         {
-            get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.ReserverInterestedPointRG).ToList()); }
+            get { return _pointTrack ?? (_pointTrack = _pointSelected.ReverseTrack(Config.ReserverInterestedPointRg).ToList()); }
         }
 
         public int PointNumber { private get; set; }
@@ -42,10 +43,10 @@ namespace RGTransform
             {
                 Rectangle = new DRect
                 {
-                    X = -1.0,
-                    Y = -1.0,
-                    Width = 2.0,
-                    Height = 2.0
+                    X = RgSettings.X1,
+                    Y = RgSettings.Y1,
+                    Width = RgSettings.W,
+                    Height = RgSettings.H
                 }
             };
 
@@ -110,12 +111,16 @@ namespace RGTransform
             var r = fr.Rectangle;
             var w = pictureBox.Width;
             var h = pictureBox.Height;
+            var fw = w * 1.2;
+            var fh = h * 1.2;
             var onepxw = r.Width / w;
             var onepxh = r.Height / h;
+            var fonepxw = r.Width / fw;
+            var fonepxh = r.Height / fh;
 
-            for (var x = r.X; x <= r.X + r.Width; x += onepxw)
+            for (var x = r.X; x <= r.X + r.Width; x += fonepxw)
             {
-                for (var y = r.Y; y <= r.Y + r.Height; y += onepxh)
+                for (var y = r.Y; y <= r.Y + r.Height; y += fonepxh)
                 {
                     FillPixel(bmp, x, y);
                 }
@@ -128,9 +133,7 @@ namespace RGTransform
             var ix1 = ix;
             var jy1 = jy;
             gr.TryDraw(g => g.DrawEllipse(Config.WhitePen, ix1 - 3, jy1 - 3, 6, 6));
-            ix = (float)(Math.Abs(1 - r.X) / onepxw);
-            jy = (float)(Math.Abs(r.Y) / onepxh);
-            gr.TryDraw(g => g.DrawEllipse(Config.RedPen, ix - 3, jy - 3, 6, 6));
+
 
             gr.Save();
 
@@ -221,7 +224,13 @@ namespace RGTransform
 
         private void BackToolStripMenuItemClick(object sender, EventArgs e)
         {
+            if (_stack.Count < 2)
+                return;
 
+            var peek = _stack.Pop();
+            pictureBox.Image = new Bitmap(peek.Bitmap);
+            DrawPoint();
+            pictureBox.Refresh();
         }
 
         private void SetPointToolStripMenuItemClick(object sender, EventArgs e)
