@@ -1,6 +1,6 @@
 ﻿namespace RGLines
 {
-    partial class RGLinesReverse
+    partial class RgLinesReverse
     {
         /// <summary>
         /// Required designer variable.
@@ -482,7 +482,7 @@
       this.Controls.Add(this.rgParamsGroup);
       this.Controls.Add(this.pictureBox);
       this.MaximizeBox = false;
-      this.Name = "RGLinesReverse";
+      this.Name = "RgLinesReverse";
       this.Text = "RG Lines";
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
       this.rgParamsGroup.ResumeLayout(false);
