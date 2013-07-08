@@ -225,6 +225,30 @@ namespace ReverseTransform
                 throw new NotSupportedException();
         }
 
+        public static void DrawPoint(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, CProjection projection, int radius = 3)
+        {
+            if (projection.HasFlag(CProjection.C0C1))
+                DrawPointC0C1(x, y, xsz, ysz, sz, clr, cp1, gr, radius);
+            else
+                throw new NotSupportedException();
+        }
+
+        public static void DrawCross(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, CProjection projection, int radius = 3)
+        {
+            if (projection.HasFlag(CProjection.C0C1))
+                DrawCrossC0C1(x, y, xsz, ysz, sz, clr, cp1, gr, radius);
+            else
+                throw new NotSupportedException();
+        }
+
+        public static void DrawXCross(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, CProjection projection, int radius = 3)
+        {
+            if (projection.HasFlag(CProjection.C0C1))
+                DrawXCrossC0C1(x, y, xsz, ysz, sz, clr, cp1, gr, radius);
+            else
+                throw new NotSupportedException();
+        }
+
         public static void SetPixel(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Bitmap bmp, CProjection projection)
         {
             if (projection.HasFlag(CProjection.C0C1))
@@ -282,6 +306,57 @@ namespace ReverseTransform
             lock (gr)
             {
                 gr.FillEllipse(brush, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
+            }
+        }
+
+        private static void DrawPointC0C1(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
+        {
+            var i1 = Correct((cp1.C0 - x) / xsz, sz);
+            var j1 = Correct((cp1.C1 - y) / ysz, sz);
+
+            var pen = new Pen(clr);
+
+            lock (gr)
+            {
+                gr.DrawEllipse(pen, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
+            }
+        }
+
+        private static void DrawCrossC0C1(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
+        {
+            var i1 = Correct((cp1.C0 - x) / xsz, sz);
+            var j1 = Correct((cp1.C1 - y) / ysz, sz);
+
+            var pen = new Pen(clr);
+
+            lock (gr)
+            {
+                var p1 = new Point((int)(i1 - radius), (int)j1);
+                var p2 = new Point((int)(i1 + radius), (int)j1);
+                var p3 = new Point((int)(i1), (int)(j1 - radius));
+                var p4 = new Point((int)(i1), (int)(j1 - radius));
+                gr.DrawEllipse(pen, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
+                gr.DrawLine(pen, p1, p2);
+                gr.DrawLine(pen, p3, p4);
+            }
+        }
+
+        private static void DrawXCrossC0C1(double x, double y, double xsz, double ysz, double sz, Color clr, CPoint cp1, Graphics gr, int radius = 3)
+        {
+            var i1 = Correct((cp1.C0 - x) / xsz, sz);
+            var j1 = Correct((cp1.C1 - y) / ysz, sz);
+
+            var pen = new Pen(clr);
+
+            lock (gr)
+            {
+                var p1 = new Point((int)(i1 - radius), (int)(j1 - radius));
+                var p2 = new Point((int)(i1 + radius), (int)(j1 + radius));
+                var p3 = new Point((int)(i1 - radius), (int)(j1 - radius));
+                var p4 = new Point((int)(i1 + radius), (int)(j1 - radius));
+                gr.DrawEllipse(pen, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
+                gr.DrawLine(pen, p1, p2);
+                gr.DrawLine(pen, p3, p4);
             }
         }
 

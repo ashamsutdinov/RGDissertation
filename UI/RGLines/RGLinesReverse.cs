@@ -79,19 +79,11 @@ namespace RGLines
 
         private List<CPoint> _areaInitialSetCPositive;
 
-        private List<CPoint> _areaInitialSetRareCPositive;
-
         private List<CPoint> _areaInitialSetCNegative;
-
-        private List<CPoint> _areaInitialSetRareCNegative;
 
         private List<List<CPoint>> _iteratedAreasCPositive;
 
-        private List<List<CPoint>> _iteratedAreasRareCPositive;
-
         private List<List<CPoint>> _iteratedAreasCNegative;
-
-        private List<List<CPoint>> _iteratedAreasRareCNegative;
 
         #endregion
 
@@ -345,62 +337,15 @@ namespace RGLines
             var initialLstNegative = (_arc ? RGPoint.GetArcNegative(_h1, _h2, _xpxsz, CProjection.UpC0C1) : RGPoint.GetTriangleNegative(_h1, _h2, _xpxsz, _ypxsz, CProjection.UpC0C1)).ToList();
             _areaInitialSetCPositive = initialLstPositive.Select(e => e.Key).ToList();
             _areaInitialSetCNegative = initialLstNegative.Select(e => e.Key).ToList();
-            _areaInitialSetRareCPositive = new List<CPoint>();
-            _areaInitialSetRareCNegative = new List<CPoint>();
 
             RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, _areaInitialSetCPositive, _bgWithArea, CProjection.UpC0C1);
             RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, _areaInitialSetCNegative, _bgWithArea, CProjection.UpC0C1);
 
-            CPoint prev = null;
-            foreach (var p in _areaInitialSetCPositive)
-            {
-                if (Math.Abs(p.Norm - 1) < 0.00000001)
-                {
-                    if (prev == null)
-                    {
-                        prev = p;
-                        _areaInitialSetRareCPositive.Add(p);
-                    }
-                    else
-                    {
-                        if (p.DistanceTo(prev) >= 0.1)
-                        {
-                            _areaInitialSetRareCNegative.Add(p);
-                            prev = p;
-                        }
-                    }
-                }
-            }
-
-            foreach (var p in _areaInitialSetCNegative)
-            {
-                if (Math.Abs(p.Norm - 1) < 0.00000001)
-                {
-                    if (prev == null)
-                    {
-                        prev = p;
-                        _areaInitialSetRareCNegative.Add(p);
-                    }
-                    else
-                    {
-                        if (p.DistanceTo(prev) >= 0.1)
-                        {
-                            _areaInitialSetRareCNegative.Add(p);
-                            prev = p;
-                        }
-                    }
-                }
-            }
-
             var iteratedPositive = RGPoint.ReverseIteratedMany(_areaInitialSetCPositive, trackArea.Maximum, CProjection.UpC0C1).ToList();
-            var iteratedRarePositive = RGPoint.ReverseIteratedMany(_areaInitialSetRareCPositive, trackArea.Maximum, CProjection.UpC0C1).ToList();
             var iteratedNegative = RGPoint.ReverseIteratedMany(_areaInitialSetCNegative, trackArea.Maximum, CProjection.UpC0C1).ToList();
-            var iteratedRareNegative = RGPoint.ReverseIteratedMany(_areaInitialSetRareCNegative, trackArea.Maximum, CProjection.UpC0C1).ToList();
             _iteratedAreasCPositive = iteratedPositive.Select(e => e.Key.ToList()).ToList();
-            _iteratedAreasRareCPositive = iteratedRarePositive.Select(e => e.Key.ToList()).ToList();
             _iteratedAreasCPositive.Insert(0, _areaInitialSetCPositive);
             _iteratedAreasCNegative = iteratedNegative.Select(e => e.Key.ToList()).ToList();
-            _iteratedAreasRareCNegative = iteratedRareNegative.Select(e => e.Key.ToList()).ToList();
             _iteratedAreasCNegative.Insert(0, _areaInitialSetCNegative);
 
             ChangePictureBoxPicture(_bgWithArea);
@@ -442,29 +387,40 @@ namespace RGLines
         {
             ChangePictureBoxPicture(_bg);
             var img = pictureBox.Image.Clone() as Bitmap;
+            /*
+            var gr = Graphics.FromImage(img);
+
+            RG.DrawPoint(X, Y, _xpxsz, _ypxsz, _sz, Config.White, new CPoint(0, 0, 1), gr, CProjection.UpC0C1);
+            RG.DrawPoint(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, new CPoint(1, 0, 0), gr, CProjection.UpC0C1);
+
+            var sqrtN = Math.Sqrt(RgSettings.N);
+            var nAlphaMinus1 = Math.Pow(RgSettings.N, RgSettings.Alpha - 1);
+            var nAlphaMinus3Div2 = Math.Pow(RgSettings.N, RgSettings.Alpha - 1.5);
+            var nAlphaMinus1Div2 = Math.Pow(RgSettings.N, RgSettings.Alpha - 0.5);
+
+            var rPlus = (sqrtN - nAlphaMinus1) / (1 - sqrtN);
+            var rMinus = (-sqrtN - nAlphaMinus1) / (1 + sqrtN);
+            var gPlus = RgSettings.N * ((1 - nAlphaMinus3Div2) / (1 - nAlphaMinus1Div2));
+            var gMinus = RgSettings.N * ((1 + nAlphaMinus3Div2) / (1 + nAlphaMinus1Div2));
+
+            var rgPlus = new RGPoint(rPlus, gPlus);
+            var rgMinus = new RGPoint(rMinus, gMinus);
+
+            var cPlus = rgPlus.CReversed;
+            var cMinus = rgMinus.CReversed;
+
+            RG.DrawCross(X, Y, _xpxsz, _ypxsz, _sz, Config.White, cPlus, gr, CProjection.UpC0C1);
+            RG.DrawCross(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, cMinus, gr, CProjection.UpC0C1);
+
+            var sing = new CPoint(1, RgSettings.Lambda, RgSettings.Lambda2);
+            RG.DrawXCross(X, Y, _xpxsz, _ypxsz, _sz, Config.Black, sing, gr, CProjection.UpC0C1);
+
             var ptsPositive = _iteratedAreasCPositive[_areaStep];
             var ptsNegative = _iteratedAreasCNegative[_areaStep];
             RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Yellow, ptsPositive, img, CProjection.UpC0C1);
             RG.FillArea(X, Y, _xpxsz, _ypxsz, _sz, Config.Red, ptsNegative, img, CProjection.UpC0C1);
-
-            /*
-            if (img != null)
-            {
-                var gr = Graphics.FromImage(img);
-                var p = new Pen(Config.White) { DashPattern = new float[] { 2, 4 } };
-                for (var i = 0; i < _areaInitialSetRareCPositive.Count; i++)
-                {
-                    var p1 = _areaInitialSetRareCPositive[i];
-                    var p2 = _iteratedAreasRareCPositive[_areaStep][i];
-                    RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, p, p1, p2, gr, CProjection.UpC0C1);
-                }
-                for (var i = 0; i < _areaInitialSetRareCNegative.Count; i++)
-                {
-                    var p1 = _areaInitialSetRareCNegative[i];
-                    var p2 = _iteratedAreasRareCNegative[_areaStep][i];
-                    RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, p, p1, p2, gr, CProjection.UpC0C1);
-                }
-            }
+            gr.Save();
+             * 
              * */
 
             ChangePictureBoxPicture(img);
