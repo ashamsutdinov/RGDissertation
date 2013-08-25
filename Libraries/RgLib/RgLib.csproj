@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColoredPoint.cs" />
+    <Compile Include="ColoredRGPoint.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CPoint.cs" />
     <Compile Include="CProjection.cs" />

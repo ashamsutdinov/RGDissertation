@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using RgLib;
 
@@ -71,7 +72,7 @@ namespace ReverseTransform
             }
         }
 
-        public static IEnumerable<RGPoint> ParabolaDirect(double a, double b, double rmin, double rmax, double rstep, bool beforeTrans = true)
+        public static IEnumerable<ColoredRGPoint> ParabolaDirect(double a, double b, double rmin, double rmax, double rstep, bool beforeTrans = true)
         {
             var l1 = 1d;
             if (!beforeTrans)
@@ -81,7 +82,35 @@ namespace ReverseTransform
 
             for (var r = rmin; r <= rmax; r += rstep)
             {
-                yield return ParabolaPoint(r, a, b, l1);
+                var rpt = ParabolaPoint(r, a, b, l1);
+                /*
+                 * from -inf to -1 = black
+                 * from -1 to b = red
+                 * from b to a = blue
+                 * from a to +inf - white
+                 * */
+                Color clr;
+                if (r < -1)
+                {
+                    clr = Config.Black;
+                }
+                else if (r >= -1 && r < b)
+                {
+                    clr = Config.Red;
+                }
+                else if (r >= b && r < a)
+                {
+                    clr = Config.Blue;
+                }
+                else if (r > a)
+                {
+                    clr = Config.White;
+                }
+                else
+                {
+                    clr = Config.Yellow;
+                }
+                yield return new ColoredRGPoint { Value = rpt, Color = clr };
             }
         }
 
