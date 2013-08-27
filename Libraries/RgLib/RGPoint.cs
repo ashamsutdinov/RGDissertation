@@ -47,7 +47,7 @@ namespace ReverseTransform
         private static RGPoint ParabolaPoint(double r, double a, double b, double l1)
         {
             var g = r;
-            if (g - b == 0)
+            if (Math.Abs(g - b) < double.Epsilon)
             {
                 g = double.MaxValue;
             }
@@ -493,6 +493,42 @@ namespace ReverseTransform
             }
             cnt = i;
             return pt;
+        }
+
+        public static double CriticalLineFunctionDirect(double r, double a, double b)
+        {
+            var g = r;
+            if (Math.Abs(g - b) < double.Epsilon)
+            {
+                return double.MaxValue;
+            }
+            var rMa = r - a;
+            var rMb = r - b;
+            var rP1 = r + 1;
+            var sqrP1 = Math.Pow(rP1, 2);
+            g = rMa / rMb * sqrP1;
+            return g;
+        }
+
+        public static CPoint CriticalLineCFunctionDirect(double r, double a, double b)
+        {
+            var g = CriticalLineFunctionDirect(r, a, b);
+            var r2 = Math.Pow(r, 2);
+            var r2Mg = r2 - g;
+            var r2Mg2 = Math.Pow(r2Mg, 2);
+            var sqrtr2Mg2 = Math.Sqrt(r2Mg2);
+            var c1 = -r / sqrtr2Mg2;
+            var c2 = r2Mg / sqrtr2Mg2;
+            var c0 = Math.Sqrt(1 - c1 * c1 - c2 * c2);
+            return new CPoint(c0, c1, c2);
+        }
+
+        public static IEnumerable<CPoint> CriticalLineDirect(double r1, double r2, double rstep, double a, double b)
+        {
+            for (var r = r1; r <= r2; r += rstep)
+            {
+                yield return CriticalLineCFunctionDirect(r, a, b);
+            }
         }
     }
 }

@@ -51,6 +51,8 @@ namespace RGLines
 
         private List<CPoint> _line2;
 
+        private List<CPoint> _criticalLine;
+
         private const double X = -1.0;
 
         private const double Y = -1.0;
@@ -281,17 +283,19 @@ namespace RGLines
             _bgWithLines = _bg.Clone() as Bitmap;
             _rline1 = RGPoint.ParabolaDirect(_a, _b, _rmin, _rmax, _rstep).ToList();
             _line1 = _rline1.Select(rg => rg.Value.CDirect).ToList();
-            
+            /*
+            _criticalLine = RGPoint.CriticalLineDirect(_rmin, _rmax, _rstep, _a, _b).ToList();
+            */
             if (DrawTransformedLine)
             {
                 _rline2 = new List<RGPoint>();
                 foreach (var rp1 in _rline1)
                 {
                     var r = rp1.Value.R;
-                    var r1 = RgSettings.Lambda*((_a - _b - 1 + RgSettings.NMinus1)/(1 - RgSettings.NMinus1))*
-                             ((r - _a1)/(r - _b1));
-                    var g1 = ((r1 - _a11)/(r1 - _b11))*Math.Pow(r1 + RgSettings.Lambda, 2);
-                    var rp2 = new RGPoint {R = r1, G = g1};
+                    var r1 = RgSettings.Lambda * ((_a - _b - 1 + RgSettings.NMinus1) / (1 - RgSettings.NMinus1)) *
+                             ((r - _a1) / (r - _b1));
+                    var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + RgSettings.Lambda, 2);
+                    var rp2 = new RGPoint { R = r1, G = g1 };
                     _rline2.Add(rp2);
                 }
                 _line2 = _rline2.Select(rg => rg.CDirect).ToList();
@@ -326,6 +330,15 @@ namespace RGLines
                         RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, Config.WhitePen, c1, c2, gr, CProjection.UpC1C2);
                     }
                 }
+
+                /*
+                for (var i = 0; i < _criticalLine.Count - 1; i++)
+                {
+                    var pt1 = _criticalLine[i];
+                    var pt2 = _criticalLine[i];
+                    RG.DrawLine(X, Y, _xpxsz, _ypxsz, _sz, Config.FuchsiaPen, pt1, pt2, gr, CProjection.UpC1C2);
+                }
+                 * */
 
                 gr.Save();
             }

@@ -38,6 +38,7 @@
             this.txtAlpha = new System.Windows.Forms.TextBox();
             this.txtN = new System.Windows.Forms.TextBox();
             this.lineParamsGroup = new System.Windows.Forms.GroupBox();
+            this.cbShowTransformedLine = new System.Windows.Forms.CheckBox();
             this.btnHideLine = new System.Windows.Forms.Button();
             this.btnAppyLineSettings = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -67,7 +68,6 @@
             this.trackArea = new System.Windows.Forms.TrackBar();
             this.btnAreaNextIteration = new System.Windows.Forms.Button();
             this.btnAreaPrevIteration = new System.Windows.Forms.Button();
-            this.cbShowTransformedLine = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.rgParamsGroup.SuspendLayout();
             this.lineParamsGroup.SuspendLayout();
@@ -186,6 +186,16 @@
             this.lineParamsGroup.TabStop = false;
             this.lineParamsGroup.Text = "Line Params";
             // 
+            // cbShowTransformedLine
+            // 
+            this.cbShowTransformedLine.AutoSize = true;
+            this.cbShowTransformedLine.Location = new System.Drawing.Point(124, 80);
+            this.cbShowTransformedLine.Name = "cbShowTransformedLine";
+            this.cbShowTransformedLine.Size = new System.Drawing.Size(85, 17);
+            this.cbShowTransformedLine.TabIndex = 13;
+            this.cbShowTransformedLine.Text = "Transformed";
+            this.cbShowTransformedLine.UseVisualStyleBackColor = true;
+            // 
             // btnHideLine
             // 
             this.btnHideLine.Location = new System.Drawing.Point(124, 103);
@@ -221,7 +231,7 @@
             this.txtRStep.Name = "txtRStep";
             this.txtRStep.Size = new System.Drawing.Size(62, 20);
             this.txtRStep.TabIndex = 9;
-            this.txtRStep.Text = "0,01";
+            this.txtRStep.Text = "0,001";
             // 
             // btnDefB
             // 
@@ -257,7 +267,7 @@
             this.txtRMax.Name = "txtRMax";
             this.txtRMax.Size = new System.Drawing.Size(62, 20);
             this.txtRMax.TabIndex = 5;
-            this.txtRMax.Text = "100";
+            this.txtRMax.Text = "20";
             // 
             // txtRMin
             // 
@@ -265,7 +275,7 @@
             this.txtRMin.Name = "txtRMin";
             this.txtRMin.Size = new System.Drawing.Size(62, 20);
             this.txtRMin.TabIndex = 4;
-            this.txtRMin.Text = "-100";
+            this.txtRMin.Text = "-20";
             // 
             // label5
             // 
@@ -461,16 +471,6 @@
             this.btnAreaPrevIteration.Text = "<-";
             this.btnAreaPrevIteration.UseVisualStyleBackColor = true;
             this.btnAreaPrevIteration.Click += new System.EventHandler(this.BtnAreaPrevIterationClick);
-            // 
-            // cbShowTransformedLine
-            // 
-            this.cbShowTransformedLine.AutoSize = true;
-            this.cbShowTransformedLine.Location = new System.Drawing.Point(124, 80);
-            this.cbShowTransformedLine.Name = "cbShowTransformedLine";
-            this.cbShowTransformedLine.Size = new System.Drawing.Size(85, 17);
-            this.cbShowTransformedLine.TabIndex = 13;
-            this.cbShowTransformedLine.Text = "Transformed";
-            this.cbShowTransformedLine.UseVisualStyleBackColor = true;
             // 
             // RGLinesDirect
             // 

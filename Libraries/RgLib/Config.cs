@@ -23,6 +23,10 @@ namespace RgLib
 
         public static readonly Pen WhitePen = new Pen(Color.White);
 
+        public static readonly Color Fuchsia = Color.Fuchsia;
+
+        public static readonly Pen FuchsiaPen = new Pen(Color.Fuchsia);
+
         public static readonly Color Red = Color.Red;
 
         public static readonly Color Blue = Color.Blue;
@@ -34,6 +38,8 @@ namespace RgLib
         public static readonly Color LightGreen = Color.LightGreen;
 
         public static readonly Color Pink = Color.Pink;
+
+        public static readonly Color Violet = Color.DarkViolet;
 
         public static readonly Color Yellow = Color.Yellow;
 
