@@ -83,32 +83,75 @@ namespace ReverseTransform
             for (var r = rmin; r <= rmax; r += rstep)
             {
                 var rpt = ParabolaPoint(r, a, b, l1);
-                /*
-                 * from -inf to -1 = black
-                 * from -1 to b = red
-                 * from b to a = blue
-                 * from a to +inf - white
-                 * */
-                Color clr;
-                if (r < -1)
+                Color clr = Config.Red;
+                if (a > b)
                 {
-                    clr = Config.Black;
+                    if (r < -1)
+                    {
+                        clr = Config.Black;
+                    }
+                    else if (r >= -1 && r < b)
+                    {
+                        clr = Config.Red;
+                    }
+                    else if (r >= b && r < a)
+                    {
+                        clr = Config.Blue;
+                    }
+                    else if (r > a)
+                    {
+                        clr = Config.White;
+                    }
+                    else
+                    {
+                        clr = Config.Yellow;
+                    }
                 }
-                else if (r >= -1 && r < b)
+                else if (a > -1 && a <= b)
                 {
-                    clr = Config.Red;
+                    if (r < -1)
+                    {
+                        clr = Config.Black;
+                    }
+                    else if (r >= -1 && r < a)
+                    {
+                        clr = Config.Red;
+                    }
+                    else if (r >= a && r < b)
+                    {
+                        clr = Config.Blue;
+                    }
+                    else if (r > b)
+                    {
+                        clr = Config.White;
+                    }
+                    else
+                    {
+                        clr = Config.Yellow;
+                    }
                 }
-                else if (r >= b && r < a)
+                else if (a <=-1)
                 {
-                    clr = Config.Blue;
-                }
-                else if (r > a)
-                {
-                    clr = Config.White;
-                }
-                else
-                {
-                    clr = Config.Yellow;
+                    if (r < a)
+                    {
+                        clr = Config.Black;
+                    }
+                    else if (r >= a && r < -1)
+                    {
+                        clr = Config.Red;
+                    }
+                    else if (r >= -1 && r < b)
+                    {
+                        clr = Config.Blue;
+                    }
+                    else if (r > b)
+                    {
+                        clr = Config.White;
+                    }
+                    else
+                    {
+                        clr = Config.Yellow;
+                    }
                 }
                 yield return new ColoredRGPoint { Value = rpt, Color = clr };
             }
