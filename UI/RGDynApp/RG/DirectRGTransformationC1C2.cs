@@ -19,13 +19,13 @@ namespace RGDynApp
             if (Initialized)
                 return;
 
-            const int leftA = 2;
-            var leftAB2 = leftA - processor.B0 - 2;
-            LeftC2Limit = (leftAB2) / (Math.Sqrt(1 + Math.Pow(leftAB2, 2)));
+            var leftRG = new RGPoint(2, 0);
+            var leftC = leftRG.C(CProjection.C1C2);
+            LeftC2Limit = leftC.C2;
 
-            const int rightA = -1;
-            var rightAB2 = rightA - processor.B0 - 2;
-            RightC2Limit = -(rightAB2) / (Math.Sqrt(1 + Math.Pow(rightAB2, 2)));
+            var rightRG = new RGPoint(-1000, ((-1000 + 1) / (-1000 - processor.B0)) * Math.Pow(-1000 + 1, 2));
+            var rightC = rightRG.C(CProjection.C1C2);
+            RightC2Limit = rightC.C2;
 
             IterationsLimit = 100;
             Initialized = true;
@@ -59,6 +59,7 @@ namespace RGDynApp
                 }
                 else
                 {
+                    /*
                     if (start.C1 < 0 && start.C2 > LeftC2Limit)
                     {
                         res = RGScene.NegativeMomentalDynamicsColor;
@@ -69,8 +70,11 @@ namespace RGDynApp
                     }
                     else
                     {
+                     * */
                         res = current.C1 < 0 ? RGScene.NegativeDynamicsColor : RGScene.PositiveDynamicsColor;
+                    /*
                     }
+                     * */
                 }
             }
             return res;

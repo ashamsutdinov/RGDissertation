@@ -2,7 +2,8 @@ using System.Drawing;
 
 namespace RGDynApp
 {
-    public abstract class BothRGSceneTransform : RGSceneTransform
+    public abstract class BothRGSceneTransform : 
+        RGSceneTransform
     {
         public override Bitmap GetLayer(RectangleF rect, Size frameRect, RGScene scene, RGProcessor processor)
         {
