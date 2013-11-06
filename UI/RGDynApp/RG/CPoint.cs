@@ -26,7 +26,10 @@ namespace RGDynApp
                     if (s > 0)
                     {
                         c0 = Math.Sqrt(s);
-                        return new CPoint(c0, c1, c2) { IsNormal = true };
+                        return new CPoint(c0, c1, c2)
+                        {
+                            IsNormal = true
+                        };
                     }
                     return new CPoint(c0, c1, c2);
             }
@@ -85,6 +88,16 @@ namespace RGDynApp
                 var n = Math.Sqrt(sum);
                 return n;
             }
+        }
+
+        public double DistanceTo(CPoint c)
+        {
+            var sc0 = C0 - c.C0;
+            var sc1 = C1 - c.C1;
+            var sc2 = C2 - c.C2;
+            var sum = sc0*sc0 + sc1*sc1 + sc2*sc2;
+            var dist = Math.Sqrt(sum);
+            return dist;
         }
 
         public CPoint Opposite

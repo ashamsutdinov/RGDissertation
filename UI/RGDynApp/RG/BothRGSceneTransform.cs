@@ -8,6 +8,9 @@ namespace RGDynApp
         public override Bitmap GetLayer(RectangleF rect, Size frameRect, RGScene scene, RGProcessor processor)
         {
             var bmp = scene.CreateBackgroundBitmap(frameRect);
+
+            //TODO: make parallel
+
             for (var i = 0; i < bmp.Width; i++)
             {
                 for (var j = 0; j < bmp.Height; j++)

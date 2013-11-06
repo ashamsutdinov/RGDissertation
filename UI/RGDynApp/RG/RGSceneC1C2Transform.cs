@@ -58,6 +58,7 @@ namespace RGDynApp
             gr.DrawLine(markupPen, minusFixedPointUiCoords.X - 3, minusFixedPointUiCoords.Y, minusFixedPointUiCoords.X + 3, minusFixedPointUiCoords.Y);
             */
 
+            /*
             var curve1 = Curve(processor, -1, -100, -1);
             var cCurve1 = curve1.Select(r => r.C(CProjection.C1C2)).ToList();
             for (var i = 0; i < cCurve1.Count - 1; i++)
@@ -79,6 +80,7 @@ namespace RGDynApp
                 var ui2 = scene.MapToUIFrame(new PointF((float)c2.C1, (float)c2.C2));
                 gr.DrawLine(markupPen, ui1, ui2);
             }
+             * */
         }
 
         private IEnumerable<RGPoint> Curve(RGProcessor proc, float a, float r0, float r1, float step = 0.0001f)

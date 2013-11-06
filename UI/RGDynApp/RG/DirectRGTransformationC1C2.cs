@@ -14,6 +14,12 @@ namespace RGDynApp
 
         protected int IterationsLimit;
 
+        protected double DistanceLimit;
+
+        protected CPoint CriticalPoint;
+
+        protected CPoint CriticalPointOpposite;
+
         protected void Initialize(RGProcessor processor)
         {
             if (Initialized)
@@ -27,56 +33,60 @@ namespace RGDynApp
             var rightC = rightRG.C(CProjection.C1C2);
             RightC2Limit = rightC.C2;
 
-            IterationsLimit = 100;
+            CriticalPoint = processor.Alpha > 1 ? new CPoint(0, 0, 1) : new CPoint(1, 0, 0);
+            CriticalPointOpposite = CriticalPoint.Opposite;
+
+            IterationsLimit = 1000;
+            DistanceLimit = 0.0001;
             Initialized = true;
         }
 
         protected override Color GetC1C2Color(Bitmap bmp, CPoint cpt, RGPoint rg, RGScene scene, RGProcessor processor)
         {
             Initialize(processor);
+
             var i = 0;
             Color res;
             var start = cpt;
             var current = start;
-            if (cpt.RG(CProjection.C1C2).G < 0)
+
+
+            while (i < IterationsLimit)
             {
-                res = RGScene.NegativeColor;
-            }
-            else
-            {
-                while (i < IterationsLimit)
+                current = DirectIterated(current, CProjection.C1C2, processor);
+                if (processor.Alpha > 1 && rg.G > 0)
                 {
-                    current = DirectIterated(current, CProjection.C1C2, processor);
                     if (current.C1 < 0 && current.C2 > LeftC2Limit)
+                    {
                         break;
+                    }
                     if (current.C1 > 0 && current.C2 > RightC2Limit)
+                    {
                         break;
-                    i++;
-                }
-                if (i == IterationsLimit)
-                {
-                    res = RGScene.UndefinedColor;
+                    }
                 }
                 else
                 {
-                    /*
-                    if (start.C1 < 0 && start.C2 > LeftC2Limit)
+                    var d1 = current.DistanceTo(CriticalPoint);
+                    var d2 = current.DistanceTo(CriticalPointOpposite);
+                    if (d1 < DistanceLimit || d2 < DistanceLimit)
                     {
-                        res = RGScene.NegativeMomentalDynamicsColor;
+                        break;
                     }
-                    else if (start.C1 > 0 && start.C2 > RightC2Limit)
-                    {
-                        res = RGScene.PositiveMomentalDynamicsColor;
-                    }
-                    else
-                    {
-                     * */
-                        res = current.C1 < 0 ? RGScene.NegativeDynamicsColor : RGScene.PositiveDynamicsColor;
-                    /*
-                    }
-                     * */
                 }
+                i++;
             }
+            if (i == IterationsLimit)
+            {
+                res = RGScene.UndefinedColor;
+            }
+            else
+            {
+                res = rg.G >= 0
+                    ? (current.C1 < 0 ? RGScene.PositiveDynamicsLeftColor : RGScene.PositiveDynamicsRightColor)
+                    : (current.C1 < 0 ? RGScene.NegativeDynamicsLeftColor : RGScene.NegativeDynamicsRightColor);
+            }
+
             return res;
         }
 

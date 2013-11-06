@@ -21,15 +21,15 @@ namespace RGDynApp
 
         public static readonly Color NegativeColor = Color.Green;
 
+        public static readonly Color NegativeDynamicsLeftColor = Color.Green;
+
+        public static readonly Color NegativeDynamicsRightColor = Color.Brown;
+
         public static readonly Color PositiveColor = Color.Blue;
 
-        public static readonly Color NegativeDynamicsColor = Color.Red;
+        public static readonly Color PositiveDynamicsLeftColor = Color.Red;
 
-        public static readonly Color NegativeMomentalDynamicsColor = Color.DeepPink;
-
-        public static readonly Color PositiveDynamicsColor = Color.Blue;
-
-        public static readonly Color PositiveMomentalDynamicsColor = Color.LightBlue;
+        public static readonly Color PositiveDynamicsRightColor = Color.Blue;
 
         public static readonly Color MarkupColor = Color.Black;
 
