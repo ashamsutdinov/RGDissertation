@@ -15,21 +15,21 @@ namespace RGDynApp
 
         public Image OriginalImage;
 
-        public static readonly Color BackgroundColr = Color.FromArgb(0, 0, 0, 0);
+        public static readonly Color BackgroundColr = Color.FromArgb(255, 255, 255, 255);
 
         public static readonly Color UndefinedColor = Color.Black;
 
-        public static readonly Color NegativeColor = Color.Green;
+        public static readonly Color NegativeColor = Color.LightGray;
 
-        public static readonly Color NegativeDynamicsLeftColor = Color.Green;
+        public static readonly Color NegativeDynamicsLeftColor = Color.LightGray;
 
         public static readonly Color NegativeDynamicsRightColor = Color.Brown;
 
-        public static readonly Color PositiveColor = Color.Blue;
+        public static readonly Color PositiveColor = Color.Gray;
 
-        public static readonly Color PositiveDynamicsLeftColor = Color.Red;
+        public static readonly Color PositiveDynamicsLeftColor = Color.FromArgb(255, 75, 75, 75);
 
-        public static readonly Color PositiveDynamicsRightColor = Color.Blue;
+        public static readonly Color PositiveDynamicsRightColor = Color.Gray;
 
         public static readonly Color MarkupColor = Color.Black;
 

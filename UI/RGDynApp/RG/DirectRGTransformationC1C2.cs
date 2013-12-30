@@ -36,7 +36,7 @@ namespace RGDynApp
             CriticalPoint = processor.Alpha > 1 ? new CPoint(0, 0, 1) : new CPoint(1, 0, 0);
             CriticalPointOpposite = CriticalPoint.Opposite;
 
-            IterationsLimit = 1000;
+            IterationsLimit = 100;
             DistanceLimit = 0.0001;
             Initialized = true;
         }
@@ -83,8 +83,12 @@ namespace RGDynApp
             else
             {
                 res = rg.G >= 0
-                    ? (current.C1 < 0 ? RGScene.PositiveDynamicsLeftColor : RGScene.PositiveDynamicsRightColor)
-                    : (current.C1 < 0 ? RGScene.NegativeDynamicsLeftColor : RGScene.NegativeDynamicsRightColor);
+                    ? 
+                    (current.C1 < 0 ? RGScene.PositiveDynamicsLeftColor : RGScene.PositiveDynamicsRightColor)
+                    : 
+                    //(current.C1 < 0 ? RGScene.NegativeDynamicsLeftColor : RGScene.NegativeDynamicsRightColor)
+                    RGScene.NegativeDynamicsLeftColor
+                    ;
             }
 
             return res;
@@ -104,6 +108,43 @@ namespace RGDynApp
             var res = new CPoint(c0, c1, c2);
             res.Project(projection);
             return res;
+        }
+
+        protected override void ApplyMarkup(Bitmap bmp, Graphics gr, RGScene scene, RGProcessor processor)
+        {
+            base.ApplyMarkup(bmp, gr, scene, processor);
+            var markupPen = new Pen(RGScene.MarkupColor);
+
+            //for (var x = -1d; x <= 1d; x += 0.01)
+            //{
+            //    var eq1 = 1 - x*x - LeftC2Limit*LeftC2Limit;
+            //    if (eq1 > 0)
+            //    {
+            //        var c = new CPoint(eq1, x, LeftC2Limit);
+            //        if (c.RG(CProjection.C1C2).G > 0 && x < 0)
+            //        {
+            //            var pt = new PointF((float) x, (float) LeftC2Limit);
+            //            var pt1 = new PointF((float) x + 0.001f, (float) LeftC2Limit);
+            //            var p1 = scene.MapToUIFrame(pt);
+            //            var p2 = scene.MapToUIFrame(pt1);
+            //            gr.DrawLine(markupPen, p1, p2);
+            //        }
+            //    }
+            //}
+
+            //for (var x = -1d; x <= 1d; x += 0.01)
+            //{
+            //    var eq1 = 1 - x * x - RightC2Limit * RightC2Limit;
+            //    if (eq1 > 0)
+            //    {
+            //        var c = new CPoint(eq1, x, RightC2Limit);
+            //        var pt = new PointF((float)x, (float)RightC2Limit);
+            //        var pt1 = new PointF((float)x + 0.001f, (float)RightC2Limit);
+            //        var p1 = scene.MapToUIFrame(pt);
+            //        var p2 = scene.MapToUIFrame(pt1);
+            //        gr.DrawLine(markupPen, p1, p2);
+            //    }
+            //}
         }
     }
 }
