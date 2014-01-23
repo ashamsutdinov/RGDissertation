@@ -198,7 +198,8 @@ namespace ReverseTransform
 
         private static void SetPixel(int i, int j, Bitmap bmp, Color clr)
         {
-            bmp.SetPixel(i, j, clr);
+            if (i < bmp.Width && i >= 0 && j < bmp.Height && j >= 0)
+                bmp.SetPixel(i, j, clr);
         }
 
         public static void DrawLine(double x, double y, double xsz, double ysz, double sz, Pen pen, CPoint cp1, CPoint cp2, Graphics gr, CProjection projection, bool verify = true)

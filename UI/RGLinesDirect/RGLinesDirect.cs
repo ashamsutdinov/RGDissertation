@@ -71,7 +71,9 @@ namespace RGLines
 
         private bool _areasShown;
 
-        private double _c1;
+        private double _h1;
+
+        private double _h2;
 
         private int _areaStep;
 
@@ -261,7 +263,8 @@ namespace RGLines
             trackArea.Value = 0;
             _areaStep = 0;
             _arc = checkBoxOnlyArc.Checked;
-            _c1 = double.Parse(txtAreaH.Text);
+            _h1 = double.Parse(txtAreaH1.Text);
+            _h2 = double.Parse(txtAreaH2.Text);
         }
 
         private void ChangePictureBoxPicture(ICloneable newImageSource)
@@ -354,8 +357,8 @@ namespace RGLines
             }
             _bgWithArea = _bg.Clone() as Bitmap;
 
-            var initialLstPositive = (_arc ? RGPoint.GetArcPositive(_c1, 1, _ypxsz, CProjection.UpC1C2) : RGPoint.GetTrianglePositive(_c1, 1, _xpxsz, _ypxsz, CProjection.UpC1C2)).ToList();
-            var initialLstNegative = (_arc ? RGPoint.GetArcNegative(_c1, 1, _ypxsz, CProjection.UpC1C2) : RGPoint.GetTriangleNegative(_c1, 1, _xpxsz, _ypxsz, CProjection.UpC1C2)).ToList();
+            var initialLstPositive = (_arc ? RGPoint.GetArcPositive(_h1, _h2, _ypxsz, CProjection.UpC1C2) : RGPoint.GetTrianglePositive(_h1, _h2, _xpxsz, _ypxsz, CProjection.UpC1C2)).ToList();
+            var initialLstNegative = (_arc ? RGPoint.GetArcNegative(_h1, _h2, _ypxsz, CProjection.UpC1C2) : RGPoint.GetTriangleNegative(_h1, _h2, _xpxsz, _ypxsz, CProjection.UpC1C2)).ToList();
             _areaInitialSetCPositive = initialLstPositive.Select(e => e.Key).ToList();
             _areaInitialSetCNegative = initialLstNegative.Select(e => e.Key).ToList();
 

@@ -320,10 +320,10 @@ namespace ReverseTransform
                         c0 = sgn * Math.Sqrt(c0);
                         var cpt = new CPoint(c0, c1, c2);
                         var rg = cpt.RG(CProjection.C1C2);
-                        if (rg.G >= 0)
-                        {
+                        //if (rg.G >= 0)
+                        //{
                             yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
-                        }
+                        //}
                     }
                 }
             }
@@ -343,10 +343,10 @@ namespace ReverseTransform
                     c2 = sgn * Math.Sqrt(c2);
                     var cpt = new CPoint(c0, c1, c2);
                     var rg = cpt.RG(CProjection.C0C1);
-                    if (rg.G >= 0)
-                    {
+                    //if (rg.G >= 0)
+                    //{
                         yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
-                    }
+                    //}
                 }
             }
         }
