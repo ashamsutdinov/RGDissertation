@@ -9,5 +9,10 @@ namespace RGDynApp
         {
             return rg.G > 0 ? RGScene.PositiveColor : RGScene.NegativeColor;
         }
+
+        public override void ApplyMarkupDynamics(int step, Bitmap bmp, Graphics gr, RGScene scene, RGProcessor processor)
+        {
+            
+        }
     }
 }

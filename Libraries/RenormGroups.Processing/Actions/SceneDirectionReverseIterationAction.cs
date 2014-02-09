@@ -4,21 +4,22 @@ using RenormGroups.Configuration;
 
 namespace RenormGroups.Processing
 {
-  public class SceneDirectionReverseIterationAction : SceneReverseIterationAction
-  {
-    protected override int GetRedChannel(IterationResult result)
+    public class SceneDirectionReverseIterationAction : SceneReverseIterationAction
     {
-      if (result.Resolution == IterationResolution.Trivial)
-      {
-        var interestedPoint = result.Track.Last(p => p.DistanceTo(Orientir) >= Config.LimitAccuracy);
-        if (interestedPoint == null)
+        protected override int GetRedChannel(IterationResult result)
         {
-          return Color.FromArgb(MaxChannelValue, MaxChannelValue, 0, 0).ToArgb();
+            if (result.Resolution == IterationResolution.Trivial)
+            {
+                var orient = Orientir(Alpha);
+                var interestedPoint = result.Track.Last(p => p.DistanceTo(orient) >= Config.LimitAccuracy);
+                if (interestedPoint == null)
+                {
+                    return Color.FromArgb(MaxChannelValue, MaxChannelValue, 0, 0).ToArgb();
+                }
+                var clr = OrientationCriteria(interestedPoint, orient) ? Config.LeftHandColor : Config.RightHandColor;
+                return clr.ToArgb();
+            }
+            return Color.FromArgb(MaxChannelValue, 0, 0, 0).ToArgb();
         }
-        var clr = OrientationCriteria(interestedPoint, Orientir) ? Config.LeftHandColor : Config.RightHandColor;
-        return clr.ToArgb();
-      }
-      return Color.FromArgb(MaxChannelValue, 0, 0, 0).ToArgb();
     }
-  }
 }

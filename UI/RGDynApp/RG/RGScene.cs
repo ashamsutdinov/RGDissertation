@@ -35,6 +35,10 @@ namespace RGDynApp
 
         public static readonly Color LabelsColor = Color.White;
 
+        public static readonly Color MarkupVColor = Color.Yellow;
+
+        public static readonly Color MarkupHColor = Color.YellowGreen;
+
         public RGScene(RectangleF rgFrameSize, Size uiFrameSize)
         {
             RGFrame = rgFrameSize;

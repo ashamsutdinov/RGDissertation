@@ -51,6 +51,12 @@
     <Compile Include="RG\CPoint.cs" />
     <Compile Include="RG\CProjection.cs" />
     <Compile Include="RG\DirectRGTransformationC1C2.cs" />
+    <Compile Include="UI\Dyn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Dyn.Designer.cs">
+      <DependentUpon>Dyn.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MouseMovingState.cs" />
     <Compile Include="RG\RGPoint.cs" />
     <Compile Include="RG\RGSceneC1C2Transform.cs" />
@@ -76,6 +82,9 @@
     </Compile>
     <Compile Include="RG\RGProcessor.cs" />
     <Compile Include="RG\RGScene.cs" />
+    <EmbeddedResource Include="UI\Dyn.resx">
+      <DependentUpon>Dyn.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Initialize.resx">
       <DependentUpon>Initialize.cs</DependentUpon>
     </EmbeddedResource>

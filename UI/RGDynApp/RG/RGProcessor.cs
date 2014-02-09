@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -46,6 +47,8 @@ namespace RGDynApp
 
         public PictureBox PlottingPanel;
 
+        public RGSceneTransform DisplayedTransformation;
+
         public RGScene Current
         {
             get { return Peek(); }
@@ -83,7 +86,8 @@ namespace RGDynApp
         public void CreateNew(RectangleF rgFrame, Size uiFrame)
         {
             var scene = new RGScene(rgFrame, uiFrame);
-            scene.ApplyTransformation(new DirectRGTransformationC1C2(), this);
+            DisplayedTransformation = new DirectRGTransformationC1C2();
+            scene.ApplyTransformation(DisplayedTransformation, this);
             Push(scene);
         }
 
@@ -101,7 +105,26 @@ namespace RGDynApp
         public void Draw()
         {
             var scene = Current;
+            if (PlottingPanel.Image != null)
+                PlottingPanel.Image.Dispose();
             PlottingPanel.Image = new Bitmap(scene.ResultedImage);
+            PlottingPanel.Update();
+        }
+
+        public void DrawMarkupDynamics(int step)
+        {
+            if (step < 0 || step > 10)
+            {
+                Draw();
+                return;
+            }
+            var scene = Current;
+            var bmp = new Bitmap(scene.ResultedImage);
+            var gr = Graphics.FromImage(bmp);
+            DisplayedTransformation.ApplyMarkupDynamics(step, bmp, gr, scene, this);
+            if (PlottingPanel.Image != null)
+                PlottingPanel.Image.Dispose();
+            PlottingPanel.Image = bmp;
             PlottingPanel.Update();
         }
 

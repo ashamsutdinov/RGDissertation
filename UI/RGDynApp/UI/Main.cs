@@ -123,5 +123,21 @@ namespace RGDynApp
                 oldImage.Dispose();
             }
         }
+
+        private void vLineDynToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var d = new Dyn(this);
+            d.Show();
+        }
+
+        public void OnMarkupDynamics(Dyn dyn, int step)
+        {
+            _processor.DrawMarkupDynamics(step);
+        }
+
+        public void OnDynClose(Dyn d)
+        {
+            _processor.DrawMarkupDynamics(-1);
+        }
     }
 }

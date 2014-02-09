@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Principal;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace RGDynApp
 {
@@ -20,6 +23,10 @@ namespace RGDynApp
 
         protected CPoint CriticalPointOpposite;
 
+        public List<List<CPoint>> MarkupVPoints = new List<List<CPoint>>();
+
+        public List<List<CPoint>> MarkupHPoints = new List<List<CPoint>>();
+
         protected void Initialize(RGProcessor processor)
         {
             if (Initialized)
@@ -39,6 +46,37 @@ namespace RGDynApp
             IterationsLimit = 100;
             DistanceLimit = 0.0001;
             Initialized = true;
+
+            MarkupVPoints.Clear();
+            MarkupHPoints.Clear();
+
+            for (var i = 0; i <= 10; i++)
+            {
+                MarkupVPoints.Add(new List<CPoint>());
+                MarkupHPoints.Add(new List<CPoint>());
+            }
+
+            for (var y = -1f; y <= 1f; y += 0.00001f)
+            {
+                var c = CPoint.New(new PointF(0, y), CProjection.C1C2);
+                MarkupVPoints[0].Add(c);
+                for (var i = 1; i <= 10; i++)
+                {
+                    c = DirectIterated(c, CProjection.C1C2, processor);
+                    MarkupVPoints[i].Add(c);
+                }
+            }
+
+            for (var x = -1f; x <= 1f; x += 0.00001f)
+            {
+                var c = CPoint.New(new PointF(x, 0), CProjection.C1C2);
+                MarkupHPoints[0].Add(c);
+                for (var i = 1; i <= 10; i++)
+                {
+                    c = DirectIterated(c, CProjection.C1C2, processor);
+                    MarkupHPoints[i].Add(c);
+                }
+            }
         }
 
         protected override Color GetC1C2Color(Bitmap bmp, CPoint cpt, RGPoint rg, RGScene scene, RGProcessor processor)
@@ -83,9 +121,9 @@ namespace RGDynApp
             else
             {
                 res = rg.G >= 0
-                    ? 
+                    ?
                     (current.C1 < 0 ? RGScene.PositiveDynamicsLeftColor : RGScene.PositiveDynamicsRightColor)
-                    : 
+                    :
                     //(current.C1 < 0 ? RGScene.NegativeDynamicsLeftColor : RGScene.NegativeDynamicsRightColor)
                     RGScene.NegativeDynamicsLeftColor
                     ;
@@ -145,6 +183,24 @@ namespace RGDynApp
             //        gr.DrawLine(markupPen, p1, p2);
             //    }
             //}
+        }
+
+        public override void ApplyMarkupDynamics(int step, Bitmap bmp, Graphics gr, RGScene scene, RGProcessor processor)
+        {
+            var vline = MarkupVPoints[step];
+            var vPen = new Pen(RGScene.MarkupVColor);
+            foreach (var cpt1 in vline)
+            {
+                var p1 = scene.MapToUIFrame(new PointF((float)cpt1.C1, (float)cpt1.C2));
+                gr.DrawEllipse(vPen, p1.X, p1.Y, 1, 1);
+            }
+            var hline = MarkupHPoints[step];
+            var hPen = new Pen(RGScene.MarkupHColor);
+            foreach (var cpt1 in hline)
+            {
+                var p1 = scene.MapToUIFrame(new PointF((float)cpt1.C1, (float)cpt1.C2));
+                gr.DrawEllipse(hPen, p1.X, p1.Y, 1, 1);
+            }
         }
     }
 }
