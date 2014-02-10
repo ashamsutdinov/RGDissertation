@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ReverseTransform
+namespace RgLib
 {
     public class ColoredPoint<T>
     {

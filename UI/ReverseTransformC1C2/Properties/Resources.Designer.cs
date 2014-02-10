@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ReverseTransform.Properties {
+namespace RgLib.Properties {
     using System;
     
     

@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using RGTransform;
 
-namespace ReverseTransform
+namespace RgLib
 {
   public partial class TrackPoint : Form
   {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ReverseTransform
+namespace RgLib
 {
   public class ProcessingStack : 
     Stack<ProcessingFrame>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace ReverseTransform
+namespace RgLib
 {
   public static class Extensions
   {

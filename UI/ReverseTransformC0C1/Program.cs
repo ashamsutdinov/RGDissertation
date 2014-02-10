@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ReverseTransform
+namespace RgLib
 {
   static class Program
   {

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.20827.3
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{C3AF30B0-68AD-484D-B714-6DFFA9A10BC9}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGTransform", "UI\RGTransform\RGTransform.csproj", "{0F9BCC90-4652-4282-920A-4EF7060033E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGDynApp", "UI\RGDynApp\RGDynApp.csproj", "{ABAAE53B-0A41-4113-9992-F47B5990C68F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGPlanParabolas", "UI\RGPlanParabolas\RGPlanParabolas.csproj", "{8D5B3272-81EE-4B83-8386-72750DACC6B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -201,6 +203,18 @@ Global
 		{ABAAE53B-0A41-4113-9992-F47B5990C68F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{ABAAE53B-0A41-4113-9992-F47B5990C68F}.Release|x64.ActiveCfg = Release|Any CPU
 		{ABAAE53B-0A41-4113-9992-F47B5990C68F}.Release|x86.ActiveCfg = Release|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Release|x64.ActiveCfg = Release|Any CPU
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,5 +233,6 @@ Global
 		{C022C860-39E7-46C7-B2B1-B704B9DD4FFB} = {908408D4-D744-4AA7-B914-8EB691EA6867}
 		{0F9BCC90-4652-4282-920A-4EF7060033E2} = {908408D4-D744-4AA7-B914-8EB691EA6867}
 		{ABAAE53B-0A41-4113-9992-F47B5990C68F} = {908408D4-D744-4AA7-B914-8EB691EA6867}
+		{8D5B3272-81EE-4B83-8386-72750DACC6B9} = {908408D4-D744-4AA7-B914-8EB691EA6867}
 	EndGlobalSection
 EndGlobal

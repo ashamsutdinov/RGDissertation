@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ReverseTransform
+namespace RgLib
 {
   [Flags]
   public enum CProjection

@@ -1,4 +1,4 @@
-﻿namespace ReverseTransform
+﻿namespace RgLib
 {
   partial class TrackPoint
   {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using RgLib;
 
-namespace ReverseTransform
+namespace RgLib
 {
     public partial class MainForm : Form
     {

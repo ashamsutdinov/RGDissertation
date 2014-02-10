@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using RgLib;
 
-namespace ReverseTransform
+namespace RgLib
 {
     public class RGPoint
     {

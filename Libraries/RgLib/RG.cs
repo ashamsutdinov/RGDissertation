@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using RgLib;
 
-namespace ReverseTransform
+namespace RgLib
 {
     public static class RG
     {

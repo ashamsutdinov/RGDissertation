@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using RgLib;
 
-namespace ReverseTransform
+namespace RgLib
 {
   public class CPoint
   {
