@@ -129,7 +129,7 @@ namespace RgLib
                         clr = Config.Yellow;
                     }
                 }
-                else if (a <=-1)
+                else if (a <= -1)
                 {
                     if (r < a)
                     {
@@ -321,7 +321,7 @@ namespace RgLib
                         var rg = cpt.RG(CProjection.C1C2);
                         //if (rg.G >= 0)
                         //{
-                            yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
+                        yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
                         //}
                     }
                 }
@@ -344,7 +344,7 @@ namespace RgLib
                     var rg = cpt.RG(CProjection.C0C1);
                     //if (rg.G >= 0)
                     //{
-                        yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
+                    yield return new KeyValuePair<CPoint, RGPoint>(cpt, rg);
                     //}
                 }
             }
@@ -483,6 +483,31 @@ namespace RgLib
             var y = G - pt.G;
             var dist = Math.Sqrt(x * x + y * y);
             return dist;
+        }
+
+        public RGPoint DirectIterated()
+        {
+            var rPlus1 = R + 1;
+            var rPlus1Q = rPlus1 * rPlus1;
+            var t = rPlus1Q - G;
+            var d = rPlus1Q - G / RgSettings.N;
+            var td = t / d;
+            var m = td * rPlus1 - 1;
+            var r = RgSettings.Lambda * m;
+            var g = (RgSettings.Lambda2 / RgSettings.N) * td * td * G;
+            return new RGPoint { R = r, G = g };
+        }
+
+        public static IEnumerable<RGPoint> DirectIterations(RGPoint start, int count)
+        {
+            yield return start;
+            var rg = start;
+            for (var i = 1; i <= count; i++)
+            {
+                var r = rg.DirectIterated();
+                yield return r;
+                rg = r;
+            }
         }
 
         public RGPoint ReverseIterated()

@@ -39,6 +39,7 @@
             this._plot.Size = new System.Drawing.Size(758, 729);
             this._plot.TabIndex = 0;
             this._plot.TabStop = false;
+            this._plot.MouseClick += new System.Windows.Forms.MouseEventHandler(this._plot_MouseClick);
             // 
             // MainForm
             // 
