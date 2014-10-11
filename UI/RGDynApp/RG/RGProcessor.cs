@@ -45,6 +45,8 @@ namespace RGDynApp
 
         public double B0;
 
+        public double CurveB;
+
         public PictureBox PlottingPanel;
 
         public RGSceneTransform DisplayedTransformation;
@@ -59,10 +61,11 @@ namespace RGDynApp
             PlottingPanel = box;
         }
 
-        public void Initialize(double alpha, double n)
+        public void Initialize(double alpha, double n, double b)
         {
             Alpha = alpha;
             N = n;
+            CurveB = b;
             Lambda = Math.Pow(N, Alpha - 1);
             LambdaMinus1 = Math.Pow(Lambda, -1);
             LambdaMinus2 = Math.Pow(Lambda, -2);

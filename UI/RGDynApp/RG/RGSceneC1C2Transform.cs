@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace RGDynApp
 {
@@ -25,6 +26,8 @@ namespace RGDynApp
             var labelsBrush = new SolidBrush(RGScene.LabelsColor);
             var labelsBrushEx = new SolidBrush(RGScene.MarkupColor);
             var labelsFont = new Font(FontFamily.GenericSansSerif, 12);
+            var line1Pen = new Pen(RGScene.Line1Color);
+            var line2Pen = new Pen(RGScene.Line2Color);
 
             var zeroFixedPoint = new PointF(0, 0);
             var zeroFixedPointUiCoords = scene.MapToUIFrame(zeroFixedPoint);
@@ -54,14 +57,13 @@ namespace RGDynApp
             var syLabelPt = scene.MapToUIFrame(ylabelPt);
             gr.DrawString("C2", labelsFont, labelsBrushEx, syLabelPt);
 
-
             var singularPoint = new CPoint(1, 1, 1);
             var frameSingularPoint = new PointF((float)singularPoint.C1, (float)singularPoint.C2);
             var singularPoinUiCoords = scene.MapToUIFrame(frameSingularPoint);
             gr.DrawEllipse(markupPen, singularPoinUiCoords.X - 3, singularPoinUiCoords.Y - 3, 6, 6);
             gr.DrawLine(markupPen, singularPoinUiCoords.X - 3, singularPoinUiCoords.Y - 3, singularPoinUiCoords.X + 3, singularPoinUiCoords.Y + 3);
             gr.DrawLine(markupPen, singularPoinUiCoords.X - 3, singularPoinUiCoords.Y + 3, singularPoinUiCoords.X + 3, singularPoinUiCoords.Y - 3);
-
+            
             /*
             var plusFixedPoint = new CPoint(1, -processor.RPlus, Math.Pow(processor.RPlus, 2) - processor.GPlus);
             var framePlusFixedPoint = new PointF((float)plusFixedPoint.C1, (float)plusFixedPoint.C2);
@@ -77,23 +79,43 @@ namespace RGDynApp
             gr.DrawLine(markupPen, minusFixedPointUiCoords.X - 3, minusFixedPointUiCoords.Y, minusFixedPointUiCoords.X + 3, minusFixedPointUiCoords.Y);
             */
 
-            //var list = new List<RGPoint>();
-            //for (var g = -100.0; g < 100; g+=0.01)
-            //{
-            //    var rg = new RGPoint(processor.B0, g);
-            //    list.Add(rg);
-            //}
-            //var curve1 = list;
-            //var cCurve1 = curve1.Select(r => r.C(CProjection.C1C2)).ToList();
-            //for (var i = 0; i < cCurve1.Count - 1; i++)
-            //{
-            //    var c1 = cCurve1[i];
-            //    var c2 = cCurve1[i + 1];
-            //    var ui1 = scene.MapToUIFrame(new PointF((float)c1.C1, (float)c1.C2));
-            //    var ui2 = scene.MapToUIFrame(new PointF((float)c2.C1, (float)c2.C2));
-            //    gr.DrawLine(markupPen, ui1, ui2);
-            //}
-
+            /*
+            var b = processor.CurveB;
+            var list1 = new List<RGPoint>();
+            var list2 = new List<RGPoint>();
+            for (var r = -100.0; r < 100; r += 0.01)
+            {
+                var rg = new RGPoint(r, b * Math.Pow(r + 1, 2));
+                list1.Add(rg);
+                list2.Add(rg.DirectIterated(processor.N, processor.Lambda, processor.Lambda2));
+            }
+            var curve1 = list1;
+            var cCurve1 = curve1.Select(r => r.C(CProjection.C1C2)).ToList();
+            for (var i = 0; i < cCurve1.Count - 1; i++)
+            {
+                var c1 = cCurve1[i];
+                var c2 = cCurve1[i + 1];
+                var ui1 = scene.MapToUIFrame(new PointF((float)c1.C1, (float)c1.C2));
+                var ui2 = scene.MapToUIFrame(new PointF((float)c2.C1, (float)c2.C2));
+                gr.DrawLine(line1Pen, ui1, ui2);
+            }
+            var curve2 = list2;
+            var cCurve2 = curve2.Select(r => r.C(CProjection.C1C2)).ToList();
+            for (var i = 0; i < cCurve2.Count - 1; i++)
+            {
+                var c1 = cCurve2[i];
+                var c2 = cCurve2[i + 1];
+                var ui1 = scene.MapToUIFrame(new PointF((float)c1.C1, (float)c1.C2));
+                var ui2 = scene.MapToUIFrame(new PointF((float)c2.C1, (float)c2.C2));
+                gr.DrawLine(line2Pen, ui1, ui2);
+            }
+            if (b == 1)
+            {
+                var c1 = cCurve2[0];
+                var ui1 = scene.MapToUIFrame(new PointF((float)c1.C1, (float)c1.C2));
+                gr.DrawEllipse(line2Pen, ui1.X - 3, ui1.Y - 3, 6, 6);
+            }
+             * */
         }
 
         private IEnumerable<RGPoint> Curve(RGProcessor proc, float a, float r0, float r1, float step = 0.0001f)

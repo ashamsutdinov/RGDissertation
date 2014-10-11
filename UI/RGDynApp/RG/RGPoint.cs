@@ -35,5 +35,18 @@ namespace RGDynApp
             }
             throw new NotSupportedException();
         }
+
+        public RGPoint DirectIterated(double n, double lambda, double lambda2)
+        {
+            var rPlus1 = R + 1;
+            var rPlus1Q = rPlus1 * rPlus1;
+            var t = rPlus1Q - G;
+            var d = rPlus1Q - G / n;
+            var td = t / d;
+            var m = td * rPlus1 - 1;
+            var r = lambda * m;
+            var g = (lambda2 / n) * td * td * G;
+            return new RGPoint { R = r, G = g };
+        }
     }
 }

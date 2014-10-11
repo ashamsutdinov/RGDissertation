@@ -25,5 +25,10 @@ namespace RGDynApp.UI
         {
             get { return double.Parse(_tbN.Text); }
         }
+
+        public double B
+        {
+            get { return double.Parse(_tbB.Text); }
+        }
     }
 }

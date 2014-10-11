@@ -17,13 +17,13 @@ namespace RGDynApp
             _processor = new RGProcessor(_plotPanel);
         }
 
-        private void initializeToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void initializeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var initDlg = new Initialize();
             var res = initDlg.ShowDialog();
             if (res == DialogResult.OK)
             {
-                _processor.Initialize(initDlg.Alpha, initDlg.N);
+                _processor.Initialize(initDlg.Alpha, initDlg.N, initDlg.B);
                 _processor.StartNewProcesing();
             }
         }

@@ -39,6 +39,10 @@ namespace RGDynApp
 
         public static readonly Color MarkupHColor = Color.YellowGreen;
 
+        public static readonly Color Line1Color = Color.Blue;
+
+        public static readonly Color Line2Color = Color.Red;
+
         public RGScene(RectangleF rgFrameSize, Size uiFrameSize)
         {
             RGFrame = rgFrameSize;
