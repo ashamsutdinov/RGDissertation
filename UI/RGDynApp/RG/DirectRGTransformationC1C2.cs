@@ -43,7 +43,7 @@ namespace RGDynApp
             CriticalPoint = processor.Alpha > 1 ? new CPoint(0, 0, 1) : new CPoint(1, 0, 0);
             CriticalPointOpposite = CriticalPoint.Opposite;
 
-            IterationsLimit = 3;
+            IterationsLimit = 100;
             DistanceLimit = 0.0001;
             Initialized = true;
 
