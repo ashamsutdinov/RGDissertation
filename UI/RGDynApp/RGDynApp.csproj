@@ -57,6 +57,12 @@
     <Compile Include="UI\Dyn.Designer.cs">
       <DependentUpon>Dyn.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Mode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Mode.Designer.cs">
+      <DependentUpon>Mode.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MouseMovingState.cs" />
     <Compile Include="RG\RGPoint.cs" />
     <Compile Include="RG\RGSceneC1C2Transform.cs" />
@@ -103,6 +109,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UI\Mode.resx">
+      <DependentUpon>Mode.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

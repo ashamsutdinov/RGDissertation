@@ -21,9 +21,9 @@ namespace RGDynApp
 
         public static readonly Color NegativeColor = Color.LightGray;
 
-        public static readonly Color NegativeDynamicsLeftColor = Color.LightGray;
+        public static readonly Color NegativeDynamicsLeftColor = Color.LightSlateGray;
 
-        public static readonly Color NegativeDynamicsRightColor = Color.Brown;
+        public static readonly Color NegativeDynamicsRightColor = Color.LightGray;
 
         public static readonly Color PositiveColor = Color.Gray;
 

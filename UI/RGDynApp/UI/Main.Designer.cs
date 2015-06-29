@@ -35,6 +35,7 @@ namespace RGDynApp
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.initializeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vLineDynToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +58,7 @@ namespace RGDynApp
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.initializeToolStripMenuItem,
             this.saveAsToolStripMenuItem,
+            this.modeToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             resources.ApplyResources(this.fileToolStripMenuItem, "fileToolStripMenuItem");
@@ -71,6 +73,13 @@ namespace RGDynApp
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             resources.ApplyResources(this.saveAsToolStripMenuItem, "saveAsToolStripMenuItem");
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
+            // modeToolStripMenuItem
+            // 
+            this.modeToolStripMenuItem.Name = "modeToolStripMenuItem";
+            resources.ApplyResources(this.modeToolStripMenuItem, "modeToolStripMenuItem");
+            this.modeToolStripMenuItem.Click += new System.EventHandler(this.ChangeMode);
             // 
             // exitToolStripMenuItem
             // 
@@ -89,7 +98,7 @@ namespace RGDynApp
             // 
             this.vLineDynToolStripMenuItem.Name = "vLineDynToolStripMenuItem";
             resources.ApplyResources(this.vLineDynToolStripMenuItem, "vLineDynToolStripMenuItem");
-            this.vLineDynToolStripMenuItem.Click += new System.EventHandler(this.vLineDynToolStripMenuItem_Click);
+            this.vLineDynToolStripMenuItem.Click += new System.EventHandler(this.DrawMarkupDynamics);
             // 
             // undoToolStripMenuItem
             // 
@@ -137,6 +146,7 @@ namespace RGDynApp
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem vLineDynToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem modeToolStripMenuItem;
 
 
     }

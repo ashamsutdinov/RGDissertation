@@ -187,6 +187,25 @@ namespace RgLib
             return resClr;
         }
 
+        public static Color GetColorDirect(RGPoint pt, CProjection projection)
+        {
+            var rp = pt;
+            int cnt;
+            var end = pt.DirectTrackEndPoint(Config.ReserverInterestedPointRg, projection, out cnt);
+            if (cnt >= Config.Count)
+            {
+                return Config.Black;
+            }
+            var last = end;
+            var p = Config.ReserverInterestedPointRg;
+            var clr = rp.G < 0
+                            ? (last.R < p.R ? Config.Yellow : Config.Green)
+                            : (last.R < p.R ? Config.Red : Config.Blue);
+
+            var resClr = clr;
+            return resClr;
+        }
+
         private static double Correct(double value, double max)
         {
             if (value < 0)

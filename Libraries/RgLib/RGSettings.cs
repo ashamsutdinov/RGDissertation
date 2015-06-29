@@ -33,6 +33,8 @@ namespace RgLib
 
         public static double H;
 
+        public static double Const;
+
         public static void Build(double alpha, double n)
         {
             Alpha = alpha;
@@ -63,6 +65,7 @@ namespace RgLib
                 double.TryParse(parts[1], out Y1);
                 double.TryParse(parts[2], out W);
                 double.TryParse(parts[3], out H);
+                Const = double.Parse(conf["Const"]);
             }
             catch
             {

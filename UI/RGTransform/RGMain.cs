@@ -67,7 +67,7 @@ namespace RGTransform
         {
             var np = NPt(p1);
             var gr = Graphics.FromImage(pictureBox.Image);
-            var bgClr = RG.GetColorReversed(new RGPoint(p1), CProjection.UpC0C1);
+            var bgClr = RG.GetColorDirect(new RGPoint(p1), CProjection.UpC1C2);
             var blend = RG.Blend(clr, bgClr);
             gr.TryDraw(g => g.FillEllipse(new SolidBrush(clr), np.X - 2, np.Y - 2, 4, 4));
             gr.TryDraw(g => g.DrawRectangle(new Pen(blend), np.X - 10, np.Y - 10, 20, 20));
@@ -93,14 +93,42 @@ namespace RGTransform
             return NPt(p.R, p.G);
         }
 
+        bool InTriangle(RGPoint rg)
+        {
+            if (rg.G > 0)
+                return false;
+            var c = RgSettings.Const;
+            if (
+                (rg.G >= rg.R - c && rg.R <= c && rg.R >= 0) ||
+                (rg.G >= -rg.R - c && rg.R > -c && rg.R <= 0)
+                )
+            {
+                return true;
+            }
+            return false;
+        }
+
         private void FillPixel(Bitmap bmp, double x, double y)
         {
             var r = x;
             var g = y;
             var pt = NPt(r, g);
             var cpt = new RGPoint(r, g);
-            var color = RG.GetColorReversed(cpt, CProjection.UpC0C1);
+            var color = RG.GetColorDirect(cpt, CProjection.UpC1C2);
             SetPixel(bmp, pt.X, pt.Y, color);
+            var orig = new RGPoint(r, g);
+            if (InTriangle(orig))
+            {
+                var oneIteration = orig.DirectIterated();
+                var pt1 = NPt(oneIteration.R, oneIteration.G);
+                if (pt1.X >= 0 && pt1.Y >= 0 && pt1.X < bmp.Size.Width && pt1.Y < bmp.Size.Height)
+                {
+                    var clrR = Math.Max(0, color.R - 50);
+                    var clrG = Math.Max(0, color.G - 50);
+                    var clrB = Math.Max(0, color.B - 50);
+                    SetPixel(bmp, pt1.X, pt1.Y, Color.Black);
+                }
+            }
         }
 
         private void Redraw()
@@ -133,6 +161,17 @@ namespace RGTransform
             var jy1 = jy;
             gr.TryDraw(g => g.DrawEllipse(Config.WhitePen, ix1 - 3, jy1 - 3, 6, 6));
 
+            var cX1 = Math.Abs(r.X + RgSettings.Const) / onepxw;
+            var cX2 = cX1 + 2 * RgSettings.Const / onepxw;
+            var cY1 = Math.Abs(r.Y + RgSettings.Const) / onepxh;
+            var cY2 = cY1 + 2 * RgSettings.Const / onepxh;
+            var x0 = ix;
+            var y0 = jy;
+
+            gr.TryDraw(g => g.DrawLine(Config.BlackPen, (int)cX1, (int)y0, (int)x0, (int)cY2));
+            gr.TryDraw(g => g.DrawLine(Config.BlackPen, (int)cX1, (int)y0, (int)x0, (int)cY1));
+            gr.TryDraw(g => g.DrawLine(Config.BlackPen, (int)cX2, (int)y0, (int)x0, (int)cY2));
+            gr.TryDraw(g => g.DrawLine(Config.BlackPen, (int)cX2, (int)y0, (int)x0, (int)cY1));
 
             gr.Save();
 

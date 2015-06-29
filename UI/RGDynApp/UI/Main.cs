@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using RGDynApp.UI;
 
@@ -10,6 +11,8 @@ namespace RGDynApp
         private readonly RGProcessor _processor;
 
         private MouseMovingState _mouseMovingState;
+
+        private bool _boundaryMode;
 
         public Main()
         {
@@ -78,8 +81,19 @@ namespace RGDynApp
             var pt1 = _processor.Current.MapToRGFrame(new Point(rect.Left, rect.Bottom));
             var pt2 = _processor.Current.MapToRGFrame(new Point(rect.Right, rect.Top));
             var rectF = new RectangleF(pt1.X, pt1.Y, pt2.X - pt1.X, pt2.Y - pt1.Y);
-            _processor.CreateNew(rectF, _plotPanel.Size);
-            _processor.Draw();
+
+            if (!_boundaryMode)
+            {
+                _processor.CreateNew(rectF, _plotPanel.Size);
+                _processor.Draw();
+            }
+            else
+            {
+                _processor.StartBoundaryAnalysis(rectF, _plotPanel.Size);
+                _processor.Draw();
+                var dyn = new Dyn(this);
+                dyn.Show();
+            }
 
             _mouseMovingState = null;
         }
@@ -124,7 +138,7 @@ namespace RGDynApp
             }
         }
 
-        private void vLineDynToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DrawMarkupDynamics(object sender, EventArgs e)
         {
             var d = new Dyn(this);
             d.Show();
@@ -132,12 +146,46 @@ namespace RGDynApp
 
         public void OnMarkupDynamics(Dyn dyn, int step)
         {
-            _processor.DrawMarkupDynamics(step);
+            if (!_boundaryMode)
+            {
+                _processor.DrawMarkupDynamics(step);
+            }
+            else
+            {
+                _processor.DrawBoundaryPointDynamics(step);
+            }
         }
 
         public void OnDynClose(Dyn d)
         {
-            _processor.DrawMarkupDynamics(-1);
+            if (!_boundaryMode)
+            {
+                _processor.DrawMarkupDynamics(-1);
+            }
+            else
+            {
+                _processor.DrawBoundaryPointDynamics(-1);
+            }
+        }
+
+        public void ChangeMode(object sender, EventArgs e)
+        {
+            var dlg = new Mode(_boundaryMode);
+            var res = dlg.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                _boundaryMode = dlg.IsBoundaryMode;
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var bmp = new Bitmap(_plotPanel.Image);
+            var dlg = new SaveFileDialog();
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                bmp.Save(dlg.FileName, ImageFormat.Tiff);
+            }
         }
     }
 }

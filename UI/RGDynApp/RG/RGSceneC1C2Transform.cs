@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace RGDynApp
 {
     public abstract class RGSceneC1C2Transform :
         BothRGSceneTransform
     {
-        protected override Color GetPixelColor(Bitmap bmp, PointF ptF, RGScene scene, RGProcessor processor)
+        public override Color GetPixelColor(PointF ptF, RGScene scene, RGProcessor processor)
         {
             var cpt = CPoint.New(ptF, CProjection.C1C2);
             if (cpt.IsNormal)
             {
                 var rg = cpt.RG(CProjection.C1C2);
-                var clr = GetC1C2Color(bmp, cpt, rg, scene, processor);
+                var clr = GetC1C2Color(cpt, rg, scene, processor);
                 return clr;
             }
             return RGScene.BackgroundColr;
@@ -22,6 +22,7 @@ namespace RGDynApp
 
         protected override void ApplyMarkup(Bitmap bmp, Graphics gr, RGScene scene, RGProcessor processor)
         {
+
             var markupPen = new Pen(RGScene.MarkupColor);
             var labelsBrush = new SolidBrush(RGScene.LabelsColor);
             var labelsBrushEx = new SolidBrush(RGScene.MarkupColor);
@@ -31,12 +32,12 @@ namespace RGDynApp
 
             var zeroFixedPoint = new PointF(0, 0);
             var zeroFixedPointUiCoords = scene.MapToUIFrame(zeroFixedPoint);
-            gr.DrawEllipse(markupPen, zeroFixedPointUiCoords.X - 3, zeroFixedPointUiCoords.Y - 3, 6, 6);
+            gr.DrawEllipse(markupPen, zeroFixedPointUiCoords.X - 4, zeroFixedPointUiCoords.Y - 4, 8, 8);
             gr.DrawString("0", labelsFont, labelsBrushEx, zeroFixedPointUiCoords.X, zeroFixedPointUiCoords.Y);
 
             var infinityFixedPoint = new PointF(0, 1);
             var infinityFixedPointUiCoords = scene.MapToUIFrame(infinityFixedPoint);
-            gr.DrawEllipse(markupPen, infinityFixedPointUiCoords.X - 3, infinityFixedPointUiCoords.Y - 3, 6, 6);
+            gr.DrawEllipse(markupPen, infinityFixedPointUiCoords.X - 4, infinityFixedPointUiCoords.Y - 4, 8, 8);
             gr.DrawString("δ", labelsFont, labelsBrushEx, infinityFixedPointUiCoords.X, infinityFixedPointUiCoords.Y);
 
             var x0Pt = new PointF(-1.1f, 0);
@@ -60,73 +61,106 @@ namespace RGDynApp
             var singularPoint = new CPoint(1, 1, 1);
             var frameSingularPoint = new PointF((float)singularPoint.C1, (float)singularPoint.C2);
             var singularPoinUiCoords = scene.MapToUIFrame(frameSingularPoint);
-            gr.DrawEllipse(markupPen, singularPoinUiCoords.X - 3, singularPoinUiCoords.Y - 3, 6, 6);
-            gr.DrawLine(markupPen, singularPoinUiCoords.X - 3, singularPoinUiCoords.Y - 3, singularPoinUiCoords.X + 3, singularPoinUiCoords.Y + 3);
-            gr.DrawLine(markupPen, singularPoinUiCoords.X - 3, singularPoinUiCoords.Y + 3, singularPoinUiCoords.X + 3, singularPoinUiCoords.Y - 3);
-            
-            /*
-            var plusFixedPoint = new CPoint(1, -processor.RPlus, Math.Pow(processor.RPlus, 2) - processor.GPlus);
-            var framePlusFixedPoint = new PointF((float)plusFixedPoint.C1, (float)plusFixedPoint.C2);
-            var plusFixedPointUiCoords = scene.MapToUIFrame(framePlusFixedPoint);
-            gr.DrawEllipse(markupPen, plusFixedPointUiCoords.X - 3, plusFixedPointUiCoords.Y - 3, 6, 6);
-            gr.DrawLine(markupPen, plusFixedPointUiCoords.X - 3, plusFixedPointUiCoords.Y, plusFixedPointUiCoords.X + 3, plusFixedPointUiCoords.Y);
-            gr.DrawLine(markupPen, plusFixedPointUiCoords.X, plusFixedPointUiCoords.Y - 3, plusFixedPointUiCoords.X, plusFixedPointUiCoords.Y + 3);
+            gr.DrawEllipse(markupPen, singularPoinUiCoords.X - 4, singularPoinUiCoords.Y - 4, 8, 8);
+            gr.DrawLine(markupPen, singularPoinUiCoords.X - 4, singularPoinUiCoords.Y - 4, singularPoinUiCoords.X + 4, singularPoinUiCoords.Y + 4);
+            gr.DrawLine(markupPen, singularPoinUiCoords.X - 4, singularPoinUiCoords.Y + 4, singularPoinUiCoords.X + 4, singularPoinUiCoords.Y - 4);
 
-            var minusFixedPoint = new CPoint(1, -processor.RMinus, Math.Pow(processor.RMinus, 2) - processor.GMinus);
-            var frameMinusFixedPoint = new PointF((float)minusFixedPoint.C1, (float)minusFixedPoint.C2);
-            var minusFixedPointUiCoords = scene.MapToUIFrame(frameMinusFixedPoint);
-            gr.DrawEllipse(markupPen, minusFixedPointUiCoords.X - 3, minusFixedPointUiCoords.Y - 3, 6, 6);
-            gr.DrawLine(markupPen, minusFixedPointUiCoords.X - 3, minusFixedPointUiCoords.Y, minusFixedPointUiCoords.X + 3, minusFixedPointUiCoords.Y);
-            */
 
-            /*
-            var b = processor.CurveB;
-            var list1 = new List<RGPoint>();
-            var list2 = new List<RGPoint>();
-            for (var r = -100.0; r < 100; r += 0.01)
+            var fixedPointX1 = Math.Sqrt((1 - processor.Lambda * processor.NSqrt) / (processor.NSqrt - processor.Lambda));
+            var fixedPointY1 = Math.Sqrt((processor.NSqrt - processor.Lambda) / (1 - processor.Lambda * processor.NSqrt));
+            var fixedPointR1 = (processor.NSqrt + fixedPointX1 * fixedPointY1) / (fixedPointX1 * fixedPointX1 - processor.NSqrt);
+            var fixedPointG1 = processor.NSqrt * Math.Pow((fixedPointX1 + fixedPointY1) / (fixedPointX1 * fixedPointX1 - processor.NSqrt), 2);
+            var fixedPointRG1 = new RGPoint(fixedPointR1, fixedPointG1);
+            var fixedPoint1 = fixedPointRG1.C(CProjection.C1C2);
+            var fixedPointFrame1 = new PointF((float)fixedPoint1.C1, (float)fixedPoint1.C2);
+            var fixedPointUICoords1 = scene.MapToUIFrame(fixedPointFrame1);
+            gr.DrawEllipse(markupPen, fixedPointUICoords1.X - 4, fixedPointUICoords1.Y - 4, 8, 8);
+            gr.DrawLine(markupPen, fixedPointUICoords1.X - 4, fixedPointUICoords1.Y, fixedPointUICoords1.X + 4, fixedPointUICoords1.Y);
+            gr.DrawLine(markupPen, fixedPointUICoords1.X, fixedPointUICoords1.Y - 4, fixedPointUICoords1.X, fixedPointUICoords1.Y + 4);
+
+            var fixedPointX2 = Math.Sqrt((1 + processor.Lambda * processor.NSqrt) / (processor.NSqrt + processor.Lambda));
+            var fixedPointY2 =
+                -Math.Sqrt((processor.NSqrt + processor.Lambda) / (1 + processor.Lambda * processor.NSqrt));
+            var fixedPointR2 = (processor.NSqrt + fixedPointX2 * fixedPointY2) /
+                               (fixedPointX2 * fixedPointX2 - processor.NSqrt);
+            var fixedPointG2 = processor.NSqrt *
+                               Math.Pow(
+                                   (fixedPointX2 + fixedPointY2) / (fixedPointX2 * fixedPointX2 - processor.NSqrt), 2);
+            var fixedPointRG2 = new RGPoint(fixedPointR2, fixedPointG2);
+            var fixedPointC2 = fixedPointRG2.C(CProjection.C1C2);
+            var fixedPointFrame2 = new PointF((float)fixedPointC2.C1, (float)fixedPointC2.C2);
+            var fixedPointUICoords2 = scene.MapToUIFrame(fixedPointFrame2);
+            gr.DrawEllipse(markupPen, fixedPointUICoords2.X - 4, fixedPointUICoords2.Y - 4, 8, 8);
+            gr.DrawLine(markupPen, fixedPointUICoords2.X - 4, fixedPointUICoords2.Y, fixedPointUICoords2.X + 4,
+                fixedPointUICoords2.Y);
+
+            if (processor.Any())
             {
-                var rg = new RGPoint(r, b * Math.Pow(r + 1, 2));
-                list1.Add(rg);
-                list2.Add(rg.DirectIterated(processor.N, processor.Lambda, processor.Lambda2));
+                var fixPart1 = Math.Sqrt(processor.Lambda) / (1 + processor.Lambda);
+                var fixPart2 = (1 + processor.Lambda * processor.Lambda * processor.N) / (processor.Lambda * Math.Sqrt(processor.N));
+                var fixPart3 = (processor.N + 1) / Math.Sqrt(processor.N);
+                var fixPart4 = Math.Sqrt((1 + processor.Lambda * processor.Lambda * processor.N) / (processor.N + processor.Lambda * processor.Lambda));
+                var cycleX1 = fixPart1 * Math.Sqrt(fixPart2 - fixPart3 * fixPart4);
+                var cycleY1 = Math.Sqrt((processor.N + processor.Lambda * processor.Lambda) / (1 + processor.Lambda * processor.Lambda * processor.N)) * cycleX1;
+                var cycleR1 = (processor.NSqrt + cycleX1 * cycleY1) / (cycleX1 * cycleX1 - processor.NSqrt);
+                var cycleG1 = processor.NSqrt * Math.Pow((cycleX1 + cycleY1) / (cycleX1 * cycleX1 - processor.NSqrt), 2);
+                var cycleRG1 = new RGPoint(cycleR1, cycleG1);
+                var cycleC1 = cycleRG1.C(CProjection.C1C2);
+                var cycleCoords1 = scene.MapToUIFrame(new PointF((float)cycleC1.C1, (float)cycleC1.C2));
+                gr.DrawEllipse(markupPen, cycleCoords1.X - 3, cycleCoords1.Y - 3, 6, 6);
+                gr.DrawEllipse(markupPen, cycleCoords1.X - 4, cycleCoords1.Y - 4, 8, 8);
+                gr.DrawEllipse(markupPen, cycleCoords1.X - 5, cycleCoords1.Y - 5, 10, 10);
+                var cycleX2 = fixPart1 * Math.Sqrt(fixPart2 + fixPart3 * fixPart4);
+                var cycleY2 = -Math.Sqrt((processor.N + processor.Lambda * processor.Lambda) / (1 + processor.Lambda * processor.Lambda * processor.N)) * cycleX2;
+                var cycleR2 = (processor.NSqrt + cycleX2 * cycleY2) / (cycleX2 * cycleX2 - processor.NSqrt);
+                var cycleG2 = processor.NSqrt * Math.Pow((cycleX2 + cycleY2) / (cycleX2 * cycleX2 - processor.NSqrt), 2);
+                var cycleRG2 = new RGPoint(cycleR2, cycleG2);
+                var cycleC2 = cycleRG2.C(CProjection.C1C2);
+                var cycleCoords2 = scene.MapToUIFrame(new PointF((float)cycleC2.C1, (float)cycleC2.C2));
+                gr.DrawEllipse(markupPen, cycleCoords2.X - 3, cycleCoords2.Y - 3, 6, 6);
+                gr.DrawEllipse(markupPen, cycleCoords2.X - 4, cycleCoords2.Y - 4, 8, 8);
+                gr.DrawEllipse(markupPen, cycleCoords2.X - 5, cycleCoords2.Y - 5, 10, 10);
             }
-            var curve1 = list1;
-            var cCurve1 = curve1.Select(r => r.C(CProjection.C1C2)).ToList();
-            for (var i = 0; i < cCurve1.Count - 1; i++)
-            {
-                var c1 = cCurve1[i];
-                var c2 = cCurve1[i + 1];
-                var ui1 = scene.MapToUIFrame(new PointF((float)c1.C1, (float)c1.C2));
-                var ui2 = scene.MapToUIFrame(new PointF((float)c2.C1, (float)c2.C2));
-                gr.DrawLine(line1Pen, ui1, ui2);
-            }
-            var curve2 = list2;
-            var cCurve2 = curve2.Select(r => r.C(CProjection.C1C2)).ToList();
-            for (var i = 0; i < cCurve2.Count - 1; i++)
-            {
-                var c1 = cCurve2[i];
-                var c2 = cCurve2[i + 1];
-                var ui1 = scene.MapToUIFrame(new PointF((float)c1.C1, (float)c1.C2));
-                var ui2 = scene.MapToUIFrame(new PointF((float)c2.C1, (float)c2.C2));
-                gr.DrawLine(line2Pen, ui1, ui2);
-            }
-            if (b == 1)
-            {
-                var c1 = cCurve2[0];
-                var ui1 = scene.MapToUIFrame(new PointF((float)c1.C1, (float)c1.C2));
-                gr.DrawEllipse(line2Pen, ui1.X - 3, ui1.Y - 3, 6, 6);
-            }
-             * */
         }
 
-        private IEnumerable<RGPoint> Curve(RGProcessor proc, float a, float r0, float r1, float step = 0.0001f)
+        public override void ApplyBoundaryPointDynamics(int step, Bitmap bmp, Graphics gr, Tuple<Color, PointF, CPoint> left, Tuple<Color, PointF, CPoint> right, RGScene scene, RGProcessor processor)
         {
-            for (var r = r0; r <= r1; r += step)
+            var cptLeft = left.Item3;
+            var clrLeft =
+                left.Item1 == RGScene.PositiveDynamicsRightColor ||
+                left.Item1 == RGScene.NegativeDynamicsLeftColor
+                    ? RGScene.Line2Color
+                    : RGScene.Line1Color;
+            var penLeft = new Pen(clrLeft);
+            var cptRight = right.Item3;
+            var clrRight =
+                right.Item1 == RGScene.PositiveDynamicsRightColor ||
+                right.Item1 == RGScene.NegativeDynamicsLeftColor
+                    ? RGScene.Line2Color
+                    : RGScene.Line1Color;
+            var penRight = new Pen(clrRight);
+
+            var trans = this as DirectRGTransformationC1C2;
+            if (trans == null)
+                return;
+
+            var resLeft = cptLeft;
+            var resRight = cptRight;
+            for (int i = 0; i < step; i++)
             {
-                var g = ((r - a) / (r - proc.B0)) * Math.Pow(r + 1, 2);
-                yield return new RGPoint(r, g);
+                resLeft = trans.DirectIterated(resLeft, CProjection.C1C2, processor);
+                resRight = trans.DirectIterated(resRight, CProjection.C1C2, processor);
             }
+
+            var coordsLeft = scene.MapToUIFrame(new PointF((float)resLeft.C1, (float)resLeft.C2));
+            gr.DrawEllipse(penLeft, coordsLeft.X, coordsLeft.Y, 1, 1);
+            gr.DrawEllipse(penLeft, coordsLeft.X - 3, coordsLeft.Y - 3, 6, 6);
+
+            var coordsRight = scene.MapToUIFrame(new PointF((float)resRight.C1, (float)resRight.C2));
+            gr.DrawEllipse(penRight, coordsRight.X, coordsRight.Y, 1, 1);
+            gr.DrawEllipse(penRight, coordsRight.X - 3, coordsRight.Y - 3, 6, 6);
         }
 
-        protected abstract Color GetC1C2Color(Bitmap bmp, CPoint cpt, RGPoint rg, RGScene scene, RGProcessor processor);
+        protected abstract Color GetC1C2Color(CPoint cpt, RGPoint rg, RGScene scene, RGProcessor processor);
     }
 }

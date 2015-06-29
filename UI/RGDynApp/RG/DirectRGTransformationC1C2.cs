@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Security.Principal;
-using System.Windows.Forms.DataVisualization.Charting;
 
 namespace RGDynApp
 {
@@ -43,8 +41,8 @@ namespace RGDynApp
             CriticalPoint = processor.Alpha > 1 ? new CPoint(0, 0, 1) : new CPoint(1, 0, 0);
             CriticalPointOpposite = CriticalPoint.Opposite;
 
-            IterationsLimit = 100;
-            DistanceLimit = 0.0001;
+            IterationsLimit = 1000;
+            DistanceLimit = 0.000001;
             Initialized = true;
 
             MarkupVPoints.Clear();
@@ -79,7 +77,7 @@ namespace RGDynApp
             }
         }
 
-        protected override Color GetC1C2Color(Bitmap bmp, CPoint cpt, RGPoint rg, RGScene scene, RGProcessor processor)
+        protected override Color GetC1C2Color(CPoint cpt, RGPoint rg, RGScene scene, RGProcessor processor)
         {
             Initialize(processor);
 
@@ -124,8 +122,8 @@ namespace RGDynApp
                     ?
                     (current.C1 < 0 ? RGScene.PositiveDynamicsLeftColor : RGScene.PositiveDynamicsRightColor)
                     :
-                    //(current.C1 < 0 ? RGScene.NegativeDynamicsLeftColor : RGScene.NegativeDynamicsRightColor)
-                    RGScene.NegativeDynamicsLeftColor
+                    (current.C1 < 0 ? RGScene.NegativeDynamicsLeftColor : RGScene.NegativeDynamicsRightColor)
+                    //RGScene.NegativeDynamicsLeftColor
                     ;
             }
 

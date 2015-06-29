@@ -51,6 +51,10 @@ namespace RGDynApp
 
         public RGSceneTransform DisplayedTransformation;
 
+        public Tuple<Color, PointF, CPoint> BoundaryPointLeft;
+
+        public Tuple<Color, PointF, CPoint> BoundaryPointRight; 
+
         public RGScene Current
         {
             get { return Peek(); }
@@ -116,7 +120,7 @@ namespace RGDynApp
 
         public void DrawMarkupDynamics(int step)
         {
-            if (step < 0 || step > 10)
+            if (step < 0 || step > 25)
             {
                 Draw();
                 return;
@@ -135,6 +139,127 @@ namespace RGDynApp
         {
             Pop();
             Draw();
+        }
+
+        public void StartBoundaryAnalysis(RectangleF rgFrame, Size uiFrame)
+        {
+            var mid = rgFrame.Y + rgFrame.Height / 2;
+            var left = rgFrame.X;
+
+            Tuple<Color, PointF, CPoint> pt1 = null;
+            Tuple<Color, PointF, CPoint> pt2 = null;
+            const float acc = 0.00001f;
+            for (var x = left; x <= left + rgFrame.Width; x += acc)
+            {
+                var fpt1 = new PointF(x, mid);
+                var clr1 = DisplayedTransformation.GetPixelColor(fpt1, Current, this);
+                var fpt2 = new PointF(x + acc, mid);
+                var clr2 = DisplayedTransformation.GetPixelColor(fpt2, Current, this);
+                if (clr1 != clr2)
+                {
+                    pt1 = new Tuple<Color, PointF, CPoint>(clr1, fpt1, CPoint.New(fpt1, CProjection.C1C2));
+                    pt2 = new Tuple<Color, PointF, CPoint>(clr2, fpt2, CPoint.New(fpt2, CProjection.C1C2));
+                    break;
+                }
+            }
+
+            if (pt1 != null && pt2 != null)
+            {
+                var curPt1 = pt1.Item2;
+                var curClr1 = pt1.Item1;
+                var curPt2 = pt2.Item2;
+                var curClr2 = pt2.Item1;
+
+                var acc1 = 0.000001f;
+                var accuracyChanged1 = false;
+                var afterAccuracyChangedSteps1 = 0;
+                while (true)
+                {
+                    var testPt = new PointF(curPt1.X + acc1, curPt1.Y);
+                    var testClr = DisplayedTransformation.GetPixelColor(testPt, Current, this);
+                    if (testClr != curClr1)
+                    {
+                        if (acc1 >= float.Epsilon*2)
+                        {
+                            acc1 = acc1/2;
+                            accuracyChanged1 = true;
+                            afterAccuracyChangedSteps1 = 0;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        curPt1 = testPt;
+                        if (accuracyChanged1)
+                        {
+                            afterAccuracyChangedSteps1++;
+                            if (afterAccuracyChangedSteps1 >= 4)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                BoundaryPointLeft = new Tuple<Color, PointF, CPoint>(pt1.Item1, curPt1, CPoint.New(curPt1, CProjection.C1C2));
+
+                var acc2 = 0.000001f;
+                var accuracyChanged2 = false;
+                var afterAccuracyChangedSteps2 = 0;
+                while (true)
+                {
+                    var testPt = new PointF(curPt2.X - acc2, curPt1.Y);
+                    var testClr = DisplayedTransformation.GetPixelColor(testPt, Current, this);
+                    if (testClr != curClr2)
+                    {
+                        if (acc2 >= float.Epsilon * 2)
+                        {
+                            acc2 = acc2 / 2;
+                            accuracyChanged2 = true;
+                            afterAccuracyChangedSteps2 = 0;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        curPt2 = testPt;
+                        if (accuracyChanged2)
+                        {
+                            afterAccuracyChangedSteps2++;
+                            if (afterAccuracyChangedSteps2 >= 4)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                BoundaryPointRight = new Tuple<Color, PointF, CPoint>(pt2.Item1, curPt2, CPoint.New(curPt2, CProjection.C1C2));
+            }
+
+            DrawBoundaryPointDynamics(0);
+        }
+
+        public void DrawBoundaryPointDynamics(int step)
+        {
+            if (step < 0 || step > 25)
+            {
+                Draw();
+                return;
+            }
+            var scene = Current;
+            var bmp = new Bitmap(scene.ResultedImage);
+            var gr = Graphics.FromImage(bmp);
+            DisplayedTransformation.ApplyBoundaryPointDynamics(step, bmp, gr, BoundaryPointLeft, BoundaryPointRight, Current, this);
+            if (PlottingPanel.Image != null)
+                PlottingPanel.Image.Dispose();
+            PlottingPanel.Image = bmp;
+            PlottingPanel.Update();
         }
     }
 }

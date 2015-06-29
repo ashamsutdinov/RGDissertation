@@ -529,6 +529,20 @@ namespace RgLib
             G = g1;
         }
 
+        public void IterateDirect()
+        {
+            var rPlus1 = R + 1;
+            var rPlus1Q = rPlus1 * rPlus1;
+            var t = rPlus1Q - G;
+            var d = rPlus1Q - G / RgSettings.N;
+            var td = t / d;
+            var m = td * rPlus1 - 1;
+            var r = RgSettings.Lambda * m;
+            var g = (RgSettings.Lambda2 / RgSettings.N) * td * td * G;
+            R = r;
+            G = g;
+        }
+
         public IEnumerable<RGPoint> ReverseTrack(RGPoint crit)
         {
             var pt = this;
@@ -555,6 +569,22 @@ namespace RgLib
             while (d > Config.Acc && i < Config.Count)
             {
                 pt.IterateReverse();
+                d = pt.DistanceTo(crit);
+                i++;
+            }
+            cnt = i;
+            return pt;
+        }
+
+        public RGPoint DirectTrackEndPoint(RGPoint crit, CProjection projection, out int cnt)
+        {
+            var pt = this;
+            const double max = double.MaxValue;
+            var d = max;
+            var i = 0;
+            while (d > Config.Acc && i < Config.Count)
+            {
+                pt.IterateDirect();
                 d = pt.DistanceTo(crit);
                 i++;
             }

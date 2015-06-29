@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 
 namespace RGDynApp
@@ -16,7 +17,7 @@ namespace RGDynApp
                 for (var j = 0; j < bmp.Height; j++)
                 {
                     var pt = scene.MapToRGFrame(new Point(i, j));
-                    var clr = GetPixelColor(bmp, pt, scene, processor);
+                    var clr = GetPixelColor(pt, scene, processor);
                     if (clr != RGScene.BackgroundColr)
                     {
                         bmp.SetPixel(i, j, clr);
@@ -29,8 +30,6 @@ namespace RGDynApp
             gr.Save();
             return bmp;
         }
-
-        protected abstract Color GetPixelColor(Bitmap bmp, PointF ptF, RGScene scene, RGProcessor processor);
 
         protected abstract void ApplyMarkup(Bitmap bmp, Graphics gr, RGScene scene, RGProcessor processor);
     }
