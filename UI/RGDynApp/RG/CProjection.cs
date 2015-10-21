@@ -1,4 +1,4 @@
-namespace RGDynApp
+namespace RGDynApp.RG
 {
     public enum CProjection
     {

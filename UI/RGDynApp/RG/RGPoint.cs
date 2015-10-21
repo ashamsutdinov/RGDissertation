@@ -1,6 +1,6 @@
 using System;
 
-namespace RGDynApp
+namespace RGDynApp.RG
 {
     public class RGPoint
     {

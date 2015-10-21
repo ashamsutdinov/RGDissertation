@@ -2,77 +2,77 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace RGDynApp
+namespace RGDynApp.RG
 {
     public class DirectRGTransformationC1C2 :
         RGSceneC1C2Transform
     {
-        protected bool Initialized;
+        private bool _initialized;
 
-        protected double LeftC2Limit;
+        private double _leftC2Limit;
 
-        protected double RightC2Limit;
+        private double _rightC2Limit;
 
-        protected int IterationsLimit;
+        private int _iterationsLimit;
 
-        protected double DistanceLimit;
+        private double _distanceLimit;
 
-        protected CPoint CriticalPoint;
+        private CPoint _criticalPoint;
 
-        protected CPoint CriticalPointOpposite;
+        private CPoint _criticalPointOpposite;
 
-        public List<List<CPoint>> MarkupVPoints = new List<List<CPoint>>();
+        private readonly List<List<CPoint>> _markupVPoints = new List<List<CPoint>>();
 
-        public List<List<CPoint>> MarkupHPoints = new List<List<CPoint>>();
+        private readonly List<List<CPoint>> _markupHPoints = new List<List<CPoint>>();
 
-        protected void Initialize(RGProcessor processor)
+        private void Initialize(RGProcessor processor)
         {
-            if (Initialized)
+            if (_initialized)
                 return;
 
             var leftRG = new RGPoint(2, 0);
             var leftC = leftRG.C(CProjection.C1C2);
-            LeftC2Limit = leftC.C2;
+            _leftC2Limit = leftC.C2;
 
             var rightRG = new RGPoint(-1000, ((-1000 + 1) / (-1000 - processor.B0)) * Math.Pow(-1000 + 1, 2));
             var rightC = rightRG.C(CProjection.C1C2);
-            RightC2Limit = rightC.C2;
+            _rightC2Limit = rightC.C2;
 
-            CriticalPoint = processor.Alpha > 1 ? new CPoint(0, 0, 1) : new CPoint(1, 0, 0);
-            CriticalPointOpposite = CriticalPoint.Opposite;
+            _criticalPoint = processor.Alpha > 1 ? new CPoint(0, 0, 1) : new CPoint(1, 0, 0);
+            _criticalPointOpposite = _criticalPoint.Opposite;
 
-            IterationsLimit = 1000;
-            DistanceLimit = 0.000001;
-            Initialized = true;
+            _iterationsLimit = 1000;
+            _distanceLimit = 0.000001;
+            _initialized = true;
 
-            MarkupVPoints.Clear();
-            MarkupHPoints.Clear();
+            _markupVPoints.Clear();
+            _markupHPoints.Clear();
 
             for (var i = 0; i <= 10; i++)
             {
-                MarkupVPoints.Add(new List<CPoint>());
-                MarkupHPoints.Add(new List<CPoint>());
+                _markupVPoints.Add(new List<CPoint>());
+                _markupHPoints.Add(new List<CPoint>());
             }
 
             for (var y = -1f; y <= 1f; y += 0.00001f)
             {
                 var c = CPoint.New(new PointF(0, y), CProjection.C1C2);
-                MarkupVPoints[0].Add(c);
+                _markupVPoints[0].Add(c);
                 for (var i = 1; i <= 10; i++)
                 {
                     c = DirectIterated(c, CProjection.C1C2, processor);
-                    MarkupVPoints[i].Add(c);
+                    _markupVPoints[i].Add(c);
                 }
             }
 
             for (var x = -1f; x <= 1f; x += 0.00001f)
             {
                 var c = CPoint.New(new PointF(x, 0), CProjection.C1C2);
-                MarkupHPoints[0].Add(c);
+                _markupHPoints[0].Add(c);
                 for (var i = 1; i <= 10; i++)
                 {
                     c = DirectIterated(c, CProjection.C1C2, processor);
-                    MarkupHPoints[i].Add(c);
+                    _markupHPoints[i].Add(c);
                 }
             }
         }
@@ -87,32 +87,32 @@ namespace RGDynApp
             var current = start;
 
 
-            while (i < IterationsLimit)
+            while (i < _iterationsLimit)
             {
                 current = DirectIterated(current, CProjection.C1C2, processor);
                 if (processor.Alpha > 1 && rg.G > 0)
                 {
-                    if (current.C1 < 0 && current.C2 > LeftC2Limit)
+                    if (current.C1 < 0 && current.C2 > _leftC2Limit)
                     {
                         break;
                     }
-                    if (current.C1 > 0 && current.C2 > RightC2Limit)
+                    if (current.C1 > 0 && current.C2 > _rightC2Limit)
                     {
                         break;
                     }
                 }
                 else
                 {
-                    var d1 = current.DistanceTo(CriticalPoint);
-                    var d2 = current.DistanceTo(CriticalPointOpposite);
-                    if (d1 < DistanceLimit || d2 < DistanceLimit)
+                    var d1 = current.DistanceTo(_criticalPoint);
+                    var d2 = current.DistanceTo(_criticalPointOpposite);
+                    if (d1 < _distanceLimit || d2 < _distanceLimit)
                     {
                         break;
                     }
                 }
                 i++;
             }
-            if (i == IterationsLimit)
+            if (i == _iterationsLimit)
             {
                 res = RGScene.UndefinedColor;
             }
@@ -185,14 +185,14 @@ namespace RGDynApp
 
         public override void ApplyMarkupDynamics(int step, Bitmap bmp, Graphics gr, RGScene scene, RGProcessor processor)
         {
-            var vline = MarkupVPoints[step];
+            var vline = _markupVPoints[step];
             var vPen = new Pen(RGScene.MarkupVColor);
             foreach (var cpt1 in vline)
             {
                 var p1 = scene.MapToUIFrame(new PointF((float)cpt1.C1, (float)cpt1.C2));
                 gr.DrawEllipse(vPen, p1.X, p1.Y, 1, 1);
             }
-            var hline = MarkupHPoints[step];
+            var hline = _markupHPoints[step];
             var hPen = new Pen(RGScene.MarkupHColor);
             foreach (var cpt1 in hline)
             {

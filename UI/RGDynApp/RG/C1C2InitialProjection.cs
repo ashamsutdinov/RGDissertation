@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace RGDynApp
+namespace RGDynApp.RG
 {
     public class C1C2InitialProjection :
         RGSceneC1C2Transform

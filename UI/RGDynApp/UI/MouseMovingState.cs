@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace RGDynApp
+namespace RGDynApp.UI
 {
     public class MouseMovingState
     {

@@ -2,17 +2,19 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using RGDynApp.RG;
 using RGDynApp.UI;
 
 namespace RGDynApp
 {
-    public partial class Main : Form
+    public partial class Main :
+        Form
     {
         private readonly RGProcessor _processor;
 
         private MouseMovingState _mouseMovingState;
 
-        private bool _boundaryMode;
+        private AnalisysMode _analisysMode;
 
         public Main()
         {
@@ -71,7 +73,7 @@ namespace RGDynApp
             _mouseMovingState.End = currentPoint;
 
             var rect = GetRectangle(_mouseMovingState.Start, _mouseMovingState.End);
-            if (rect.Width < 2 || rect.Height < 2)
+            if ((rect.Width < 2 || rect.Height < 2) && _analisysMode != AnalisysMode.TrackPoint)
             {
                 _mouseMovingState = null;
                 return;
@@ -82,17 +84,24 @@ namespace RGDynApp
             var pt2 = _processor.Current.MapToRGFrame(new Point(rect.Right, rect.Top));
             var rectF = new RectangleF(pt1.X, pt1.Y, pt2.X - pt1.X, pt2.Y - pt1.Y);
 
-            if (!_boundaryMode)
+            switch (_analisysMode)
             {
-                _processor.CreateNew(rectF, _plotPanel.Size);
-                _processor.Draw();
-            }
-            else
-            {
-                _processor.StartBoundaryAnalysis(rectF, _plotPanel.Size);
-                _processor.Draw();
-                var dyn = new Dyn(this);
-                dyn.Show();
+                case AnalisysMode.Zoom:
+                    _processor.CreateNew(rectF, _plotPanel.Size);
+                    _processor.Draw();
+                    break;
+                case AnalisysMode.TrackPoint:
+                    _processor.StartTrackPoint(pt1, _plotPanel.Size);
+                    _processor.Draw();
+                    var dynT = new Dyn(this);
+                    dynT.Show();
+                    break;
+                case AnalisysMode.TrackBoundary:
+                    _processor.StartBoundaryAnalysis(rectF, _plotPanel.Size);
+                    _processor.Draw();
+                    var dyn = new Dyn(this);
+                    dyn.Show();
+                    break;
             }
 
             _mouseMovingState = null;
@@ -110,7 +119,7 @@ namespace RGDynApp
             return pb;
         }
 
-        public static Rectangle GetRectangle(Point p1, Point p2)
+        private static Rectangle GetRectangle(Point p1, Point p2)
         {
             var x1 = Math.Min(p1.X, p2.X);
             var x2 = Math.Max(p1.X, p2.X);
@@ -144,37 +153,45 @@ namespace RGDynApp
             d.Show();
         }
 
-        public void OnMarkupDynamics(Dyn dyn, int step)
+        public void OnMarkupDynamics(int step)
         {
-            if (!_boundaryMode)
+            switch (_analisysMode)
             {
-                _processor.DrawMarkupDynamics(step);
-            }
-            else
-            {
-                _processor.DrawBoundaryPointDynamics(step);
+                case AnalisysMode.TrackBoundary:
+                    _processor.DrawBoundaryPointDynamics(step);
+                    break;
+                case AnalisysMode.TrackPoint:
+                    _processor.DrawTrackPointDynamics(step);
+                    break;
+                default:
+                    _processor.DrawMarkupDynamics(step);
+                    break;
             }
         }
 
-        public void OnDynClose(Dyn d)
+        public void OnDynClose()
         {
-            if (!_boundaryMode)
+            switch (_analisysMode)
             {
-                _processor.DrawMarkupDynamics(-1);
-            }
-            else
-            {
-                _processor.DrawBoundaryPointDynamics(-1);
+                case AnalisysMode.TrackBoundary:
+                    _processor.DrawBoundaryPointDynamics(-1);
+                    break;
+                case AnalisysMode.TrackPoint:
+                    _processor.DrawTrackPointDynamics(-1);
+                    break;
+                default:
+                    _processor.DrawMarkupDynamics(-1);
+                    break;
             }
         }
 
-        public void ChangeMode(object sender, EventArgs e)
+        private void ChangeMode(object sender, EventArgs e)
         {
-            var dlg = new Mode(_boundaryMode);
+            var dlg = new Mode(_analisysMode);
             var res = dlg.ShowDialog();
             if (res == DialogResult.OK)
             {
-                _boundaryMode = dlg.IsBoundaryMode;
+                _analisysMode = dlg.AnalisysMode;
             }
         }
 

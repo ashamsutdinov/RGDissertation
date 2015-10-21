@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms.DataVisualization.Charting;
 
-namespace RGDynApp
+namespace RGDynApp.RG
 {
     public abstract class RGSceneC1C2Transform :
         BothRGSceneTransform
@@ -11,13 +10,12 @@ namespace RGDynApp
         public override Color GetPixelColor(PointF ptF, RGScene scene, RGProcessor processor)
         {
             var cpt = CPoint.New(ptF, CProjection.C1C2);
-            if (cpt.IsNormal)
-            {
-                var rg = cpt.RG(CProjection.C1C2);
-                var clr = GetC1C2Color(cpt, rg, scene, processor);
-                return clr;
-            }
-            return RGScene.BackgroundColr;
+            if (!cpt.IsNormal) 
+                return RGScene.BackgroundColr;
+
+            var rg = cpt.RG(CProjection.C1C2);
+            var clr = GetC1C2Color(cpt, rg, scene, processor);
+            return clr;
         }
 
         protected override void ApplyMarkup(Bitmap bmp, Graphics gr, RGScene scene, RGProcessor processor)
@@ -123,6 +121,31 @@ namespace RGDynApp
             }
         }
 
+        public override void ApplyTrackPointDynamics(int step, Bitmap bmp, Graphics gr, Tuple<Color, PointF, CPoint> point, RGScene scene, RGProcessor processor)
+        {
+            var cpt = point.Item3;
+            var clr =
+                point.Item1 == RGScene.PositiveDynamicsRightColor ||
+                point.Item1 == RGScene.NegativeDynamicsLeftColor
+                    ? RGScene.Line2Color
+                    : RGScene.Line1Color;
+            var pen = new Pen(clr);
+
+            var trans = this as DirectRGTransformationC1C2;
+            if (trans == null)
+                return;
+
+            var res = cpt;
+            for (var i = 0; i < step; i++)
+            {
+                res = trans.DirectIterated(res, CProjection.C1C2, processor);
+            }
+
+            var coordsLeft = scene.MapToUIFrame(new PointF((float)res.C1, (float)res.C2));
+            gr.DrawEllipse(pen, coordsLeft.X, coordsLeft.Y, 1, 1);
+            gr.DrawEllipse(pen, coordsLeft.X - 3, coordsLeft.Y - 3, 6, 6);
+        }
+
         public override void ApplyBoundaryPointDynamics(int step, Bitmap bmp, Graphics gr, Tuple<Color, PointF, CPoint> left, Tuple<Color, PointF, CPoint> right, RGScene scene, RGProcessor processor)
         {
             var cptLeft = left.Item3;
@@ -146,7 +169,7 @@ namespace RGDynApp
 
             var resLeft = cptLeft;
             var resRight = cptRight;
-            for (int i = 0; i < step; i++)
+            for (var i = 0; i < step; i++)
             {
                 resLeft = trans.DirectIterated(resLeft, CProjection.C1C2, processor);
                 resRight = trans.DirectIterated(resRight, CProjection.C1C2, processor);

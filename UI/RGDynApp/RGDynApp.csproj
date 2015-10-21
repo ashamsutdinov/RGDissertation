@@ -51,6 +51,7 @@
     <Compile Include="RG\CPoint.cs" />
     <Compile Include="RG\CProjection.cs" />
     <Compile Include="RG\DirectRGTransformationC1C2.cs" />
+    <Compile Include="UI\AnalisysMode.cs" />
     <Compile Include="UI\Dyn.cs">
       <SubType>Form</SubType>
     </Compile>

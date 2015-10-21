@@ -5,11 +5,12 @@ namespace RGDynApp.UI
 {
     public partial class Mode : Form
     {
-        public Mode(bool isBoundaryMode)
+        public Mode(AnalisysMode mode)
         {
             InitializeComponent();
-            rbBoundaryAnalisysMode.Checked = isBoundaryMode;
-            rbZoomMode.Checked = !isBoundaryMode;
+            rbBoundaryAnalisysMode.Checked = mode ==  AnalisysMode.TrackBoundary;
+            rbZoomMode.Checked = mode == AnalisysMode.Zoom;
+            rbTrackPointMode.Checked = mode == AnalisysMode.TrackPoint;
         }
 
         private void OnChangeMode(object sender, EventArgs e)
@@ -18,9 +19,13 @@ namespace RGDynApp.UI
             Close();
         }
 
-        public bool IsBoundaryMode
+        public AnalisysMode AnalisysMode
         {
-            get { return rbBoundaryAnalisysMode.Checked; }
+            get {
+                return rbZoomMode.Checked
+                    ? AnalisysMode.Zoom
+                    : (rbBoundaryAnalisysMode.Checked ? AnalisysMode.TrackBoundary : AnalisysMode.TrackPoint);
+            }
         }
     }
 }

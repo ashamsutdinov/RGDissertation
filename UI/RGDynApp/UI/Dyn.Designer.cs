@@ -34,19 +34,21 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(12, 12);
-            this.trackBar1.Maximum = 25;
+            this.trackBar1.Location = new System.Drawing.Point(9, 10);
+            this.trackBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.trackBar1.Maximum = 50;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(408, 56);
+            this.trackBar1.Size = new System.Drawing.Size(306, 45);
             this.trackBar1.TabIndex = 0;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // Dyn
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(432, 77);
+            this.ClientSize = new System.Drawing.Size(324, 63);
             this.Controls.Add(this.trackBar1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Dyn";
             this.Text = "Dyn";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dyn_FormClosed);

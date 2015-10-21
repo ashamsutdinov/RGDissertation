@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Drawing;
 
-namespace RGDynApp
+namespace RGDynApp.RG
 {
-    public class RGScene : IDisposable
+    public class RGScene : 
+        IDisposable
     {
-        public RectangleF RGFrame;
+        private RectangleF _rgFrame;
 
-        public Size UIFrame;
+        private Size _uiFrame;
 
-        public SizeF OnePxSize;
+        private SizeF _onePxSize;
 
         public Image ResultedImage;
 
@@ -45,33 +46,33 @@ namespace RGDynApp
 
         public RGScene(RectangleF rgFrameSize, Size uiFrameSize)
         {
-            RGFrame = rgFrameSize;
-            UIFrame = uiFrameSize;
+            _rgFrame = rgFrameSize;
+            _uiFrame = uiFrameSize;
             var onePxWidth = rgFrameSize.Width / uiFrameSize.Width;
             var onePxHeight = rgFrameSize.Height / uiFrameSize.Height;
-            OnePxSize = new SizeF(onePxWidth, onePxHeight);
+            _onePxSize = new SizeF(onePxWidth, onePxHeight);
             OriginalImage = CreateBackgroundBitmap(uiFrameSize);
             ResultedImage = new Bitmap(OriginalImage);
         }
 
         public PointF MapToRGFrame(Point uiPoint)
         {
-            var xOffset = uiPoint.X * OnePxSize.Width;
-            var x = RGFrame.X + xOffset;
-            var yOffset = (UIFrame.Height - uiPoint.Y) * OnePxSize.Height;
-            var y = RGFrame.Y + yOffset;
+            var xOffset = uiPoint.X * _onePxSize.Width;
+            var x = _rgFrame.X + xOffset;
+            var yOffset = (_uiFrame.Height - uiPoint.Y) * _onePxSize.Height;
+            var y = _rgFrame.Y + yOffset;
             var pt = new PointF(x, y);
             return pt;
         }
 
         public Point MapToUIFrame(PointF rgPoint)
         {
-            var xOffset = Math.Abs(rgPoint.X - RGFrame.X);
-            var xUiOffset = xOffset / OnePxSize.Width;
+            var xOffset = Math.Abs(rgPoint.X - _rgFrame.X);
+            var xUiOffset = xOffset / _onePxSize.Width;
             var x = xUiOffset;
-            var yOffset = Math.Abs(rgPoint.Y - RGFrame.Y);
-            var yUiOffset = yOffset / OnePxSize.Height;
-            var y = UIFrame.Height - yUiOffset;
+            var yOffset = Math.Abs(rgPoint.Y - _rgFrame.Y);
+            var yUiOffset = yOffset / _onePxSize.Height;
+            var y = _uiFrame.Height - yUiOffset;
             var pt = new Point((int)x, (int)y);
             return pt;
         }
@@ -81,7 +82,7 @@ namespace RGDynApp
             lock (OriginalImage)
             {
                 var tImage = new Bitmap(OriginalImage);
-                using (var layer = transform.GetLayer(RGFrame, UIFrame, this, processor))
+                using (var layer = transform.GetLayer(_rgFrame, _uiFrame, this, processor))
                 {
                     for (var i = 0; i < tImage.Width; i++)
                     {
