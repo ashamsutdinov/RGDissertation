@@ -48,7 +48,7 @@ namespace RGDynApp.RG
             _markupVPoints.Clear();
             _markupHPoints.Clear();
 
-            for (var i = 0; i <= 10; i++)
+            for (var i = 0; i <= 50; i++)
             {
                 _markupVPoints.Add(new List<CPoint>());
                 _markupHPoints.Add(new List<CPoint>());
@@ -58,7 +58,7 @@ namespace RGDynApp.RG
             {
                 var c = CPoint.New(new PointF(0, y), CProjection.C1C2);
                 _markupVPoints[0].Add(c);
-                for (var i = 1; i <= 10; i++)
+                for (var i = 1; i <= 50; i++)
                 {
                     c = DirectIterated(c, CProjection.C1C2, processor);
                     _markupVPoints[i].Add(c);
