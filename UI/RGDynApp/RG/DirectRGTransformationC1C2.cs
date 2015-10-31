@@ -69,7 +69,7 @@ namespace RGDynApp.RG
             {
                 var c = CPoint.New(new PointF(x, 0), CProjection.C1C2);
                 _markupHPoints[0].Add(c);
-                for (var i = 1; i <= 10; i++)
+                for (var i = 1; i <= 50; i++)
                 {
                     c = DirectIterated(c, CProjection.C1C2, processor);
                     _markupHPoints[i].Add(c);
