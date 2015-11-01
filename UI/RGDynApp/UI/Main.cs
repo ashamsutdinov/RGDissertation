@@ -195,7 +195,7 @@ namespace RGDynApp
             }
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveAsImage(object sender, EventArgs e)
         {
             var bmp = new Bitmap(_plotPanel.Image);
             var dlg = new SaveFileDialog();
@@ -203,6 +203,11 @@ namespace RGDynApp
             {
                 bmp.Save(dlg.FileName, ImageFormat.Tiff);
             }
+        }
+
+        private void BackToPreviousFrame(object sender, EventArgs e)
+        {
+            _processor.Back();
         }
     }
 }
