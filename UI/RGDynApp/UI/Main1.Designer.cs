@@ -71,7 +71,7 @@ namespace RGDynApp.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Size similar to {Width=684, Height=24}.
+        ///   Looks up a localized resource of type System.Drawing.Size similar to {Width=930, Height=24}.
         /// </summary>
         public static System.Drawing.Size _mainMenu_Size {
             get {
@@ -130,7 +130,7 @@ namespace RGDynApp.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Size similar to {Width=684, Height=638}.
+        ///   Looks up a localized resource of type System.Drawing.Size similar to {Width=930, Height=930}.
         /// </summary>
         public static System.Drawing.Size _plotPanel_Size {
             get {

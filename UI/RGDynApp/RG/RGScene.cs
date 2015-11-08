@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace RGDynApp.RG
 {
-    public class RGScene : 
+    public class RGScene :
         IDisposable
     {
         private RectangleF _rgFrame;
@@ -44,6 +44,10 @@ namespace RGDynApp.RG
 
         public static readonly Color Line2Color = Color.Red;
 
+        public static readonly Color ParabolaColor = Color.Firebrick;
+
+        public static readonly Color ReverseParabolaColor = Color.Gold;
+
         public RGScene(RectangleF rgFrameSize, Size uiFrameSize)
         {
             _rgFrame = rgFrameSize;
@@ -67,10 +71,13 @@ namespace RGDynApp.RG
 
         public Point MapToUIFrame(PointF rgPoint)
         {
-            var xOffset = Math.Abs(rgPoint.X - _rgFrame.X);
+            var xDistance = Math.Abs(rgPoint.X - _rgFrame.X);
+            var xOffset = rgPoint.X > _rgFrame.X ? xDistance : -xDistance;
             var xUiOffset = xOffset / _onePxSize.Width;
             var x = xUiOffset;
-            var yOffset = Math.Abs(rgPoint.Y - _rgFrame.Y);
+
+            var yDistance = Math.Abs(rgPoint.Y - _rgFrame.Y);
+            var yOffset = rgPoint.Y > _rgFrame.Y ? yDistance : -yDistance;
             var yUiOffset = yOffset / _onePxSize.Height;
             var y = _uiFrame.Height - yUiOffset;
             var pt = new Point((int)x, (int)y);

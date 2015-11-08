@@ -24,11 +24,11 @@ namespace RGDynApp.RG
 
         private double _nAlphaMinus1To2;
 
-        private double _lambdaMinus1;
+        public double LambdaMinus1;
 
-        private double _lambdaMinus2;
+        public double LambdaMinus2;
 
-        private double _nLambdaMinus2;
+        public double NLambdaMinus2;
 
         public double Lambda2;
 
@@ -72,9 +72,9 @@ namespace RGDynApp.RG
             N = n;
             _curveB = b;
             Lambda = Math.Pow(N, Alpha - 1);
-            _lambdaMinus1 = Math.Pow(Lambda, -1);
-            _lambdaMinus2 = Math.Pow(Lambda, -2);
-            _nLambdaMinus2 = N * _lambdaMinus2;
+            LambdaMinus1 = Math.Pow(Lambda, -1);
+            LambdaMinus2 = Math.Pow(Lambda, -2);
+            NLambdaMinus2 = N * LambdaMinus2;
             Lambda2 = Lambda * Lambda;
             OneDivN = 1 / N;
             _nMinus1 = Math.Pow(N, -1);

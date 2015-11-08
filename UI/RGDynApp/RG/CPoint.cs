@@ -61,7 +61,8 @@ namespace RGDynApp.RG
             Build(c0, c1, c2);
         }
 
-        public CPoint(CPoint src) : this(src.C0, src.C1, src.C2)
+        public CPoint(CPoint src)
+            : this(src.C0, src.C1, src.C2)
         {
         }
 
@@ -73,9 +74,9 @@ namespace RGDynApp.RG
             var norm = Norm;
             if (!(norm > 0))
                 return;
-            C0 = C0/norm;
-            C1 = C1/norm;
-            C2 = C2/norm;
+            C0 = C0 / norm;
+            C1 = C1 / norm;
+            C2 = C2 / norm;
         }
 
         private void ToOpposite()
@@ -89,7 +90,7 @@ namespace RGDynApp.RG
         {
             get
             {
-                var sum = C0*C0 + C1*C1 + C2*C2;
+                var sum = C0 * C0 + C1 * C1 + C2 * C2;
                 var n = Math.Sqrt(sum);
                 return n;
             }
@@ -100,7 +101,7 @@ namespace RGDynApp.RG
             var sc0 = C0 - c.C0;
             var sc1 = C1 - c.C1;
             var sc2 = C2 - c.C2;
-            var sum = sc0*sc0 + sc1*sc1 + sc2*sc2;
+            var sum = sc0 * sc0 + sc1 * sc1 + sc2 * sc2;
             var dist = Math.Sqrt(sum);
             return dist;
         }
@@ -115,13 +116,13 @@ namespace RGDynApp.RG
             const double max = double.MaxValue;
             try
             {
-                var r = C2 > 0 || C2 < 0 ? -C1/C2 : max;
-                var g = C2 > 0 || C2 < 0 ? (C1*C1 - C0*C2)/(C2*C2) : max;
-                return new RGPoint {R = r, G = g};
+                var r = C2 > 0 || C2 < 0 ? -C1 / C2 : max;
+                var g = C2 > 0 || C2 < 0 ? (C1 * C1 - C0 * C2) / (C2 * C2) : max;
+                return new RGPoint { R = r, G = g };
             }
             catch (Exception)
             {
-                return new RGPoint {R = max, G = max};
+                return new RGPoint { R = max, G = max };
             }
         }
 
@@ -130,13 +131,13 @@ namespace RGDynApp.RG
             const double max = double.MaxValue;
             try
             {
-                var r = C0 > 0 || C0 < 0 ? -C2/C0 : max;
-                var g = C0 > 0 || C0 < 0 ? (C1*C1 - C0*C2)/(C0*C0) : max;
-                return new RGPoint {R = r, G = g};
+                var r = C0 > 0 || C0 < 0 ? -C2 / C0 : max;
+                var g = C0 > 0 || C0 < 0 ? (C1 * C1 - C0 * C2) / (C0 * C0) : max;
+                return new RGPoint { R = r, G = g };
             }
             catch (Exception)
             {
-                return new RGPoint {R = max, G = max};
+                return new RGPoint { R = max, G = max };
             }
         }
 
@@ -145,13 +146,13 @@ namespace RGDynApp.RG
             const double max = double.MaxValue;
             try
             {
-                var r = C1 > 0 || C1 < 0 ? -C0/C1 : max;
-                var g = C1 > 0 || C1 < 0 ? (C1*C1 - C0*C2)/(C1*C1) : max;
-                return new RGPoint {R = r, G = g};
+                var r = C1 > 0 || C1 < 0 ? -C0 / C1 : max;
+                var g = C1 > 0 || C1 < 0 ? (C1 * C1 - C0 * C2) / (C1 * C1) : max;
+                return new RGPoint { R = r, G = g };
             }
             catch (Exception)
             {
-                return new RGPoint {R = max, G = max};
+                return new RGPoint { R = max, G = max };
             }
         }
 
