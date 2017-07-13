@@ -38,7 +38,7 @@ namespace RGDynApp.RG
             var rightC = rightRG.C(CProjection.C1C2);
             _rightC2Limit = rightC.C2;
 
-            _criticalPoint = processor.Alpha > 1 ? new CPoint(0, 0, 1) : new CPoint(1, 0, 0);
+            _criticalPoint = processor.Alpha >= 1 ? new CPoint(0, 0, 1) : new CPoint(1, 0, 0);
             _criticalPointOpposite = _criticalPoint.Opposite;
 
             _iterationsLimit = 1000;
@@ -48,12 +48,13 @@ namespace RGDynApp.RG
             _markupVPoints.Clear();
             _markupHPoints.Clear();
 
+            /*
             for (var i = 0; i <= 50; i++)
             {
                 _markupVPoints.Add(new List<CPoint>());
                 _markupHPoints.Add(new List<CPoint>());
             }
-
+            
             for (var y = -1f; y <= 1f; y += 0.00001f)
             {
                 var c = CPoint.New(new PointF(0, y), CProjection.C1C2);
@@ -75,6 +76,8 @@ namespace RGDynApp.RG
                     _markupHPoints[i].Add(c);
                 }
             }
+            */
+            
         }
 
         protected override Color GetC1C2Color(CPoint cpt, RGPoint rg, RGScene scene, RGProcessor processor)

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Resources;
 
 namespace RGDynApp.RG
 {
@@ -77,45 +75,54 @@ namespace RGDynApp.RG
 
             var fixedPointX1 = Math.Sqrt((1 - processor.Lambda * processor.NSqrt) / (processor.NSqrt - processor.Lambda));
             var fixedPointY1 = Math.Sqrt((processor.NSqrt - processor.Lambda) / (1 - processor.Lambda * processor.NSqrt));
-            var fixedPointR1 = (processor.NSqrt + fixedPointX1 * fixedPointY1) / (fixedPointX1 * fixedPointX1 - processor.NSqrt);
-            var fixedPointG1 = processor.NSqrt * Math.Pow((fixedPointX1 + fixedPointY1) / (fixedPointX1 * fixedPointX1 - processor.NSqrt), 2);
-            var fixedPointRG1 = new RGPoint(fixedPointR1, fixedPointG1);
-            var fixedPoint1 = fixedPointRG1.C(CProjection.C1C2);
-            var fixedPointFrame1 = new PointF((float)fixedPoint1.C1, (float)fixedPoint1.C2);
-            var fixedPointUICoords1 = scene.MapToUIFrame(fixedPointFrame1);
-            gr.DrawEllipse(markupPen, fixedPointUICoords1.X - 4, fixedPointUICoords1.Y - 4, 8, 8);
-            if (opt)
+            if (!double.IsNaN(fixedPointX1) && !double.IsNaN(fixedPointY1))
             {
-                gr.DrawLine(markupPen, fixedPointUICoords1.X - 4, fixedPointUICoords1.Y, fixedPointUICoords1.X + 4, fixedPointUICoords1.Y);
-                gr.DrawLine(markupPen, fixedPointUICoords1.X, fixedPointUICoords1.Y - 4, fixedPointUICoords1.X, fixedPointUICoords1.Y + 4);
-            }
-            else
-            {
-                gr.DrawString("1", labelsFont, labelsBrushEx, fixedPointUICoords1.X + 2, fixedPointUICoords1.Y - 3);
+                var fixedPointR1 = (processor.NSqrt + fixedPointX1 * fixedPointY1) / (fixedPointX1 * fixedPointX1 - processor.NSqrt);
+                var fixedPointG1 = processor.NSqrt * Math.Pow((fixedPointX1 + fixedPointY1) / (fixedPointX1 * fixedPointX1 - processor.NSqrt), 2);
+                var fixedPointRG1 = new RGPoint(fixedPointR1, fixedPointG1);
+                var fixedPoint1 = fixedPointRG1.C(CProjection.C1C2);
+                var fixedPointFrame1 = new PointF((float)fixedPoint1.C1, (float)fixedPoint1.C2);
+                var fixedPointUICoords1 = scene.MapToUIFrame(fixedPointFrame1);
+                gr.DrawEllipse(markupPen, fixedPointUICoords1.X - 4, fixedPointUICoords1.Y - 4, 8, 8);
+                if (opt)
+                {
+                    gr.DrawLine(markupPen, fixedPointUICoords1.X - 4, fixedPointUICoords1.Y, fixedPointUICoords1.X + 4, fixedPointUICoords1.Y);
+                    gr.DrawLine(markupPen, fixedPointUICoords1.X, fixedPointUICoords1.Y - 4, fixedPointUICoords1.X, fixedPointUICoords1.Y + 4);
+                }
+                else
+                {
+                    gr.DrawString("1", labelsFont, labelsBrushEx, fixedPointUICoords1.X + 2, fixedPointUICoords1.Y - 3);
+                }
             }
 
             var fixedPointX2 = Math.Sqrt((1 + processor.Lambda * processor.NSqrt) / (processor.NSqrt + processor.Lambda));
             var fixedPointY2 = -Math.Sqrt((processor.NSqrt + processor.Lambda) / (1 + processor.Lambda * processor.NSqrt));
-            var fixedPointR2 = (processor.NSqrt + fixedPointX2 * fixedPointY2) / (fixedPointX2 * fixedPointX2 - processor.NSqrt);
-            var fixedPointG2 = processor.NSqrt * Math.Pow((fixedPointX2 + fixedPointY2) / (fixedPointX2 * fixedPointX2 - processor.NSqrt), 2);
-            var fixedPointRG2 = new RGPoint(fixedPointR2, fixedPointG2);
-            var fixedPointC2 = fixedPointRG2.C(CProjection.C1C2);
-            var fixedPointFrame2 = new PointF((float)fixedPointC2.C1, (float)fixedPointC2.C2);
-            var fixedPointUICoords2 = scene.MapToUIFrame(fixedPointFrame2);
-            gr.DrawEllipse(markupPen, fixedPointUICoords2.X - 4, fixedPointUICoords2.Y - 4, 8, 8);
-            if (opt)
+            if (!double.IsNaN(fixedPointX2) && !double.IsNaN(fixedPointY2))
             {
-                gr.DrawLine(markupPen, fixedPointUICoords2.X - 4, fixedPointUICoords2.Y, fixedPointUICoords2.X + 4, fixedPointUICoords2.Y);
+                var fixedPointR2 = (processor.NSqrt + fixedPointX2 * fixedPointY2) / (fixedPointX2 * fixedPointX2 - processor.NSqrt);
+                var fixedPointG2 = processor.NSqrt * Math.Pow((fixedPointX2 + fixedPointY2) / (fixedPointX2 * fixedPointX2 - processor.NSqrt), 2);
+                var fixedPointRG2 = new RGPoint(fixedPointR2, fixedPointG2);
+                var fixedPointC2 = fixedPointRG2.C(CProjection.C1C2);
+                var fixedPointFrame2 = new PointF((float)fixedPointC2.C1, (float)fixedPointC2.C2);
+                var fixedPointUICoords2 = scene.MapToUIFrame(fixedPointFrame2);
+                gr.DrawEllipse(markupPen, fixedPointUICoords2.X - 4, fixedPointUICoords2.Y - 4, 8, 8);
+                if (opt)
+                {
+                    gr.DrawLine(markupPen, fixedPointUICoords2.X - 4, fixedPointUICoords2.Y, fixedPointUICoords2.X + 4,
+                        fixedPointUICoords2.Y);
+                }
+                else
+                {
+                    gr.DrawString("2", labelsFont, labelsBrushEx, fixedPointUICoords2.X + 2, fixedPointUICoords2.Y - 3);
+                }
             }
-            else
-            {
-                gr.DrawString("2", labelsFont, labelsBrushEx, fixedPointUICoords2.X + 2, fixedPointUICoords2.Y - 3);
-            }
-
+            /*
             var fixPart1 = Math.Sqrt(processor.Lambda) / (1 + processor.Lambda);
             var fixPart2 = (1 + processor.Lambda * processor.Lambda * processor.N) / (processor.Lambda * Math.Sqrt(processor.N));
             var fixPart3 = (processor.N + 1) / Math.Sqrt(processor.N);
             var fixPart4 = Math.Sqrt((1 + processor.Lambda * processor.Lambda * processor.N) / (processor.N + processor.Lambda * processor.Lambda));
+            */
+            /*
             var cycleX1 = fixPart1 * Math.Sqrt(fixPart2 - fixPart3 * fixPart4);
             var cycleY1 = Math.Sqrt((processor.N + processor.Lambda * processor.Lambda) / (1 + processor.Lambda * processor.Lambda * processor.N)) * cycleX1;
             var cycleR1 = (processor.NSqrt + cycleX1 * cycleY1) / (cycleX1 * cycleX1 - processor.NSqrt);
@@ -132,7 +139,8 @@ namespace RGDynApp.RG
             else
             {
                 gr.DrawString("4", labelsFont, labelsBrushEx, cycleCoords1.X + 2, cycleCoords1.Y - 3);
-            }
+            }*/
+            /*
             var cycleX2 = fixPart1 * Math.Sqrt(fixPart2 + fixPart3 * fixPart4);
             var cycleY2 = -Math.Sqrt((processor.N + processor.Lambda * processor.Lambda) / (1 + processor.Lambda * processor.Lambda * processor.N)) * cycleX2;
             var cycleR2 = (processor.NSqrt + cycleX2 * cycleY2) / (cycleX2 * cycleX2 - processor.NSqrt);
@@ -150,28 +158,29 @@ namespace RGDynApp.RG
             {
                 gr.DrawString("5", labelsFont, labelsBrushEx, cycleCoords2.X + 2, cycleCoords2.Y - 3);
             }
-
+            */
+            /*
             if (drawParabolas)
             {
                 for (var r = -100.0; r < 100.0; r += 0.01)
                 {
-                    var cpt1 = new CPoint(1, -r, -2*r - 1);
-                    var pt1 = scene.MapToUIFrame(new PointF((float) cpt1.C1, (float) cpt1.C2));
+                    var cpt1 = new CPoint(1, -r, -2 * r - 1);
+                    var pt1 = scene.MapToUIFrame(new PointF((float)cpt1.C1, (float)cpt1.C2));
                     var r1 = r + 0.01;
-                    var cpt2 = new CPoint(1, -r1, -2*r1 - 1);
-                    var pt2 = scene.MapToUIFrame(new PointF((float) cpt2.C1, (float) cpt2.C2));
+                    var cpt2 = new CPoint(1, -r1, -2 * r1 - 1);
+                    var pt2 = scene.MapToUIFrame(new PointF((float)cpt2.C1, (float)cpt2.C2));
                     gr.DrawLine(parabolaPen, pt1, pt2);
 
                     var cpt1Rev = ReverseIterated(cpt1, CProjection.C1C2, processor);
-                    var pt1Rev = scene.MapToUIFrame(new PointF((float) cpt1Rev.C1, (float) cpt1Rev.C2));
+                    var pt1Rev = scene.MapToUIFrame(new PointF((float)cpt1Rev.C1, (float)cpt1Rev.C2));
                     var cpt2Rev = ReverseIterated(cpt2, CProjection.C1C2, processor);
-                    var pt2Rev = scene.MapToUIFrame(new PointF((float) cpt2Rev.C1, (float) cpt2Rev.C2));
+                    var pt2Rev = scene.MapToUIFrame(new PointF((float)cpt2Rev.C1, (float)cpt2Rev.C2));
                     if (cpt1Rev.DistanceTo(cpt2Rev) < 0.1)
                     {
                         gr.DrawLine(reverseParabolaPen, pt1Rev, pt2Rev);
                     }
                 }
-            }
+            }*/
         }
 
         private CPoint ReverseIterated(CPoint source, CProjection projection, RGProcessor processor)
