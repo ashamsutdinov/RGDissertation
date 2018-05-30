@@ -14,7 +14,7 @@ namespace RenormGroups
       var c0C2MinusC1Sq = pt.C0 * pt.C2 - pt.C1 * pt.C1;
       var n1 = 1 / n;
 
-      var c0 = (c1MinusC0 * c1MinusC0 + n1 * c0C2MinusC1Sq);
+      var c0 = c1MinusC0 * c1MinusC0 + n1 * c0C2MinusC1Sq;
       var c1 = lambda * (c1MinusC0 * c2MunusC1 + n1 * c0C2MinusC1Sq);
       var c2 = lambda * lambda * (c2MunusC1 * c2MunusC1 + n1 * c0C2MinusC1Sq);
 

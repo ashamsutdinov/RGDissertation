@@ -136,7 +136,7 @@ namespace RenormGroups.Processing
       var x2 = Math.Max(p1.X, p2.X);
       var y1 = Math.Min(p1.Y, p2.Y);
       var y2 = Math.Max(p1.Y, p2.Y);
-      var rect = new Rectangle(x1, y1, (x2 - x1), (y2 - y1));
+      var rect = new Rectangle(x1, y1, x2 - x1, y2 - y1);
       return rect;
     }
 

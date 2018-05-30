@@ -45,7 +45,7 @@ namespace RGDynApp.RG
             var td = t / d;
             var m = td * rPlus1 - 1;
             var r = lambda * m;
-            var g = (lambda2 / n) * td * td * G;
+            var g = lambda2 / n * td * td * G;
             return new RGPoint { R = r, G = g };
         }
     }

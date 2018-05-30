@@ -158,7 +158,7 @@ namespace RGDynApp.RG
 
         public void Project(CProjection projection)
         {
-            var oppositize = (projection.HasFlag(CProjection.C0C1) && (C2) < 0) || (projection.HasFlag(CProjection.C0C2) && (C1) < 0) || (projection.HasFlag(CProjection.C1C2) && (C0) < 0);
+            var oppositize = (projection.HasFlag(CProjection.C0C1) && C2 < 0) || (projection.HasFlag(CProjection.C0C2) && C1 < 0) || (projection.HasFlag(CProjection.C1C2) && C0 < 0);
 
             if (oppositize)
                 ToOpposite();

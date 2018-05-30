@@ -25,11 +25,11 @@ namespace DynamicSystem
         }
         private double gF(double gg, double rr)
         {
-            return (double)(Math.Pow(n, 2 * alfa - 3) * Math.Pow((((rr + 1) * (rr + 1) - gg) / ((rr + 1) * (rr + 1) - gg / n)), 2) * gg);
+            return (double)(Math.Pow(n, 2 * alfa - 3) * Math.Pow(((rr + 1) * (rr + 1) - gg) / ((rr + 1) * (rr + 1) - gg / n), 2) * gg);
         }
         private double rF(double gg, double rr)
         {
-            return (double)(Math.Pow(n, alfa - 1) * ((((rr + 1) * (rr + 1) - gg) / ((rr + 1) * (rr + 1) - gg / n)) * (rr + 1) - 1));
+            return (double)(Math.Pow(n, alfa - 1) * (((rr + 1) * (rr + 1) - gg) / ((rr + 1) * (rr + 1) - gg / n) * (rr + 1) - 1));
         }
 
         private double C0F(double c0, double c1, double c2)
@@ -65,14 +65,14 @@ namespace DynamicSystem
         }
         private void Pereschet()
         {
-            if ((pictureBox1.Width - panel2.Width) / (_xmax - _xmin) < (pictureBox1.Height) / (_ymax - _ymin))
+            if ((pictureBox1.Width - panel2.Width) / (_xmax - _xmin) < pictureBox1.Height / (_ymax - _ymin))
             {
                 _width = pictureBox1.Width - panel2.Width;
                 _height = (int)((pictureBox1.Width - panel2.Width) * (_ymax - _ymin) / (_xmax - _xmin));
             }
             else
             {
-                _width = (int)((pictureBox1.Height) * (_xmax - _xmin) / (_ymax - _ymin));
+                _width = (int)(pictureBox1.Height * (_xmax - _xmin) / (_ymax - _ymin));
                 _height = pictureBox1.Height;
             }
         }
@@ -95,7 +95,7 @@ namespace DynamicSystem
                         _bitmap.SetPixel(i, j, Color.Violet);
 
                     }
-                    else if ((rr * rr) / (ctemp * ctemp) - gg / ctemp < 0)
+                    else if (rr * rr / (ctemp * ctemp) - gg / ctemp < 0)
                     {
                         double c0 = ctemp;
                         double c1 = rr;
@@ -121,9 +121,9 @@ namespace DynamicSystem
                                 c11 = -c11;
                                 c21 = -c21;
                             }
-                            c0 = c01 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
-                            c1 = c11 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
-                            c2 = c21 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
+                            c0 = c01 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
+                            c1 = c11 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
+                            c2 = c21 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
                         }
 
                         //_bitmap.SetPixel(i, j, Color.Gray);
@@ -154,9 +154,9 @@ namespace DynamicSystem
                                 c11 = -c11;
                                 c21 = -c21;
                             }
-                            c0 = c01 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
-                            c1 = c11 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
-                            c2 = c21 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
+                            c0 = c01 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
+                            c1 = c11 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
+                            c2 = c21 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
                         }
                     }
 
@@ -185,9 +185,9 @@ namespace DynamicSystem
                                 c1 = -c1;
                                 c2 = -c2;
                             }
-                            double cc0 = c0 / Math.Pow((c0 * c0 + c1 * c1 + c2 * c2), 0.5);
-                            double cc1 = c1 / Math.Pow((c0 * c0 + c1 * c1 + c2 * c2), 0.5);
-                            double cc2 = c2 / Math.Pow((c0 * c0 + c1 * c1 + c2 * c2), 0.5);
+                            double cc0 = c0 / Math.Pow(c0 * c0 + c1 * c1 + c2 * c2, 0.5);
+                            double cc1 = c1 / Math.Pow(c0 * c0 + c1 * c1 + c2 * c2, 0.5);
+                            double cc2 = c2 / Math.Pow(c0 * c0 + c1 * c1 + c2 * c2, 0.5);
                             for (int k = 0; k < (int)numericUpDown1.Value; k++)
                             {
                                 double c01 = C0F(c0, c1, c2);
@@ -199,9 +199,9 @@ namespace DynamicSystem
                                     c11 = -c11;
                                     c21 = -c21;
                                 }
-                                c0 = c01 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
-                                c1 = c11 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
-                                c2 = c21 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
+                                c0 = c01 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
+                                c1 = c11 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
+                                c2 = c21 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
                             }
                             if (norma > Math.Sqrt((c0 - cc0) * (c0 - cc0) + (c1 - cc1) * (c1 - cc1) + (c2 - cc2) * (c2 - cc2)))
                             {
@@ -220,7 +220,7 @@ namespace DynamicSystem
 
 
             double rrr = (double)((Math.Sqrt(n) - Math.Pow(n, alfa - 1)) / (1 - Math.Sqrt(n)));
-            double ggr = (double)(rrr * Math.Pow((1 + rrr), 2) / (1 + rrr + Math.Pow(n, -0.5)));
+            double ggr = (double)(rrr * Math.Pow(1 + rrr, 2) / (1 + rrr + Math.Pow(n, -0.5)));
             double c02;
             double c12 = -rrr;
             double c22 = rrr * rrr - ggr;
@@ -239,7 +239,7 @@ namespace DynamicSystem
 
             }
             rrr = (double)((-Math.Sqrt(n) - Math.Pow(n, alfa - 1)) / (1 + Math.Sqrt(n)));
-            ggr = (double)(rrr * Math.Pow((1 + rrr), 2) / (1 + rrr - Math.Pow(n, -0.5)));
+            ggr = (double)(rrr * Math.Pow(1 + rrr, 2) / (1 + rrr - Math.Pow(n, -0.5)));
             c12 = -rrr;
             c22 = rrr * rrr - ggr;
             c02 = 1;
@@ -591,7 +591,7 @@ namespace DynamicSystem
         {
             double c1 = rFixed;
             double c2 = gFixed;
-            double c0 = Math.Pow((1 - c1 * c1 - c2 * c2), 0.5);
+            double c0 = Math.Pow(1 - c1 * c1 - c2 * c2, 0.5);
             double c01 = C0F(c0, c1, c2);
             double c11 = C1F(c0, c1, c2);
             double c21 = C2F(c0, c1, c2);
@@ -601,9 +601,9 @@ namespace DynamicSystem
                 c11 = -c11;
                 c21 = -c21;
             }
-            c0 = c01 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
-            c1 = c11 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
-            c2 = c21 / Math.Pow((c01 * c01 + c11 * c11 + c21 * c21), 0.5);
+            c0 = c01 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
+            c1 = c11 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
+            c2 = c21 / Math.Pow(c01 * c01 + c11 * c11 + c21 * c21, 0.5);
             rFixed = c1;
             gFixed = c2;
             RePaint();
@@ -615,7 +615,7 @@ namespace DynamicSystem
             _xmin -= temp;
             _xmax += temp;
             _ymin = 0;
-            _ymax += (_ymax - _ymin);
+            _ymax += _ymax - _ymin;
             Status();
             DrawGraphics();
             RePaint();

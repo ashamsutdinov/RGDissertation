@@ -242,7 +242,7 @@ namespace RGLines
         private void ApplyLineSettings()
         {
             _a = double.Parse(txtLineA.Text);
-            _a1 = ((RgSettings.NMinus1 - 1) * _a) / (_a - _b - 1 + RgSettings.NMinus1);
+            _a1 = (RgSettings.NMinus1 - 1) * _a / (_a - _b - 1 + RgSettings.NMinus1);
             _a11 = RgSettings.Lambda * _a;
             _b = double.Parse(txtLineB.Text);
             _b1 = (_b - RgSettings.NMinus1 * _a) / (1 - RgSettings.NMinus1);
@@ -296,7 +296,7 @@ namespace RGLines
                     var r = rp1.Value.R;
                     var r1 = RgSettings.Lambda * ((_a - _b - 1 + RgSettings.NMinus1) / (1 - RgSettings.NMinus1)) *
                              ((r - _a1) / (r - _b1));
-                    var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + RgSettings.Lambda, 2);
+                    var g1 = (r1 - _a11) / (r1 - _b11) * Math.Pow(r1 + RgSettings.Lambda, 2);
                     var rp2 = new RGPoint { R = r1, G = g1 };
                     _rline2.Add(rp2);
                 }

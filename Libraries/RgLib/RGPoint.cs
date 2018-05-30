@@ -52,7 +52,7 @@ namespace RgLib
             }
             else
             {
-                g = ((r - a) / (r - b)) * Math.Pow(r + l1, 2);
+                g = (r - a) / (r - b) * Math.Pow(r + l1, 2);
             }
             return new RGPoint { R = r, G = g };
         }
@@ -494,7 +494,7 @@ namespace RgLib
             var td = t / d;
             var m = td * rPlus1 - 1;
             var r = RgSettings.Lambda * m;
-            var g = (RgSettings.Lambda2 / RgSettings.N) * td * td * G;
+            var g = RgSettings.Lambda2 / RgSettings.N * td * td * G;
             return new RGPoint { R = r, G = g };
         }
 
@@ -514,8 +514,8 @@ namespace RgLib
         {
             var rPlusLambda = R + RgSettings.Lambda;
             var rPlusLambda2 = rPlusLambda * rPlusLambda;
-            var r1 = RgSettings.LambdaMinus1 * (((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G)) * rPlusLambda - RgSettings.Lambda);
-            var g1 = (RgSettings.N / RgSettings.Lambda2) * Math.Pow((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G), 2) * G;
+            var r1 = RgSettings.LambdaMinus1 * ((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G) * rPlusLambda - RgSettings.Lambda);
+            var g1 = RgSettings.N / RgSettings.Lambda2 * Math.Pow((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G), 2) * G;
             return new RGPoint { R = r1, G = g1 };
         }
 
@@ -523,8 +523,8 @@ namespace RgLib
         {
             var rPlusLambda = R + RgSettings.Lambda;
             var rPlusLambda2 = rPlusLambda * rPlusLambda;
-            var r1 = RgSettings.LambdaMinus1 * (((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G)) * rPlusLambda - RgSettings.Lambda);
-            var g1 = (RgSettings.N / RgSettings.Lambda2) * Math.Pow((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G), 2) * G;
+            var r1 = RgSettings.LambdaMinus1 * ((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G) * rPlusLambda - RgSettings.Lambda);
+            var g1 = RgSettings.N / RgSettings.Lambda2 * Math.Pow((rPlusLambda2 - G) / (rPlusLambda2 - RgSettings.N * G), 2) * G;
             R = r1;
             G = g1;
         }
@@ -538,7 +538,7 @@ namespace RgLib
             var td = t / d;
             var m = td * rPlus1 - 1;
             var r = RgSettings.Lambda * m;
-            var g = (RgSettings.Lambda2 / RgSettings.N) * td * td * G;
+            var g = RgSettings.Lambda2 / RgSettings.N * td * td * G;
             R = r;
             G = g;
         }

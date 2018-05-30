@@ -49,9 +49,9 @@ namespace RgLib
       var oppositize = false;
 
       oppositize =
-        (projection.HasFlag(CProjection.C0C1) && (C2 * sign) < 0) ||
-        (projection.HasFlag(CProjection.C0C2) && (C1 * sign) < 0) ||
-        (projection.HasFlag(CProjection.C1C2) && (C0 * sign) < 0);
+        (projection.HasFlag(CProjection.C0C1) && C2 * sign < 0) ||
+        (projection.HasFlag(CProjection.C0C2) && C1 * sign < 0) ||
+        (projection.HasFlag(CProjection.C1C2) && C0 * sign < 0);
 
       if (oppositize)
         ToOpposite();
@@ -160,7 +160,7 @@ namespace RgLib
       var c0C2MinusC1Sq = C0 * C2 - C1 * C1;
       var n1 = RgSettings.OneDivN;
 
-      var c0 = (c1MinusC0 * c1MinusC0 + n1 * c0C2MinusC1Sq);
+      var c0 = c1MinusC0 * c1MinusC0 + n1 * c0C2MinusC1Sq;
       var c1 = RgSettings.Lambda * (c1MinusC0 * c2MunusC1 + n1 * c0C2MinusC1Sq);
       var c2 = RgSettings.Lambda2 * (c2MunusC1 * c2MunusC1 + n1 * c0C2MinusC1Sq);
 

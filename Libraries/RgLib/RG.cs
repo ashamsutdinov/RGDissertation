@@ -9,9 +9,9 @@ namespace RgLib
     {
         public static Color Blend(Color color, Color backColor, double amount = 0.5)
         {
-            var r = (byte)((color.R * amount) + backColor.R * (1 - amount));
-            var g = (byte)((color.G * amount) + backColor.G * (1 - amount));
-            var b = (byte)((color.B * amount) + backColor.B * (1 - amount));
+            var r = (byte)(color.R * amount + backColor.R * (1 - amount));
+            var g = (byte)(color.G * amount + backColor.G * (1 - amount));
+            var b = (byte)(color.B * amount + backColor.B * (1 - amount));
             return Color.FromArgb(r, g, b);
         }
 
@@ -353,8 +353,8 @@ namespace RgLib
             {
                 var p1 = new Point((int)(i1 - radius), (int)j1);
                 var p2 = new Point((int)(i1 + radius), (int)j1);
-                var p3 = new Point((int)(i1), (int)(j1 - radius));
-                var p4 = new Point((int)(i1), (int)(j1 - radius));
+                var p3 = new Point((int)i1, (int)(j1 - radius));
+                var p4 = new Point((int)i1, (int)(j1 - radius));
                 gr.DrawEllipse(pen, (float)(i1 - radius), (float)(j1 - radius), 2 * radius, 2 * radius);
                 gr.DrawLine(pen, p1, p2);
                 gr.DrawLine(pen, p3, p4);

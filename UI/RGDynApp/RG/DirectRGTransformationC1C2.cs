@@ -34,7 +34,7 @@ namespace RGDynApp.RG
             var leftC = leftRG.C(CProjection.C1C2);
             _leftC2Limit = leftC.C2;
 
-            var rightRG = new RGPoint(-1000, ((-1000 + 1) / (-1000 - processor.B0)) * Math.Pow(-1000 + 1, 2));
+            var rightRG = new RGPoint(-1000, (-1000 + 1) / (-1000 - processor.B0) * Math.Pow(-1000 + 1, 2));
             var rightC = rightRG.C(CProjection.C1C2);
             _rightC2Limit = rightC.C2;
 
@@ -140,7 +140,7 @@ namespace RGDynApp.RG
             var c0C2MinusC1Sq = source.C0 * source.C2 - source.C1 * source.C1;
             var n1 = processor.OneDivN;
 
-            var c0 = (c1MinusC0 * c1MinusC0 + n1 * c0C2MinusC1Sq);
+            var c0 = c1MinusC0 * c1MinusC0 + n1 * c0C2MinusC1Sq;
             var c1 = processor.Lambda * (c1MinusC0 * c2MunusC1 + n1 * c0C2MinusC1Sq);
             var c2 = processor.Lambda2 * (c2MunusC1 * c2MunusC1 + n1 * c0C2MinusC1Sq);
 

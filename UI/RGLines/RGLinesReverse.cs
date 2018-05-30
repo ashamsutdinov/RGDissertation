@@ -235,7 +235,7 @@ namespace RGLines
         private void ApplyLineSettings()
         {
             _a = double.Parse(txtLineA.Text);
-            _a1 = ((RgSettings.N - 1) * _a) / (_a - _b + (RgSettings.N + 1) * Math.Pow(RgSettings.Lambda, -1));
+            _a1 = (RgSettings.N - 1) * _a / (_a - _b + (RgSettings.N + 1) * Math.Pow(RgSettings.Lambda, -1));
             _a11 = RgSettings.Lambda * _a;
             _b = double.Parse(txtLineB.Text);
             _b1 = (_b - RgSettings.N * _a) / (1 - RgSettings.N);
@@ -284,14 +284,14 @@ namespace RGLines
             {
                 var r = rp1.R;
                 var r1 = RgSettings.Lambda * ((_a - _b + (RgSettings.N - 1) * Math.Pow(RgSettings.Lambda, -1)) / (1 - RgSettings.N)) * ((r - _a1) / (r - _b1));
-                var g1 = ((r1 - _a11) / (r1 - _b11)) * Math.Pow(r1 + 1, 2);
+                var g1 = (r1 - _a11) / (r1 - _b11) * Math.Pow(r1 + 1, 2);
                 var rp2 = new RGPoint { R = r1, G = g1 };
                 _rline2.Add(rp2);
             }
             _line2 = _rline2.Select(rg => rg.CReversed).ToList();
 
             var nearestToB = _rline1.OrderBy(rp => Math.Abs(rp.R - _b)).FirstOrDefault();
-            var nearestToL = _rline1.OrderBy(rp => Math.Abs(rp.R - (-Math.Pow(RgSettings.Lambda, -1)))).FirstOrDefault();
+            var nearestToL = _rline1.OrderBy(rp => Math.Abs(rp.R - -Math.Pow(RgSettings.Lambda, -1))).FirstOrDefault();
 
             var cNearestToB = nearestToB != null ? nearestToB.CReversed : null;
             var cNearesToL = nearestToL != null ? nearestToL.CReversed : null;
